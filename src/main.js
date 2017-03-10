@@ -4,12 +4,6 @@ import VueRouter from 'vue-router'
 
 
 Vue.use(VueRouter)
-//
-// new Vue({
-//   el: '#app',
-//   render: h => h(App)
-// })
-
 
 
 // 0. If using a module system (e.g. via vue-cli), import Vue and VueRouter and then call Vue.use(VueRouter).

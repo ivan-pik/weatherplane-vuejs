@@ -1,5 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: './src/main.js',
@@ -35,7 +37,18 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
-      }
+      },
+			{
+				test: /\.scss$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: [
+						`css-loader`,
+						'postcss-loader',
+						`sass-loader`,
+					],
+				})
+			}
     ]
   },
   resolve: {
@@ -50,7 +63,19 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+	plugins: [
+		new ExtractTextPlugin("./src/public/css/styles.css"),
+		new webpack.LoaderOptionsPlugin({
+			test: /\.s?css$/,
+			options: {
+				output: { path: './test/' },
+				postcss: [
+					autoprefixer({ browsers: ['last 2 versions', 'android 4', 'opera 12'] }),
+				],
+			},
+		}),
+	],
 }
 
 if (process.env.NODE_ENV === 'production') {
