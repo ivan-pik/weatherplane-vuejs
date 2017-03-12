@@ -5,9 +5,11 @@ export default {
   name: 'LoginInput',
   created() {
     bus.$on('failed-login', this.onFailedLogin)
+    bus.$on('successful-login', this.onSuccessfulLogin)
   },
   destroyed() {
     bus.$on('failed-login', this.onFailedLogin)
+    bus.$on('successful-login', this.onSuccessfulLogin)
   },
   methods: {
     onSubmit(event) {
@@ -22,6 +24,9 @@ export default {
     },
     onFailedLogin(user) {
        Vue.set(this.errors, 'wrongCredentials', true)
+    },
+    onSuccessfulLogin(user) {
+       Vue.delete(this.errors, 'wrongCredentials')
     },
   },
   data() {

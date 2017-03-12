@@ -42,6 +42,7 @@ export default {
         if (data.errors) {
           bus.$emit('failed-login')
         } else if (data.success) {
+          bus.$emit('successful-login')
           Vue.set(this.user, name, data)
           this.user.loggedIn = true;
         }
