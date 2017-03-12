@@ -1,0 +1,9 @@
+<div>
+  <p v-if="user.loggedIn == false">
+    Enter a username and a password to login
+  </p>
+  <p v-else>
+    User "{{ currentUsername }}":
+    <login-user-data :data="user"></login-user-data>
+  </p>
+</div>
