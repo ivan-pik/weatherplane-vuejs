@@ -1,28 +1,23 @@
 import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from './store'
 
-import Vuex from 'vuex'
+import LoginView from './LoginView/index.vue'
+import RegisterView from './RegisterView/index.vue'
 
-Vue.use(Vuex)
+Vue.use(VueRouter)
 
 
-const store = new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
-  state: {
-    count: 0
-  },
 
-  mutations: {
-    increment (state) {
-      state.count++
-    }
-  }
+const routes = [
+  { path: '/login', component: LoginView },
+  { path: '/signup', component: RegisterView }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  routes
 })
-
-
-
-
-
-
 
 import VeeValidate from 'vee-validate';
 
@@ -47,13 +42,19 @@ const veeConfig = {
 Vue.use(VeeValidate, veeConfig);
 
 import AppComponent from './App/index.vue'
+import Navigation from './Navigation/index.vue'
 
 
 
-const vm = new Vue({
-  el: '#app',
+
+
+const app = new Vue({
+  el : '#app',
+  router,
   components: {
-    app: AppComponent,
+    'navigation': Navigation
   },
-  render: h => h('app'),
+  data : {
+    userInfo : "user info"
+  }
 })

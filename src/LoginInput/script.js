@@ -22,15 +22,16 @@ export default {
           // when form is invalid
       });
     },
-    onFailedLogin(user) {
+    onFailedLogin() {
        Vue.set(this.errors, 'wrongCredentials', true)
     },
-    onSuccessfulLogin(user) {
+    onSuccessfulLogin() {
        Vue.delete(this.errors, 'wrongCredentials')
-    },
+    }
   },
   data() {
     return {
+      show: true,
       username: '',
       password: '',
       errors: {}

@@ -1,38 +1,45 @@
-<form v-on:submit.prevent="onSubmit">
-  <span
-    v-show="errors.wrongCredentials"
-    class="help is-danger">Wrong combination of username and password
-  </span>
+<div class="modal">
 
-  <label class="label" for="username">Username</label>
-  <br>
-  <input
-    v-validate="{ rules: { required: true, alpha_dash: true } }"
-    :class="{'input': true, 'is-danger': validationErrors.has('username') }"
-    name="username"
-    v-model="username"
-    type="text"
-    placeholder="Enter your username here"
-    autofocus
-  >
-  <br>
-  <span
-    v-show="validationErrors.has('username')"
-    class="help is-danger">{{ validationErrors.first('username') }}
-  </span>
-  <br>
-  <label class="label" for="password">Password</label>
-  <br>
-  <input
-    v-validate="{ rules: { required: true } }"
-    :class="{'input': true, 'is-danger': validationErrors.has('password') }"
-    type="password"
-    name="password"
-    v-model="password"
-    placeholder="Enter your password here"
+  <transition name="fade">
+  <form v-if="show" v-on:submit.prevent="onSubmit">
+    <transition name="fade">
+      <span
+        v-show="errors.wrongCredentials"
+        class="help is-danger">Wrong combination of username and password
+      </span>
+    </transition>
 
-  />
-  <span v-show="validationErrors.has('password')" class="help is-danger">{{ validationErrors.first('password') }}</span>
-  <br>
-  <button type="submit">Login</button>
-</form>
+    <label class="label" for="username">Username</label>
+    <br>
+    <input
+      v-validate="{ rules: { required: true, alpha_dash: true } }"
+      :class="{'input': true, 'is-danger': validationErrors.has('username') }"
+      name="username"
+      v-model="username"
+      type="text"
+      placeholder="Enter your username here"
+      autofocus
+    >
+    <br>
+    <span
+      v-show="validationErrors.has('username')"
+      class="help is-danger">{{ validationErrors.first('username') }}
+    </span>
+    <br>
+    <label class="label" for="password">Password</label>
+    <br>
+    <input
+      v-validate="{ rules: { required: true } }"
+      :class="{'input': true, 'is-danger': validationErrors.has('password') }"
+      type="password"
+      name="password"
+      v-model="password"
+      placeholder="Enter your password here"
+
+    />
+    <span v-show="validationErrors.has('password')" class="help is-danger">{{ validationErrors.first('password') }}</span>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+  </transition>
+</div>

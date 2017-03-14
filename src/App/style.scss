@@ -4,6 +4,13 @@ body {
   color: #fff;
 }
 
+a {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid #fff;
+
+}
+
 .help {
   background-color: red;
   padding: 0.5em;
@@ -16,3 +23,20 @@ input {
      border: 2px solid red;
    }
  }
+
+
+ .fade-enter-active, .fade-leave-active {
+   transition: opacity .5s
+ }
+ .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+   opacity: 0
+ }
+
+
+.v-enter {
+  background-color: red;
+}
+
+.v-enter-active {
+  background-color: orange;
+}
