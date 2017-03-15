@@ -25,11 +25,18 @@ export default {
     },
     onFailedRegistration(errors) {
       let userName, userEmail;
-      console.log("we have");
-      console.log(errors);
       Vue.set(this.errors, 'registrationFailed', true);
 
       // @todo @nextstep This doesn't work as is probably quite naive
+
+      var result = errors.filter(function( obj ) {
+        return obj.code == 'username-exists';
+      });
+
+      console.log('---------------------');
+      console.log(result);
+      console.log('---------------------');
+
 
       if (errors.filter(function(e) {e.code == 'username-or-email-already-registered'}).length > 0) {
         if (errors.filter(function(e) {e.code == 'user-email-exists'}).length > 0) {
