@@ -50,6 +50,7 @@ export default {
           // @todo Well I guess I will now save the user date in localStorate/ cookie
           // and to the Vuex store
 
+          // @nextstep: Learn how Vuex works!
           that.$store.dispatch('saveUserProfile', data);
 
           Vue.set(this.user, name, data)
