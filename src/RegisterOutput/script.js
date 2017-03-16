@@ -22,6 +22,7 @@ export default {
       this.register(user)
     },
     register(user) {
+      var that = this;
       if (this.user.hasOwnProperty('name') && this.user.hasOwnProperty('password') && this.user.hasOwnProperty('email')) return
 
       var payLoad = {
@@ -44,7 +45,13 @@ export default {
           bus.$emit('failed-registration', data.errors);
         } else if (data.success) {
           console.log("emitting successful-registration")
-          // bus.$emit('successful-registration')
+          bus.$emit('successful-registration')
+
+          // @todo Well I guess I will now save the user date in localStorate/ cookie
+          // and to the Vuex store
+
+          that.$store.dispatch('saveUserProfile', data);
+
           Vue.set(this.user, name, data)
           this.user.registered = true;
         }

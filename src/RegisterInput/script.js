@@ -24,43 +24,43 @@ export default {
       });
     },
     onFailedRegistration(errors) {
+      let errorCode = function(code, errors) {
+        let check = errors.filter(function( obj ) {
+          return obj.code == code;
+        });
+        if (check.length > 0) {
+          return true;
+        }
+        return false;
+      }
+
       let userName, userEmail;
-      Vue.set(this.errors, 'registrationFailed', true);
 
-      // @todo @nextstep This doesn't work as is probably quite naive
-
-      var result = errors.filter(function( obj ) {
-        return obj.code == 'username-exists';
-      });
-
-      console.log('---------------------');
-      console.log(result);
-      console.log('---------------------');
-
-
-      if (errors.filter(function(e) {e.code == 'username-or-email-already-registered'}).length > 0) {
-        if (errors.filter(function(e) {e.code == 'user-email-exists'}).length > 0) {
-          userEmail = true;
-          console.log("The error is: " + userEmail);
-        }
-        if (errors.filter(function(e) {e.code == 'username-exists'}).length > 0) {
+      // Duplicate username and/or e-mail
+      if (errorCode("username-or-email-already-registered", errors)) {
+        if(errorCode("username-exists", errors)) {
           userName = true;
-          console.log("The error is: " + userName);
+          console.log(userName);
         }
+        if(errorCode("user-email-exists", errors)) {
+          userEmail = true;
+          console.log(userEmail);
+        }
+      // Unknown errors from the API, probably something quite serious
       } else {
         Vue.set(this.errors, 'unknown-failure', true)
       }
 
+
       let message = 'Sorry, user with this ' + (userName ? 'username' : '') + (userName && userEmail ? ' and ' : ' ') + (userEmail ? 'email' : '') + ' already exits.';
 
       Vue.set(this.errors, 'message', message);
+      Vue.set(this.errors, 'registrationFailed', true);
 
     },
     onSuccessfulRegistration(user) {
+      // @todo: When you initially try to register existing user and then finally submit unique user, this method seems to happen 3 times after the "successful-registration" event was emitted once.
       console.log("Registration successful method")
-
-
-
       Vue.set(this.errors, 'registrationFailed', false)
       Vue.set(this.errors, 'userExists', false)
       Vue.set(this.errors, 'emailExists', false)

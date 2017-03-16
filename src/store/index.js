@@ -21,7 +21,9 @@ const store = new Vuex.Store({
 
   // update store
   mutations: {
-
+    saveUserProfile(state, data) {
+      state.userProfile = data;
+    }
   },
 
   // Calculated data
