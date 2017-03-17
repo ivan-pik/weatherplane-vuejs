@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from './store'
+import Vuex from 'vuex'
 
 import LoginView from './LoginView/index.vue'
 import RegisterView from './RegisterView/index.vue'
 
+import AppComponent from './App/index.vue'
+import Navigation from './Navigation/index.vue'
+
+
+
 Vue.use(VueRouter)
+Vue.use(Vuex)
 
 
 
@@ -41,15 +47,37 @@ const veeConfig = {
 
 Vue.use(VeeValidate, veeConfig);
 
-import AppComponent from './App/index.vue'
-import Navigation from './Navigation/index.vue'
 
+const store = new Vuex.Store({
+  state: {
+    locations : [],
+    userProfile : {}
+  },
+
+  // calls that will commit changes
+  actions: {
+
+  },
+
+  // update store
+  mutations: {
+    saveUserProfile(state, data) {
+      state.userProfile = data;
+    }
+  },
+
+  // Calculated data
+  getters: {
+
+  }
+})
 
 
 
 
 const app = new Vue({
   el : '#app',
+  store,
   router,
   components: {
     'navigation': Navigation

@@ -22,7 +22,6 @@ export default {
       this.register(user)
     },
     register(user) {
-      var that = this;
       if (this.user.hasOwnProperty('name') && this.user.hasOwnProperty('password') && this.user.hasOwnProperty('email')) return
 
       var payLoad = {
@@ -51,7 +50,7 @@ export default {
           // and to the Vuex store
 
           // @nextstep: Learn how Vuex works!
-          that.$store.dispatch('saveUserProfile', data);
+
 
           Vue.set(this.user, name, data)
           this.user.registered = true;
