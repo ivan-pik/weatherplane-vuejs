@@ -1,23 +1,23 @@
 import Vue from 'vue'
+import store from './store/store';
+import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
-import Vuex from 'vuex'
+import VeeValidate from 'vee-validate';
+import App from './App/index.vue'
 
-import LoginView from './LoginView/index.vue'
-import RegisterView from './RegisterView/index.vue'
+import LoginView from './Login/LoginView/index.vue'
+import RegisterView from './Register/RegisterView/index.vue'
+import ResetPassword from './User/ResetPassword/index.vue'
 
-import AppComponent from './App/index.vue'
-import Navigation from './Navigation/index.vue'
-
-
-
-Vue.use(VueRouter)
-Vue.use(Vuex)
 
 
 
 const routes = [
-  { path: '/login', component: LoginView },
-  { path: '/signup', component: RegisterView }
+    { path: '/', name: 'home'},
+    { path: '/login', name: 'login', component: LoginView },
+    { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
+    { path: '/signup', name: 'signup', component: RegisterView }
+
 ]
 
 const router = new VueRouter({
@@ -25,7 +25,12 @@ const router = new VueRouter({
   routes
 })
 
-import VeeValidate from 'vee-validate';
+
+Vue.use(VueRouter);
+Vue.use(VueResource);
+
+
+Vue.http.options.root = '//localhost:4000';
 
 const veeConfig = {
   errorBagName: 'validationErrors', // change if property conflicts.
@@ -48,29 +53,7 @@ const veeConfig = {
 Vue.use(VeeValidate, veeConfig);
 
 
-const store = new Vuex.Store({
-  state: {
-    locations : [],
-    userProfile : {}
-  },
 
-  // calls that will commit changes
-  actions: {
-
-  },
-
-  // update store
-  mutations: {
-    saveUserProfile(state, data) {
-      state.userProfile = data;
-    }
-  },
-
-  // Calculated data
-  getters: {
-
-  }
-})
 
 
 
@@ -79,10 +62,5 @@ const app = new Vue({
   el : '#app',
   store,
   router,
-  components: {
-    'navigation': Navigation
-  },
-  data : {
-    userInfo : "user info"
-  }
+  render: h => h(App)
 })

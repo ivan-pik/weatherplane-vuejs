@@ -1,4 +1,4 @@
-import bus from '../bus'
+import bus from '../../bus'
 import Vue from 'vue'
 import RegisterUserData from '../RegisterUserData/index.vue'
 
@@ -29,8 +29,8 @@ export default {
         password : user.password,
         email : user.email
       }
-
-      const url = `//localhost:3000/register`
+  // @todo: use axios resource here
+      const url = `//localhost:4000/register`
       fetch(url, {
         method: 'post',
         headers: {
@@ -50,10 +50,12 @@ export default {
           // and to the Vuex store
 
           // @nextstep: Learn how Vuex works!
-
+    // @todo: use store
 
           Vue.set(this.user, name, data)
           this.user.registered = true;
+
+          // @todo: login as the newly created user
         }
       })
     }

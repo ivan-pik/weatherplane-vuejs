@@ -1,4 +1,4 @@
-import bus from '../bus'
+import bus from '../../bus'
 import Vue from 'vue'
 
 import RegisterInput from '../RegisterInput/index.vue'
