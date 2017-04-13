@@ -1,6 +1,6 @@
 <div id="app">
   <navigation></navigation>
-  <keep-alive exclude="LoginView">
+  <keep-alive v-bind:exclude="notAliveViews">
     <router-view></router-view>
   </keep-alive>
 </div>

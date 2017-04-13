@@ -37,6 +37,9 @@ export default {
     'navigation': Navigation
   },
   data() {
-    return {}
+    return {
+        // @todo: this doesn't work for RegisterView
+        notAliveViews: "LoginView RegisterView"
+    }
   }
 }
