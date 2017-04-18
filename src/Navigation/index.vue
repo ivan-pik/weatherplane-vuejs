@@ -1,5 +1,6 @@
 <template>
     <nav>
+        <router-link  to="/">Home</router-link>
         <router-link v-if="!loggedIn" to="/login">Login</router-link>
         <router-link v-if="!loggedIn" to="/signup">Signup</router-link>
         <a v-if="loggedIn" @click="logOut">Logout</a>

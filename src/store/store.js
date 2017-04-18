@@ -9,8 +9,10 @@ export default new Vuex.Store({
             loggedIn: false,
             name: false
         }
+
     },
     mutations: {
+        // User
         'USER_LOG_IN' (state, user) {
             state.user.name = user.username;
             state.user.loggedIn = true;
@@ -19,5 +21,6 @@ export default new Vuex.Store({
             state.user.name = false;
             state.user.loggedIn = false;
         }
+
     }
 });

@@ -5,16 +5,19 @@ import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import App from './App/index.vue'
 
+import MapSearchView from './MapSearch/MapSearchView/index.vue'
 import LoginView from './Login/LoginView/index.vue'
 import RegisterView from './Register/RegisterView/index.vue'
 import ResetPassword from './User/ResetPassword/index.vue'
+import SettingsView from './User/SettingsView/index.vue'
 
 
 
 
 const routes = [
-    { path: '/', name: 'home'},
+    { path: '/', name: 'home', component: MapSearchView},
     { path: '/login', name: 'login', component: LoginView },
+    { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
     { path: '/signup', name: 'signup', component: RegisterView }
 
