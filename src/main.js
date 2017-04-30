@@ -60,7 +60,6 @@ Vue.use(VeeValidate, veeConfig);
 
 
 
-
 const app = new Vue({
   el : '#app',
   store,
