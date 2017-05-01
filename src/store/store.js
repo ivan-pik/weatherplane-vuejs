@@ -8,6 +8,9 @@ export default new Vuex.Store({
         user: {
             loggedIn: false,
             name: false
+        },
+        placeSearch: {
+          place: {}
         }
 
     },
@@ -20,7 +23,11 @@ export default new Vuex.Store({
         'USER_LOG_OUT' (state) {
             state.user.name = false;
             state.user.loggedIn = false;
-        }
+        },
+        // Place Search
+        'PLACE_SEARCH_PLACE_SELECTED' (state, place) {
+            state.placeSearch.place = place;
+        },
 
     }
 });
