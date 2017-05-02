@@ -1,7 +1,14 @@
 <template>
     <div class="">
       <place-input v-bind:placeInput="place"></place-input>
-      <location-map></location-map>
+      <br>
+      <br>
+      <br>
+      <br>
+      <location-map
+        v-if="showMap"
+        :place="place"
+      />
     </div>
 
 </template>
@@ -24,6 +31,13 @@
         computed: {
             place() {
                 return this.$store.state.placeSearch.place;
+            },
+            showMap () {
+              if (this.place.description) {
+                return true;
+              } else {
+                return false;
+              }
             }
         }
     }
