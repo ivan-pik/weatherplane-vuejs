@@ -19,8 +19,9 @@
 </template>
 <script>
     import Vue from 'vue'
-    import loadGoogleMapsAPI from 'load-google-maps-api';
+
     import suggestionsDropdown from './suggestionsDropdown/index.vue';
+    import {loadGoogleApi} from '../../libs/googleApi.js';
 
     export default {
         name: 'placeInput',
@@ -43,18 +44,14 @@
             this.$parent.$emit('placeSelected', this.suggestions[activeSuggestion]);
 
            });
-
-          loadGoogleMapsAPI(
-            {
-              key: 'AIzaSyBTL50DdKgmlhWvZ7b-kbCFt4N1hdZ7EvY',
-              libraries: 'places'
+           
+            loadGoogleApi().then(function(googleApi) {
+              this.service = new googleApi.places.AutocompleteService();
+            }.bind(this), function(error) {
+              console.error("Failed!", error);
             }
-          ).then((googleMaps) => {
-            console.log("Google Maps API loaded")
-            this.service = new google.maps.places.AutocompleteService();
-          }).catch((err) => {
-            console.error(err);
-          });
+
+          );
         },
 
         watch: {
