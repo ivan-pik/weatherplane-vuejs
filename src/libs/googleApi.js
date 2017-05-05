@@ -2,7 +2,7 @@ import loadGoogleMapsAPI from 'load-google-maps-api';
 
 export const loadGoogleApi = function() {
   return new Promise(function(resolve, reject) {
-    if(google && google.maps) {
+    if((typeof window.google !== 'undefined') && google.maps ) {
       resolve (google.maps);
     } else {
       loadGoogleMapsAPI(

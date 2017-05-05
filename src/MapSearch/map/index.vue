@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{place}}
     <div id="map">
       Map
     </div>
@@ -32,43 +31,30 @@
       },
       methods: {
         //@todo @next: this does not work, learn more about THIS binding :)
-        updateMap (place) {
-          console.log("redraw")
-          
-
+        updateMap () {
           var geocoder = new this.googleApi.Geocoder;
-          var infowindow = new this.googleApi.InfoWindow;
+          geocoder.geocode({'placeId': this.place.place_id}, (results, status) => {
+              if (status === 'OK') {
+                if (results[0]) {
+                    this.mapWidget.setZoom(11);
+                    this.mapWidget.setCenter(results[0].geometry.location);
+                    var marker = new this.googleApi.Marker({
+                    map: this.mapWidget,
+                    position: results[0].geometry.location
+                    });
+                } else {
+                    // @todo: No results found
+                }
+              } else {
+                console.error('Geocoder failed due to: ' + status);
+              }
+          });
 
-          function geocodePlaceId(geocoder, map, infowindow) {
-              console.log(this);
-              var placeId = this.place.place_id;
-              
-              geocoder.geocode({'placeId': placeId}, function(results, status) {
-                  if (status === 'OK') {
-                  if (results[0]) {
-                      map.setZoom(11);
-                      map.setCenter(results[0].geometry.location);
-                      var marker = new google.maps.Marker({
-                      map: map,
-                      position: results[0].geometry.location
-                      });
-                      infowindow.setContent(results[0].formatted_address);
-                      infowindow.open(map, marker);
-                  } else {
-                      window.alert('No results found');
-                  }
-                  } else {
-                  window.alert('Geocoder failed due to: ' + status);
-                  }
-              });
-          }
-          
-          geocodePlaceId(geocoder, this.mapWidget, infowindow).bind(this);
         }
       },
       watch: {
         place () {
-          this.updateMap(this.place);
+          this.updateMap();
         }
       }
     }
