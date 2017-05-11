@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div id="map">
-      Map
-    </div>
+  <div id="map" ref="mapWraper">
+    Map
   </div>
 </template>
+
 <script>
-// @todo: @next https://developers.google.com/places/place-id
     import Vue from 'vue'
     import {loadGoogleApi} from '../../libs/googleApi.js';
 
@@ -18,33 +16,31 @@
         }
       },
       created () {
+
         loadGoogleApi().then(function(googleApi) {
 
           this.googleApi = googleApi;
 
-
-          // @todo: Use $ref instead of getting the ID
-          this.mapWidget = new googleApi.Map(document.getElementById('map'), {
+          this.mapWidget = new googleApi.Map(this.$refs.mapWraper, {
             center: {lat: -12.1430911, lng: -77.0227697},
-            zoom: 12
+            zoom: 16,
+            mapTypeId: 'satellite'
           });
 
           let mapWidget = this.mapWidget;
-
-
-
-
-
 
           // place marker
           google.maps.event.addListener(mapWidget, 'click', (event) => {
              this.placeMarker(event.latLng);
            });
 
+           this.updateMap();
+
         }.bind(this), function(error) {
           console.error("Failed!", error);
         });
       },
+
       methods: {
 
         placeMarker (location) {
@@ -67,8 +63,6 @@
           this.markersArray.length = 0;
         },
 
-
-        //@todo @next: this does not work, learn more about THIS binding :)
         updateMap () {
           var geocoder = new this.googleApi.Geocoder;
           geocoder.geocode({'placeId': this.place.place_id}, (results, status) => {
@@ -103,8 +97,6 @@
         }
       }
     }
-
-
 
 </script>
 <style scoped>
