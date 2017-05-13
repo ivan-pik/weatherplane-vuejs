@@ -10,7 +10,11 @@ export default new Vuex.Store({
             name: false
         },
         placeSearch: {
-          place: {}
+          place: {},
+          placeSelected: false,
+          selectedLocation: {
+            coordinates: {}
+          }
         }
 
     },
@@ -28,6 +32,10 @@ export default new Vuex.Store({
         'PLACE_SEARCH_PLACE_SELECTED' (state, place) {
             state.placeSearch.place = place;
         },
+        'LOCATION_SAVE_ACTIVE_LOCATION' (state, coordinates) {
+            state.placeSearch.selectedLocation.coordinates = coordinates;
+            state.placeSearch.placeSelected = true;
+        }
 
     }
 });

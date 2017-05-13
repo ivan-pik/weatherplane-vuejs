@@ -10,7 +10,7 @@ import LoginView from './Login/LoginView/index.vue'
 import RegisterView from './Register/RegisterView/index.vue'
 import ResetPassword from './User/ResetPassword/index.vue'
 import SettingsView from './User/SettingsView/index.vue'
-
+import PlaceView from './Place/PlaceView/index.vue'
 
 
 
@@ -19,7 +19,8 @@ const routes = [
     { path: '/login', name: 'login', component: LoginView },
     { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
-    { path: '/signup', name: 'signup', component: RegisterView }
+    { path: '/signup', name: 'signup', component: RegisterView },
+    { path: '/place', name: 'place', component: PlaceView }
 
 ]
 

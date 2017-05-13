@@ -1,7 +1,14 @@
 <template>
+  <div class="">
+
+
   <div id="map" ref="mapWraper">
     Map
   </div>
+
+
+
+    </div>
 </template>
 
 <script>
@@ -34,6 +41,8 @@
              this.placeMarker(event.latLng);
            });
 
+
+
            this.updateMap();
 
         }.bind(this), function(error) {
@@ -43,17 +52,44 @@
 
       methods: {
 
+        saveActiveLocation(coordinates) {
+          this.$store.commit('LOCATION_SAVE_ACTIVE_LOCATION', coordinates);
+        },
+
         placeMarker (location) {
+
+
           this.clearOverlays();
+
+          // @todo: you are repeating yourself
+
           var marker = new google.maps.Marker({
               position: location,
               map: this.mapWidget,
               draggable: true
           });
 
+          google.maps.event.addListener(marker, 'dragend', (event) => {
+            let coordinates = {
+              lat: marker.getPosition().lat(),
+              lng: marker.getPosition().lng()
+            }
+            this.saveActiveLocation(coordinates);
+           });
+
           this.markersArray.push(marker);
 
           this.mapWidget.setCenter(location);
+
+          let coordinates = {
+            lat: marker.getPosition().lat(),
+            lng: marker.getPosition().lng()
+          }
+
+          this.saveActiveLocation(coordinates);
+
+
+
         },
 
         clearOverlays () {
@@ -70,11 +106,26 @@
                 if (results[0]) {
                     this.mapWidget.setZoom(16);
                     this.mapWidget.setCenter(results[0].geometry.location);
+
+                    // @todo: you are repeating yourself
+
                     var marker = new this.googleApi.Marker({
                       map: this.mapWidget,
                       position: results[0].geometry.location,
                       draggable: true
                     });
+
+                    let coordinates = {
+                      lat: marker.getPosition().lat(),
+                      lng: marker.getPosition().lng()
+                    }
+
+
+                    this.saveActiveLocation(coordinates);
+
+                    google.maps.event.addListener(marker, 'dragend', function() { console.log('marker dragged'); } );
+
+
                     this.markersArray.push(marker);
                 } else {
                     // @todo: No results found
