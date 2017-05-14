@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import {checkAuth, getLocalToken} from '../auth'
+import {HTTP} from '../http-common';
 
 
 import Navigation from '../Navigation/index.vue'
+
+
 
 
 export default {
@@ -11,12 +14,12 @@ export default {
 
     if(checkAuth()) {
 
-
-        this.$http.post('identify', getLocalToken())
+        HTTP.post('identify', getLocalToken())
             .then(response => {
-                    if (response.body.success) {
+							console.log(response);
+                    if (response.data.success) {
                         this.$store.commit('USER_LOG_IN', {
-                            username: response.body.data.username
+                            username: response.data.data.username
                         })
 
 
@@ -26,10 +29,11 @@ export default {
                     }
                 }
             ).catch(err => {
-            if(err.body.errors) {
-                console.log("OMG BROKEN");
-                // bus.$emit('failed-login');
-            }
+							console.log(err);
+            //  if(err.responnse.errors) {
+            //    console.log("OMG BROKEN");
+            //     // bus.$emit('failed-login');
+            //  }
         });
     }
   },

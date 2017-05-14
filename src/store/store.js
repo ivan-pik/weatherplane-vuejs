@@ -7,7 +7,9 @@ export default new Vuex.Store({
     state: {
         user: {
             loggedIn: false,
-            name: false
+            name: false,
+						authenticationRequired: false,
+						authenticated: false
         },
         placeSearch: {
           place: {},
@@ -15,7 +17,10 @@ export default new Vuex.Store({
           selectedLocation: {
             coordinates: {}
           }
-        }
+        },
+				placeView: {
+
+				}
 
     },
     mutations: {
@@ -27,6 +32,13 @@ export default new Vuex.Store({
         'USER_LOG_OUT' (state) {
             state.user.name = false;
             state.user.loggedIn = false;
+        },
+				'USER_AUTHENTICATION_REQUIRED' (state) {
+            state.user.authenticationRequired = true;
+        },
+				'USER_AUTHENTICATED' (state) {
+					
+            state.user.authenticated = true;
         },
         // Place Search
         'PLACE_SEARCH_PLACE_SELECTED' (state, place) {

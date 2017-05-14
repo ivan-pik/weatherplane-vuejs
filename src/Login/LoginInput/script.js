@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import {saveToken} from '../../auth'
+import {HTTP} from '../../http-common';
 
 export default {
   name: 'LoginInput',
@@ -10,22 +11,31 @@ export default {
           userID :  this.username,
           password : this.password
       };
-      this.$http.post('authenticate', credentials)
+      HTTP.post('authenticate', credentials)
           .then(response => {
-              if (response.body.success) {
+              if (response.data.success) {
 
-                  saveToken(response.body.token);
+                  saveToken(response.data.token);
 
                   this.$store.commit('USER_LOG_IN', {
                       username: credentials.userID
                   });
 
-                  this.$router.push(credentials.userID);
+									console.log(this.noRouterRedirect);
+
+									if(this.noRouterRedirect) {
+
+										this.$store.commit('USER_AUTHENTICATED');
+									} else {
+										this.$router.push(credentials.userID);
+									}
+
+
               }
           }).catch(err => {
-          if(err.body.errors) {
-              this.onFailedLogin();
-          }
+	          if(err.response) {
+	              this.onFailedLogin();
+	          }
       });
       }).catch(() => {
           // when form is invalid
@@ -35,6 +45,11 @@ export default {
        Vue.set(this.errors, 'wrongCredentials', true)
     }
   },
+	computed: {
+		noRouterRedirect () {
+			return this.$store.state.user.authenticationRequired;
+		}
+	},
   data() {
     return {
       show: true,

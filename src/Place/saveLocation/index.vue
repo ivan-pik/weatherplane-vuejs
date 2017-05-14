@@ -3,6 +3,7 @@
     <button v-if="!openSaveOptions" type="button" name="button" @click="saveThisPlace">Save this location</button>
 
     <div v-if="openSaveOptions">
+      <button type="button" name="button" @click="openSaveOptions=false">X</button>
       <h5>Save this location</h5>
       <form  v-on:submit.prevent="onSubmit">
 
@@ -57,8 +58,9 @@
 
 </template>
 <script>
-    import Vue from 'vue'
+    import Vue from 'vue';
 
+		import {HTTP} from '../../http-common';
 
     export default {
         name: 'saveLocation',
@@ -93,25 +95,37 @@
           onSubmit(event) {
             this.$validator.validateAll().then(() => {
 
-            let newPlace = this.activeLocation;
+            let newPlace = {
+							placeName : this.placeName,
+							placeSlug : this.placeNameURL,
+							userID : this.userName,
+							placeLat : this.activeLocation.coordinates.lat,
+							placeLng : this.activeLocation.coordinates.lng,
+							placeSettings : {
+								public : this.placeIsPublic
+							}
+						}
+
 
             // @todo: @next Save this place in the back end
-            this.$http.post('place', newPlace)
+            HTTP.post('places', newPlace)
                 .then(response => {
-                    if (response.body.success) {
+									console.log(response)
+                    if (response.data.success) {
                       console.log("place saved")
-                        // this.$router.push(credentials.userID);
+                        this.$router.push(this.userName + "/" + newPlace.placeSlug);
                     }
                 }).catch(err => {
-                if(err.body.errors) {
-                    this.onFailedLogin();
+									console.log(err);
+                if(err.response) {
+                    this.onFailedPlaceSave();
                 }
             });
             }).catch(() => {
                 // when form is invalid
             });
           },
-          onFailedLogin() {
+          onFailedPlaceSave() {
              Vue.set(this.errors, 'placeNotSaved', true)
           }
         },

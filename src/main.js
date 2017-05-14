@@ -5,14 +5,15 @@ import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import App from './App/index.vue'
 
+import {checkAuth, getLocalToken} from './auth/index.js'
+
 import MapSearchView from './MapSearch/MapSearchView/index.vue'
 import LoginView from './Login/LoginView/index.vue'
 import RegisterView from './Register/RegisterView/index.vue'
 import ResetPassword from './User/ResetPassword/index.vue'
 import SettingsView from './User/SettingsView/index.vue'
 import PlaceView from './Place/PlaceView/index.vue'
-
-
+import ExistingPlaceView from './Place/ExistingPlaceView/index.vue'
 
 const routes = [
     { path: '/', name: 'home', component: MapSearchView},
@@ -20,7 +21,8 @@ const routes = [
     { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
     { path: '/signup', name: 'signup', component: RegisterView },
-    { path: '/place', name: 'place', component: PlaceView }
+    { path: '/place', name: 'place', component: PlaceView },
+		{ path: '/:username/:place', component: ExistingPlaceView }
 
 ]
 
@@ -34,7 +36,7 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 
 
-Vue.http.options.root = '//localhost:4000';
+// Vue.http.options.root = '//localhost:4000';
 
 const veeConfig = {
   errorBagName: 'validationErrors', // change if property conflicts.
