@@ -18,8 +18,8 @@ export default new Vuex.Store({
             coordinates: {}
           }
         },
-				placeView: {
-
+				existingPlaceView: {
+          place: null
 				}
 
     },
@@ -37,7 +37,7 @@ export default new Vuex.Store({
             state.user.authenticationRequired = true;
         },
 				'USER_AUTHENTICATED' (state) {
-					
+
             state.user.authenticated = true;
         },
         // Place Search
@@ -47,7 +47,11 @@ export default new Vuex.Store({
         'LOCATION_SAVE_ACTIVE_LOCATION' (state, coordinates) {
             state.placeSearch.selectedLocation.coordinates = coordinates;
             state.placeSearch.placeSelected = true;
-        }
+        },
+        // Place View
+        'PLACE_SAVE_PLACE_DATA' (state, place) {
+            state.existingPlaceView.place = place;
+        },
 
     }
 });

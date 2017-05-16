@@ -1,18 +1,17 @@
 <template>
 	<div class="">
 
-		{{authenticated}}
 
 		<place-not-found v-if="place404" />
 
-		<loginView :message="message" @loggedIn="loggedIn" v-if="needToLogin" />
+		<login-view :message="message" @loggedIn="loggedIn" v-if="needToLogin" />
 
 
     <div v-else class="">
 
 
+			<place-details />
 
-      <weather />
 
 
     </div>
@@ -26,14 +25,16 @@
     import weather from '../weather/index.vue';
 		import {HTTP} from '../../http-common';
 		import placeNotFound from '../placeNotFound/index.vue';
-		import loginView from '../../Login/LoginView/index.vue'
+		import loginView from '../../Login/LoginView/index.vue';
+		import placeDetails from '../placeDetails/index.vue';
 
     export default {
         name: 'ExistingPlaceView',
         components: {
           'weather' : weather,
 					'place-not-found' : placeNotFound,
-					'loginView' : loginView
+					'login-view' : loginView,
+					'place-details': placeDetails
         },
 				created () {
 					this.loadPlaceData();
@@ -46,12 +47,16 @@
 						HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
 			          .then(response => {
 			              if (response.data.success) {
-											console.log(response);
+
+											this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
+
+
+
 			              }
 			          }).catch(err => {
 
 				          if(err.response) {
-										// @todo: DRY
+										// @todo: DRY!!!
 										let errorCode = function(code, errors) {
 											let check = errors.filter(function( obj ) {
 												return obj.code == code;
@@ -62,7 +67,7 @@
 											return false;
 										}
 
-										console.log(err.response.data);
+
 
 
 										if(errorCode("authentication-required", err.response.data.errors)) {

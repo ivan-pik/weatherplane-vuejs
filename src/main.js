@@ -14,6 +14,7 @@ import ResetPassword from './User/ResetPassword/index.vue'
 import SettingsView from './User/SettingsView/index.vue'
 import PlaceView from './Place/PlaceView/index.vue'
 import ExistingPlaceView from './Place/ExistingPlaceView/index.vue'
+import UserPlacesView from './Place/UserPlacesView/index.vue'
 
 const routes = [
     { path: '/', name: 'home', component: MapSearchView},
@@ -22,15 +23,14 @@ const routes = [
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
     { path: '/signup', name: 'signup', component: RegisterView },
     { path: '/place', name: 'place', component: PlaceView },
+    { path: '/:username/', component: UserPlacesView },
 		{ path: '/:username/:place', component: ExistingPlaceView }
-
 ]
 
 const router = new VueRouter({
   mode: 'history',
   routes
 })
-
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
