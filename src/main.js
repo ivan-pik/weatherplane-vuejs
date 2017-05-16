@@ -5,7 +5,7 @@ import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import App from './App/index.vue'
 
-import {checkAuth, getLocalToken} from './auth/index.js'
+// import {checkAuth, getLocalToken} from './auth/index.js'
 
 import MapSearchView from './MapSearch/MapSearchView/index.vue'
 import LoginView from './Login/LoginView/index.vue'

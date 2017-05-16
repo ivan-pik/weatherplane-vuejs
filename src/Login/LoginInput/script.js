@@ -15,13 +15,20 @@ export default {
           .then(response => {
               if (response.data.success) {
 
+								console.log(response.data.token);
+
                   saveToken(response.data.token);
+
+
+									HTTP.defaults.headers.authorization = response.data.token;
+
+
+
 
                   this.$store.commit('USER_LOG_IN', {
                       username: credentials.userID
                   });
 
-									console.log(this.noRouterRedirect);
 
 									if(this.noRouterRedirect) {
 

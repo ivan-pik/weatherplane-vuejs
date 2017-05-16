@@ -14,9 +14,8 @@ export default {
 
     if(checkAuth()) {
 
-        HTTP.post('identify', getLocalToken())
+        HTTP.post('identify')
             .then(response => {
-							console.log(response);
                     if (response.data.success) {
                         this.$store.commit('USER_LOG_IN', {
                             username: response.data.data.username

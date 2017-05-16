@@ -14,9 +14,7 @@ export const checkAuth = function() {
 
 export const getLocalToken = function() {
     var jwt = localStorage.getItem('id_token');
-    if(jwt) return {
-        token: jwt
-    };
+    if(jwt) return jwt;
     else {
         return false;
     }

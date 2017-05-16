@@ -44,6 +44,8 @@
 						console.log("User is not authenticated");
 					},
 					loadPlaceData () {
+
+
 						HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
 			          .then(response => {
 			              if (response.data.success) {
