@@ -107,7 +107,6 @@
 						}
 
 
-            // @todo: @next Save this place in the back end
             HTTP.post('places', newPlace)
                 .then(response => {
 									console.log(response)

@@ -46,10 +46,7 @@ export default {
           console.log("emitting successful-registration")
           bus.$emit('successful-registration')
 
-          // @todo Well I guess I will now save the user date in localStorate/ cookie
-          // and to the Vuex store
-
-          // @nextstep: Learn how Vuex works!
+        
     // @todo: use store
 
           Vue.set(this.user, name, data)

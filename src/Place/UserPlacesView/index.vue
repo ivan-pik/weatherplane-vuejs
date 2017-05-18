@@ -2,7 +2,9 @@
 	<div class="">
 		My places
 		<br>
-		{{places}}
+		<ul>
+			<li v-for="place in places">{{place.placeName}}</li>
+		</ul>
 	</div>
 </template>
 <script>
@@ -14,6 +16,7 @@
         name: 'UserPlacesView',
 
 				created () {
+					// @load places also when component is re rendered AND when user has just logged in
 					this.loadPlacesData ()
 				},
         computed: {
@@ -21,6 +24,7 @@
 
         },
 				methods: {
+
 					loadPlacesData () {
 
 
