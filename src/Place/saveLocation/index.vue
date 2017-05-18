@@ -98,7 +98,7 @@
             let newPlace = {
 							placeName : this.placeName,
 							placeSlug : this.placeNameURL,
-							userID : this.userName,
+							_userID : this.userName,
 							placeLat : this.activeLocation.coordinates.lat,
 							placeLng : this.activeLocation.coordinates.lng,
 							placeSettings : {
