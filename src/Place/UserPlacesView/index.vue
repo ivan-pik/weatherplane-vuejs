@@ -3,7 +3,7 @@
 		My places
 		<br>
 		<ul>
-			<li v-for="place in places">{{place.placeName}}</li>
+			<li v-for="place in places">{{place.placeName}} <br> {{place}}</li>
 		</ul>
 	</div>
 </template>
