@@ -73,7 +73,6 @@
 
 
 										if(errorCode("authentication-required", err.response.data.errors)) {
-											//@todo: @next show login widget
 											this.needToLogin = true;
 											this.$store.commit('USER_AUTHENTICATION_REQUIRED')
 										}
