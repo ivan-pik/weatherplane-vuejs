@@ -2,6 +2,7 @@
 <div class="">
 <h5>Place details:</h5>
 {{activeLocation}}
+// @next @todo: Weather
 </div>
 
 </template>
