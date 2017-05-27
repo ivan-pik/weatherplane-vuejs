@@ -1,16 +1,21 @@
 <template>
 <div class="">
-<h5>Place details:</h5>
-{{activeLocation}}
-// @next @todo: Weather
+
+
+<weather-data-test />
+
 </div>
 
 </template>
 <script>
     import Vue from 'vue';
+		import weatherDataTest from '../../Weather/weatherDataTest/index.vue';
 
     export default {
         name: 'placeDetails',
+				components: {
+					'weather-data-test' : weatherDataTest
+				},
         computed: {
             activeLocation() {
                 return this.$store.state.existingPlaceView.place;

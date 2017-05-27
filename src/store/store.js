@@ -19,7 +19,8 @@ export default new Vuex.Store({
           }
         },
 				existingPlaceView: {
-          place: null
+          place: null,
+					weatherData: null
 				}
 
     },
@@ -52,6 +53,9 @@ export default new Vuex.Store({
         'PLACE_SAVE_PLACE_DATA' (state, place) {
             state.existingPlaceView.place = place;
         },
+				'PLACE_SAVE_WEATHER_DATA' (state, weather) {
+            state.existingPlaceView.weatherData = weather;
+        }
 
     }
 });
