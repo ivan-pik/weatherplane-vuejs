@@ -7,14 +7,18 @@
 		<login-view :message="message" @loggedIn="loggedIn" v-if="needToLogin" />
 
 
-    <div v-else class="">
+    <div v-else-if="place" class="">
 
 
-			<place-details />
+			<place-details :activeLocation='place' />
 
 
 
     </div>
+
+	<div v-else>
+		LOADING ...
+	</div>
 
 
 		</div>
@@ -22,16 +26,16 @@
 <script>
     import Vue from 'vue'
     import saveLocation from '../saveLocation/index.vue';
-    import weather from '../weather/index.vue';
-		import {HTTP} from '../../http-common';
-		import placeNotFound from '../placeNotFound/index.vue';
-		import loginView from '../../Login/LoginView/index.vue';
-		import placeDetails from '../placeDetails/index.vue';
+  
+	import {HTTP} from '../../http-common';
+	import placeNotFound from '../placeNotFound/index.vue';
+	import loginView from '../../Login/LoginView/index.vue';
+	import placeDetails from '../placeDetails/index.vue';
 
     export default {
         name: 'ExistingPlaceView',
         components: {
-          'weather' : weather,
+         
 					'place-not-found' : placeNotFound,
 					'login-view' : loginView,
 					'place-details': placeDetails
@@ -50,7 +54,7 @@
 			          .then(response => {
 			              if (response.data.success) {
 
-											this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
+							this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
 
 
 
@@ -90,7 +94,11 @@
         computed: {
 					authenticated () {
 						return this.$store.state.user.authenticated;
+					},
+					place () {
+						return this.$store.state.existingPlaceView.place;
 					}
+				
 
         },
 				watch: {
@@ -106,8 +114,8 @@
 					return {
 						needToLogin: false,
 						place404: false,
-						message: null,
-						place: {}
+						message: null
+						
 					}
 				}
 

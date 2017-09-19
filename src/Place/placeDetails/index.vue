@@ -1,31 +1,75 @@
 <template>
 <div class="">
 
+<div v-if="weatherData">
 
-<weather-data-test />
+  <hourly-view :weather="weatherData" />
+
+</div>
+
+<div v-else>
+  loading weather
+  </div>
+
 
 </div>
 
 </template>
 <script>
     import Vue from 'vue';
-		import weatherDataTest from '../../Weather/weatherDataTest/index.vue';
+    import hourlyView from '../../Weather/hourlyView/index.vue';
+    import {HTTP} from '../../http-common';
 
     export default {
         name: 'placeDetails',
+        created: function () {
+          
+        },
 				components: {
-					'weather-data-test' : weatherDataTest
+					
+          'hourly-view' : hourlyView,
 				},
+
+      props: {
+        activeLocation: {
+          type: Object
+        }
+      },
+     
         computed: {
-            activeLocation() {
-                return this.$store.state.existingPlaceView.place;
-            }
+         
+            weatherData() {
+							return this.$store.state.existingPlaceView.weatherData;
+						}
+        },
+        created: function () {
+          this.fetchWeather();
         },
         methods: {
           saveThisPlace () {
             if (this.loggedIn) {
               this.openSaveOptions = true;
             }
+          },
+          fetchWeather () {
+            let oid = this.activeLocation.weather[0].oid;
+
+        
+            HTTP.get('weather/' + oid)
+                .then(response => {
+                    if (response.data.success) {
+                      console.log(response.data.data);
+                      this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data)
+
+                      localStorage.setItem('weather', JSON.stringify(response.data.data));
+
+                      this.weatherDataHourly = this.weatherData.hourly;
+
+                    }
+                }).catch(err => {
+                  console.log("ooops!")
+            });
+          
           },
           onSubmit(event) {
             this.$validator.validateAll().then(() => {
@@ -68,6 +112,7 @@
             errors: null,
             placeName: '',
             placeIsPublic: false,
+            weatherDataHourly: []
           }
         }
 

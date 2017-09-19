@@ -11,7 +11,7 @@
       {{activeLocation.coordinates.lng}}
       </h6>
 
-      <weather />
+     
 
       <save-location />
 
@@ -25,15 +25,15 @@
 <script>
     import Vue from 'vue'
     import saveLocation from '../saveLocation/index.vue';
-    import weather from '../weather/index.vue';
+   
 
 
 
     export default {
         name: 'PlaceView',
         components: {
-          'save-location' : saveLocation,
-          'weather' : weather
+          'save-location' : saveLocation
+         
 
         },
 				created () {
