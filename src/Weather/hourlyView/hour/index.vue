@@ -5,9 +5,9 @@
 
         <hourTime :time="weather.time" />
 
-        <wind-speed-bar :windSpeed="weather.windSpeed" :windGust="weather.windSpeed" />
+        <wind-speed-bar :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
 
-        <wind-speed :status="windSpeedStatus" :windSpeed="weather.windSpeed" :windGust="weather.windSpeed" />
+        <wind-speed :status="windSpeedStatus" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
 
         <wind-bearing :status="windBearingStatus" :windBearing="weather.windBearing" />
 
