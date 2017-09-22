@@ -4,6 +4,11 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 
 
+
+const extractSass = new ExtractTextPlugin({
+    filename: '[name].css'
+});
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -39,17 +44,43 @@ module.exports = {
           name: '[name].[ext]?[hash]'
         }
       },
-			// {
-			// 	test: /\.scss$/,
-			// 	use: ExtractTextPlugin.extract({
-			// 		fallback: 'style-loader',
-			// 		use: [
-			// 			`css-loader`,
-			// 			'postcss-loader',
-			// 			`sass-loader`,
-			// 		],
-			// 	})
-			// }
+		  {
+        test: /\.scss$/,
+        loader: extractSass.extract({
+            use: [
+                {
+                    loader: 'css-loader',
+                    options: {
+                      sourceMap: true,
+                      importLoaders: 1
+                    },
+                },
+                // Enables autoprefixer & other configs -- check postcss.config file
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                },
+                // Let's us work with relative urls in css
+                {
+                    loader: 'resolve-url-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                },
+                // Loads SASS files
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }
+            ],
+                // Use style-loader in development
+                fallback: 'style-loader',
+            })
+        }
     ]
   },
   resolve: {
@@ -66,16 +97,17 @@ module.exports = {
   },
   devtool: '#eval-source-map',
 	plugins: [
-		new ExtractTextPlugin("./src/public/css/styles.css")
-		// new webpack.LoaderOptionsPlugin({
-		// 	test: /\.s?css$/,
-		// 	options: {
-		// 		output: { path: './test/' },
-		// 		postcss: [
-		// 			autoprefixer({ browsers: ['last 2 versions', 'android 4', 'opera 12'] }),
-		// 		],
-		// 	},
-		// }),
+    extractSass,
+		new ExtractTextPlugin("./src/public/css/styles.css"),
+		new webpack.LoaderOptionsPlugin({
+			test: /\.s?css$/,
+			options: {
+				output: { path: './test/' },
+				postcss: [
+					autoprefixer({ browsers: ['last 2 versions', 'android 4', 'opera 12'] }),
+				],
+			},
+		})
 	],
 }
 

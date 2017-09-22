@@ -1,19 +1,19 @@
 <template>
 	<div class="hour">
-    
+
 		<status :status="totalStatus" />
 
-        <hourTime :time="weather.time" />
+        <hour-time :time="weather.time" />
 
-        <wind-speed-bar :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
+        <wind-speed-bar :uid="uid" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
 
-        <wind-speed :status="windSpeedStatus" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
+        <wind-speed  :status="windSpeedStatus" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
 
-        <wind-bearing :status="windBearingStatus" :windBearing="weather.windBearing" />
+        <wind-bearing v-if="false" :status="windBearingStatus" :windBearing="weather.windBearing" />
 
-        <weather-icon :icon="weather.icon" :precipProbability="weather.precipProbability" :precipIntensity="weather.precipIntensity" />
+        <weather-icon v-if="false" :icon="weather.icon" :precipProbability="weather.precipProbability" :precipIntensity="weather.precipIntensity" />
 
-        <temperature  :temperature="weather.temperature" />
+        <temperature v-if="false"  :temperature="weather.temperature" />
 	</div>
 </template>
 
@@ -32,11 +32,14 @@
         props: {
             weather: {
                 type: Object
+            },
+            order: {
+                type: Number
             }
         },
 		components: {
 			'status' : Status,
-            'hourTime': hourTime,
+            'hour-time': hourTime,
             'wind-speed-bar' : windSpeedBar,
             'wind-speed' : windSpeed,
             'weather-icon' : weatherIcon,
@@ -44,6 +47,10 @@
             'temperature' : temperature
 		},
         computed: {
+            uid() {
+                let parsed = Date.parse(this.weather.time);
+                return parsed;
+            },
            totalStatus() {
                if (
                    this.windSpeedStatus 
@@ -90,8 +97,3 @@
 
 </script>
 
-<style>
-    .hour {
-        border: 1px solid orange;
-    }
-</style>

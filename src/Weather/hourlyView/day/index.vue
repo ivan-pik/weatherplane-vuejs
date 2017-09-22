@@ -1,9 +1,10 @@
 <template>
-	<div>
+	<div class="day-list">
    
     <date :time="day.time" />
+
   
-	<hour v-for="hour in weather" :key="hour.id" :weather="hour" />
+	<hour v-for="(hour, key) in weather" :weather="hour" />
     <hr />
 	</div>
 </template>
@@ -21,13 +22,15 @@
             },
             day: {
                 type: Object
-            }
+            },
+            
         },
 		components: {
 			'hour' : Hour,
             'date' : Date
 		},
         computed: {
+          
            
         },
         methods: {
@@ -46,7 +49,3 @@
 
 
 </script>
-
-<style>
-
-</style>

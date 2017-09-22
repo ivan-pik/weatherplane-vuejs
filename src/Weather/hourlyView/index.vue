@@ -1,7 +1,7 @@
 <template>
-	<div>
-	
-		 <day v-for="day in weather.daily" :key="day.time" :day="day" :weather="weatherForTheDay(day.time)"  />
+	<div class="weather-hourly">
+   oooooooooooooooooo {{maxWindSpeed}}xxx
+		 <day v-for="day in weather.daily" :key="day.time" :day="day"  :weather="weatherForTheDay(day.time)"  />
 
 	</div>
 </template>
@@ -24,7 +24,16 @@
             }
         },
         computed: {
-
+         
+            maxWindSpeed () {
+                var maxAchievedSpeed = 0;
+                this.weather.hourly.forEach(function(element) {
+                    if(element.windGust > maxAchievedSpeed) {
+                        maxAchievedSpeed = element.windGust;
+                    }
+                });
+                return maxAchievedSpeed;
+            }
        
         },
         methods: {

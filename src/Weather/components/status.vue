@@ -1,14 +1,6 @@
 <template>
-	<div>
-       <div v-if="status=='yes'" class="status yes">
-        OK
-       </div>
-       <div v-else-if="status=='no'" class="status no">
-        Nope
-       </div>
-       <div v-else class="status na">
-        n/a
-       </div>
+	<div class="status" v-bind:class="className">
+       
 	</div>
 </template>
 
@@ -19,7 +11,11 @@
     export default {
         name: 'status',
         props: ['status'],
-     
+        computed: {
+            className () {
+                return this.status;
+            }
+        },
         methods: {
 		
 
@@ -36,15 +32,3 @@
 
 
 </script>
-
-<style>
-    .yes {
-        color: green;
-    }
-    .no {
-        color: red;
-    }
-    .na {
-        color: gray;
-    }
-</style>

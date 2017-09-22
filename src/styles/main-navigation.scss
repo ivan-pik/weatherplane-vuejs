@@ -1,0 +1,25 @@
+.main-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.main-navigation__toggler {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: red;
+    z-index: 10;
+    position: relative;
+}
+
+.main-navigation__panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: #fff;
+    z-index: 0;
+    padding: 50px 0 0 0;
+}

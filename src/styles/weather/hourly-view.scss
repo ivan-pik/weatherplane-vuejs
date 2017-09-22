@@ -1,0 +1,76 @@
+// --------------------------------
+.weather-hourly {
+
+}
+
+// --------------------------------
+.day-list {
+    display: block;
+}
+
+// --------------------------------
+.hour {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid $colorBorder;
+    padding: 0 0 0 $widthStatusBar;
+
+    .status {
+        position: absolute;
+        left: 0;
+        top: -1px;
+        bottom: 0px;
+    }
+    .wind-speed-bar {
+        flex: 0 1 40%;
+        // width: 100px;
+        margin-right: auto;
+    }
+}
+
+.hour__time {
+    font-size: 15px;
+    padding: 0 0 0 $widthGridSpace;
+    min-width: 3.6em;
+    width: 9vw;
+}
+
+.hour__time__sup {
+    vertical-align: top;
+    font-size: 9px;
+    position: relative;
+    left: -0.3em;
+}
+
+
+// --------------------------------
+.wind-speed-bar {
+   
+}
+
+.wind-speed-bar__wind-speed {
+    border-radius: $windSpeedBarHeight/2;
+    display: block;
+    height: $windSpeedBarHeight;
+    background: red;
+    width: 100%;
+}
+
+.svg-bar {
+    
+    display: block;
+   width: 100%;
+   height: 50px;
+}
+
+.svg-bar__rect {
+   
+  
+}
+
+.svg-bar__rect--over-treshold {
+    
+}

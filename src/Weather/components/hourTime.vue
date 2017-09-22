@@ -1,6 +1,6 @@
 <template>
-	<div>
-       {{niceHour}}<span class="sup">00</span>
+	<div class="hour__time">
+       {{niceHour}} <span class="hour__time__sup">00</span>
 
 	</div>
 </template>
@@ -17,7 +17,7 @@
             // @todo: read time format from user settings
             niceHour() {
                 var awesomeDate = new Date(this.time);   
-                return awesomeDate.toLocaleTimeString(navigator.language, {hour: '2-digit'});
+                return awesomeDate.toLocaleTimeString(navigator.language, {hour: 'numeric'});
                 
             },
         },
@@ -40,10 +40,3 @@
 
 </script>
 
-<style>
-    .sup {
-        font-size: 0.6em;
-        position: relative;
-        top: -0.5em;
-    }
-</style>
