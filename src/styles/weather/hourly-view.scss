@@ -3,9 +3,26 @@
 
 }
 
+
 // --------------------------------
 .day-list {
     display: block;
+    .hour:last-child {
+        border-bottom: none;
+    }
+    
+}
+// --------------------------------
+.dayDate {
+    height: 50px;
+    line-height: 50px;
+    
+    padding: 0 $widthGridSpace;
+    background: $bgDayLabel;
+    h3 {
+        font-size: 15px;
+        margin: 0 $widthStatusBar;
+    }
 }
 
 // --------------------------------
@@ -26,8 +43,11 @@
     }
     .wind-speed-bar {
         flex: 0 1 40%;
-        // width: 100px;
-        margin-right: auto;
+        margin-right: $widthGridSpace;
+
+    }
+    .hourWindSpeed {
+        margin: 0 auto 0 0;
     }
 }
 
@@ -73,6 +93,7 @@ $hourWindSpeed__size: 2.2em;
     display: inline-flex;
     align-items: center;
     width: ($hourWindSpeed__size*1.4);
+   
 }
 
 
@@ -100,7 +121,7 @@ $hourWindSpeed__size: 2.2em;
 
 .hourWindSpeed__display--gust {
     font-size: 9px;
-    margin-left: -0.3em;
+    margin-left: -0.2em;
     border: 1px solid #fff;
 }
 

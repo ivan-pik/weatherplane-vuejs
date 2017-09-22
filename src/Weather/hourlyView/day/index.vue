@@ -1,11 +1,7 @@
 <template>
 	<div class="day-list">
-   
     <date :time="day.time" />
-
-  
 	<hour v-for="(hour, key) in weather" :weather="hour" />
-    <hr />
 	</div>
 </template>
 

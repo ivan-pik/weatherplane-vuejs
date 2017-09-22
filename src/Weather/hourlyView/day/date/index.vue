@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="dayDate">
         <h3>{{niceTime}}</h3>
 	</div>
 </template>
