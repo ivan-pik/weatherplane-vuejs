@@ -1,6 +1,6 @@
 <template>
-	<div>
-       {{temperature}}&deg;
+	<div class="hourTemperature">
+       {{temperature.toFixed(0)}}&deg;
 	</div>
 </template>
 

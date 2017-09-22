@@ -66,11 +66,47 @@
    height: 50px;
 }
 
-.svg-bar__rect {
-   
-  
+// --------------------------------
+$hourWindSpeed__size: 2.2em;
+
+.hourWindSpeed {
+    display: inline-flex;
+    align-items: center;
+    width: ($hourWindSpeed__size*1.4);
 }
 
-.svg-bar__rect--over-treshold {
-    
+
+
+.hourWindSpeed__display {
+    color: $textColourStatus;
+    width: $hourWindSpeed__size;
+    height: $hourWindSpeed__size;
+    line-height: $hourWindSpeed__size;
+    border-radius: 50%;
+    text-align: center;
+
+    &.yes {
+        background: $statusYes;        
+    }
+
+    &.no {
+        background: $statusNo;            
+    }
+}
+
+.hourWindSpeed__display--speed {
+    font-size: 12px;
+}
+
+.hourWindSpeed__display--gust {
+    font-size: 9px;
+    margin-left: -0.3em;
+    border: 1px solid #fff;
+}
+
+// --------------------------------
+.hourTemperature {
+    font-size: 12px;
+    margin-right: $widthStatusBar;
+    padding: 0 $widthGridSpace;
 }

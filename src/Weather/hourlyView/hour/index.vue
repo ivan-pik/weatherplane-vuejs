@@ -5,15 +5,29 @@
 
         <hour-time :time="weather.time" />
 
-        <wind-speed-bar :uid="uid" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
+        <wind-speed-bar :uid="uid" 
+            :windSpeed="weather.windSpeed" 
+            :windGust="weather.windGust"
+          
+             />
 
-        <wind-speed  :status="windSpeedStatus" :windSpeed="weather.windSpeed" :windGust="weather.windGust" />
+             
+
+        <wind-speed 
+            :windSpeedStatus="windSpeedStatus"
+            :windGustStatus="windGustStatus" 
+            :windSpeed="weather.windSpeed" 
+            :windGust="weather.windGust"
+        />
+
+
+        
 
         <wind-bearing v-if="false" :status="windBearingStatus" :windBearing="weather.windBearing" />
 
         <weather-icon v-if="false" :icon="weather.icon" :precipProbability="weather.precipProbability" :precipIntensity="weather.precipIntensity" />
 
-        <temperature v-if="false"  :temperature="weather.temperature" />
+        <temperature :temperature="weather.temperature" />
 	</div>
 </template>
 
@@ -54,6 +68,7 @@
            totalStatus() {
                if (
                    this.windSpeedStatus 
+                   && this.windGustStatus 
                    && this.windBearingStatus
                    && this.precipicationStatus
                 ) {
@@ -64,6 +79,10 @@
            windSpeedStatus() {
                // @todo: treshold to come from place settings
                return (this.weather.windSpeed < 2.8)
+           },
+            windGustStatus() {
+               // @todo: treshold to come from place settings
+               return (this.weather.windGust < 2.8)
            },
             windBearingStatus() {
                 // @todo: treshold to come from place settings
