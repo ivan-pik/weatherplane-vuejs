@@ -2,7 +2,7 @@
 	
 
 	<svg class="windSpeedChart" > 
-		<path :d="generatePath" stroke="red" stroke-width="1" fill="none"></path>
+		<path :d="generatePath" stroke="#444" stroke-width="3" fill="none"></path>
 		<path :d="generateGustPath" stroke="blue" stroke-width="1" fill="none"></path>
 	</svg>
 </template>
