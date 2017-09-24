@@ -2,7 +2,7 @@
 	<div v-if="weather" class="day-list">
 		<date :time="day.time" />
 		<hour v-for="(hour, key) in weather" :weather="hour" />
-		<chart :weather="weather" />
+		<chart v-if="displayChart" :weather="weather" />
 	</div>
 		
 </template>
@@ -30,7 +30,13 @@
 			'chart' : Chart
 		},
 		computed: {
-		  
+		  displayChart () {
+			  	let i = 0;
+			  	this.weather.forEach(function(hour) {
+					i++;
+				});
+				return (i>1);
+		  }
 		   
 		},
 		methods: {
