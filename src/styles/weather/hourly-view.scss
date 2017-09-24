@@ -149,10 +149,14 @@ $hourWindSpeed__size: 2.2em;
 
 // --------------------------------
 .windSpeedChart {
+	display: block;
 	position: absolute;
-	top: 50px;
+	top: 0;
 	bottom: 0;
 	
 	height: 100%;
-	left: 5em;
+	left: 4em;
+	width: 38%;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
 }
