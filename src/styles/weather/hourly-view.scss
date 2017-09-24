@@ -6,63 +6,64 @@
 
 // --------------------------------
 .day-list {
-    display: block;
-    .hour:last-child {
-        border-bottom: none;
-    }
-    
+	display: block;
+	position: relative;
+	.hour:last-child {
+		border-bottom: none;
+	}
+	
 }
 // --------------------------------
 .dayDate {
-    height: 50px;
-    line-height: 50px;
-    
-    padding: 0 $widthGridSpace;
-    background: $bgDayLabel;
-    h3 {
-        font-size: 15px;
-        margin: 0 $widthStatusBar;
-    }
+	height: 50px;
+	line-height: 50px;
+	
+	padding: 0 $widthGridSpace;
+	background: $bgDayLabel;
+	h3 {
+		font-size: 15px;
+		margin: 0 $widthStatusBar;
+	}
 }
 
 // --------------------------------
 .hour {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    border-bottom: 1px solid $colorBorder;
-    padding: 0 0 0 $widthStatusBar;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 50px;
+	border-bottom: 1px solid $colorBorder;
+	padding: 0 0 0 $widthStatusBar;
 
-    .status {
-        position: absolute;
-        left: 0;
-        top: -1px;
-        bottom: 0px;
-    }
-    .wind-speed-bar {
-        flex: 0 1 40%;
-        margin-right: $widthGridSpace;
+	.status {
+		position: absolute;
+		left: 0;
+		top: -1px;
+		bottom: 0px;
+	}
+	.wind-speed-bar {
+		flex: 0 1 40%;
+		margin-right: $widthGridSpace;
 
-    }
-    .hourWindSpeed {
-        margin: 0 auto 0 0;
-    }
+	}
+	.hourWindSpeed {
+		margin: 0 auto 0 0;
+	}
 }
 
 .hour__time {
-    font-size: 15px;
-    padding: 0 0 0 $widthGridSpace;
-    min-width: 3.6em;
-    width: 9vw;
+	font-size: 15px;
+	padding: 0 0 0 $widthGridSpace;
+	min-width: 3.6em;
+	width: 9vw;
 }
 
 .hour__time__sup {
-    vertical-align: top;
-    font-size: 9px;
-    position: relative;
-    left: -0.3em;
+	vertical-align: top;
+	font-size: 9px;
+	position: relative;
+	left: -0.3em;
 }
 
 
@@ -71,63 +72,87 @@
    
 }
 
-.wind-speed-bar__wind-speed {
-    border-radius: $windSpeedBarHeight/2;
-    display: block;
-    height: $windSpeedBarHeight;
-    background: red;
-    width: 100%;
+.svgBar{
+	display: block;
+	width: 100%;
+	height: 50px;
 }
 
-.svg-bar {
-    
-    display: block;
-   width: 100%;
-   height: 50px;
+.svgBar__threshold {
+	stroke:#8E8E8E; 
+	stroke-width:0.5;
+}
+
+.svgBar__overThreshold {
+	fill: $statusNo;
+}
+
+.svgBar__wingGust {
+	stroke:#fff; 
+	stroke-width:8;
+}
+
+.svgBar__windSpeed {
+	
 }
 
 // --------------------------------
 $hourWindSpeed__size: 2.2em;
 
 .hourWindSpeed {
-    display: inline-flex;
-    align-items: center;
-    width: ($hourWindSpeed__size*1.4);
+	display: inline-flex;
+	align-items: center;
+	width: ($hourWindSpeed__size*1.4);
    
 }
 
 
 
 .hourWindSpeed__display {
-    color: $textColourStatus;
-    width: $hourWindSpeed__size;
-    height: $hourWindSpeed__size;
-    line-height: $hourWindSpeed__size;
-    border-radius: 50%;
-    text-align: center;
+	color: $textColourStatus;
+	width: $hourWindSpeed__size;
+	height: $hourWindSpeed__size;
+	line-height: $hourWindSpeed__size;
+	border-radius: 50%;
+	text-align: center;
 
-    &.yes {
-        background: $statusYes;        
-    }
+	&.yes {
+		background: $statusYes;        
+	}
 
-    &.no {
-        background: $statusNo;            
-    }
+	&.no {
+		background: $statusNo;            
+	}
 }
 
 .hourWindSpeed__display--speed {
-    font-size: 12px;
+	font-size: 12px;
 }
 
 .hourWindSpeed__display--gust {
-    font-size: 9px;
-    margin-left: -0.2em;
-    border: 1px solid #fff;
+	font-size: 9px;
+	margin-left: -0.2em;
+	border: 1px solid #fff;
+}
+
+// --------------------------------
+.windBearing {
+	font-size: 10px;
 }
 
 // --------------------------------
 .hourTemperature {
-    font-size: 12px;
-    margin-right: $widthStatusBar;
-    padding: 0 $widthGridSpace;
+	font-size: 12px;
+	margin-right: $widthStatusBar;
+	padding: 0 $widthGridSpace;
+}
+
+// --------------------------------
+.windSpeedChart {
+	position: absolute;
+	top: 50px;
+	bottom: 0;
+	
+	height: 100%;
+	left: 5em;
 }

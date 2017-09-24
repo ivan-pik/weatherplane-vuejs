@@ -1,46 +1,50 @@
 <template>
-	<div class="day-list">
-    <date :time="day.time" />
-	<hour v-for="(hour, key) in weather" :weather="hour" />
+	<div v-if="weather" class="day-list">
+		<date :time="day.time" />
+		<hour v-for="(hour, key) in weather" :weather="hour" />
+		<chart :weather="weather" />
 	</div>
+		
 </template>
 
 <script>
-    import Vue from 'vue';
-    import Hour from '../hour/index.vue';
-    import Date from './date/index.vue';
+	import Vue from 'vue';
+	import Hour from '../hour/index.vue';
+	import Date from './date/index.vue';
+	import Chart from '../../components/chart.vue';
 	
-    export default {
-        name: 'day',
-        props: {
-            weather: {
-                type: Array
-            },
-            day: {
-                type: Object
-            },
-            
-        },
+	export default {
+		name: 'day',
+		props: {
+			weather: {
+				type: Array
+			},
+			day: {
+				type: Object
+			},
+			
+		},
 		components: {
 			'hour' : Hour,
-            'date' : Date
+			'date' : Date,
+			'chart' : Chart
 		},
-        computed: {
-          
-           
-        },
-        methods: {
+		computed: {
+		  
+		   
+		},
+		methods: {
 		
 
 
-        },
-        data () {
-          return {
+		},
+		data () {
+		  return {
 			
-          }
-        }
+		  }
+		}
 
-    }
+	}
 
 
 

@@ -37,7 +37,6 @@
       },
      
         computed: {
-         
             weatherData() {
 							return this.$store.state.existingPlaceView.weatherData;
 						}
@@ -59,11 +58,10 @@
                 .then(response => {
                     if (response.data.success) {
                       console.log(response.data.data);
-                      this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data)
 
-                      localStorage.setItem('weather', JSON.stringify(response.data.data));
+                      this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data);
+                      
 
-                      this.weatherDataHourly = this.weatherData.hourly;
 
                     }
                 }).catch(err => {
@@ -111,8 +109,7 @@
             openSaveOptions: false,
             errors: null,
             placeName: '',
-            placeIsPublic: false,
-            weatherDataHourly: []
+            placeIsPublic: false
           }
         }
 
