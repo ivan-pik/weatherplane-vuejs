@@ -1,13 +1,7 @@
 <template>
-	<div class="wind-speed-bar">
-	  
-		<svg class="svgBar" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<g>
 			 <defs>
-				<linearGradient x1="3.061617e-15%" y1="50%" x2="97.9532047%" y2="50%" id="linearGradient-1">
-					<stop stop-color="#3CBB22" offset="0%"></stop>
-					<stop stop-color="#ECA079" offset="80%"></stop>
-					<stop stop-color="#DF4410" offset="100%"></stop>
-				</linearGradient>
+				
 				<mask :id="uid">
 					<rect x="0" y="0" 
 						width="100%"
@@ -16,7 +10,7 @@
 					/>
 
 					<rect x="0" y="0" 
-						:width="windSpeedPercentage"
+						:width="windSpeedPixels"
 						height="8"
 						fill="white"
 						
@@ -24,27 +18,27 @@
 					<line
 						class="svgBar__wingGust"
 						stroke-dasharray="2, 2"
-						x1="0" y1="4" :x2="windGustPercentage" y2="4"
+						x1="0" y1="4" :x2="windGustPixels" y2="4"
 					/>
 				</mask>
 			</defs>
 
-			<g :mask="uidURL" transform="translate(0,21)">
+			<g :mask="uidURL" :transform="shift">
 				<rect  
 					width="100%" 
 					class="svgBar__overThreshold"x="0" y="0" height="8"
 				/>
 				<rect  
-					:width="windSpeedThresholdPercentage" 
+					:width="windSpeedThresholdPixels" 
 					class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="8"
 				/>
 			</g>
 
-			<line class="svgBar__threshold" stroke-dasharray="2, 3" :x1="windSpeedThresholdPercentage" :x2="windSpeedThresholdPercentage" y1="0" y2="50" />
+			
 	   
-		</svg>
+	</g>
 		
-	</div>
+	
 </template>
 
 <script>
@@ -53,30 +47,35 @@
 	
 	export default {
 		name: 'windSpeedBar',
-		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold'],
+		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold','order','chartWidth'],
 		computed: {
-
+			shift () {
+				let amount = this.order * 50 + 21;
+				return "translate(0," + amount + ")";
+			},
+			
+			
 			// @todo: might be better to round up to whole pixels, instead of using %
 			// @todo: the gust indicator is broken, shows a wrong amount
 			uidURL () {
 				return ('url(#' + this.uid + ')');
 			},
 
-			windSpeedPercentage () {
-				return this.speedToPercentages(this.windSpeed);
+			windSpeedPixels () {
+				return this.speedToPixels(this.windSpeed);
 			},
-			windGustPercentage () {
-				return this.speedToPercentages(this.windGust);
+			windGustPixels () {
+				return this.speedToPixels(this.windGust);
 			},
-			windSpeedThresholdPercentage () {
-				return this.speedToPercentages(this.maxSpeedTreshold);
+			windSpeedThresholdPixels () {
+				return this.speedToPixels(this.maxSpeedTreshold);
 			}
 		   
 		},
 	 
 		methods: {
-			speedToPercentages(speed) {
-				return ((100/this.maxSpeedToDisplay) * speed).toFixed(1) + '%';
+			speedToPixels(speed) {
+				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(1);
 			}
 
 
