@@ -32,7 +32,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 50px;
+	height: 49px;
 	border-bottom: 1px solid $colorBorder;
 	padding: 0 0 0 $widthStatusBar;
 
@@ -48,7 +48,7 @@
 
 	}
 	.hourWindSpeed {
-		margin: 0 auto 0 0;
+		margin: 0 0 0 auto;
 	}
 }
 
@@ -74,7 +74,7 @@
 
 .svgBar{
 	display: block;
-	width: 100%;
+	width: 100px;
 	height: 50px;
 }
 
@@ -151,12 +151,12 @@ $hourWindSpeed__size: 2.2em;
 .windSpeedChart {
 	display: block;
 	position: absolute;
-	top: 0;
+	top: 50px;
 	bottom: 0;
 	
 	height: 100%;
 	left: 4em;
-	width: 38%;
+	width: 300px;
 	border-right: 1px solid black;
 	border-left: 1px solid black;
 }
