@@ -26,7 +26,7 @@
 
 		<path :d="generatePath('windSpeed')" stroke="#444" stroke-width="3" fill="none"></path>
 
-		<path :d="generatePath('windGust')" stroke="orange" stroke-width="1" fill="none"></path>
+		<path :d="generatePath('windGust')" stroke="red" stroke-width="2" fill="none"  stroke-dasharray="2, 8"></path>
 		
 
 		
@@ -106,7 +106,7 @@
 		data () {
 		  return {
 			  // @todo: find a way how to get this value dynamically - available space for the chart
-			chartWidth: 300
+			chartWidth: 400
 		  }
 		}
 
