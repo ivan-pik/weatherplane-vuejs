@@ -24,9 +24,10 @@
 			:chartWidth="chartWidth"
 		/>
 
-		<path :d="generatePath('windSpeed')" stroke="#444" stroke-width="3" fill="none"></path>
+		<path :d="generatePath(windSpeedPoints)" stroke="#444" stroke-width="3" fill="none"></path>
+		<path :d="generatePath(windGustPoints)" stroke="#444" stroke-width="1" fill="none"></path>
 
-		<path :d="generatePath('windGust')" stroke="red" stroke-width="2" fill="none"  stroke-dasharray="2, 8"></path>
+		
 		
 
 		
@@ -46,7 +47,30 @@
 			'wind-speed-bar' : windSpeedBar
 		},
 		computed: {
-
+			windSpeedPoints () {
+				let i = 0;
+				let points = [];
+				this.weather.forEach((hour) => {
+					points.push([
+						parseFloat(this.speedToPixels(hour.windSpeed)),
+						50*i+25
+					]);
+					i++;
+				});
+				return points;
+			},
+			windGustPoints () {
+				let i = 0;
+				let points = [];
+				this.weather.forEach((hour) => {
+					points.push([
+						parseFloat(this.speedToPixels(hour.windGust)),
+						50*i+25
+					]);
+					i++;
+				});
+				return points;
+			},
 			nOfItems () {
 				return this.weather.length;
 			},
@@ -54,13 +78,6 @@
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
 			},
-			
-			// @todo: this needs to relate to the width of wind bar, make windBar send back it's width in pixels to store?
-			// @todo: finish this :) https://css-tricks.com/svg-path-syntax-illustrated-guide/
-
-			
-			
-		
 		},
 		
 		
@@ -73,28 +90,21 @@
 			speedToPixels(speed) {
 				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(1);
 			},
-			generatePath (attribute) {
+			
+
+			generatePath (points) {
 				let path = "";
 				let i = 0;
-				this.weather.forEach((hour) => {
-					
-					var value = 0;
-					
-					if (attribute == "windSpeed") {
-						 value = hour.windSpeed;
-					} else if (attribute=="windGust") {
-						 value = hour.windGust;
-					}
-
-
+				
+				points.forEach((point) => {
+					let x = point[0];
+					let y = point[1];
 					if (i==0){
-						path += "M " + this.speedToPixels(value) + ",25";
-						
+						path += `M${x},${y}`;
 					} else {
-						let coordinates = (25 + (i * 50));
-						let speed = this.speedToPixels(value);
-
-						path += " L " + speed + ", " + coordinates; // @todo: build the bezier path string
+						let sx = x;
+						let sy = y;
+						path += `S${sx},${sy} ${x},${y} `;
 					}
 					i++;
 				});
