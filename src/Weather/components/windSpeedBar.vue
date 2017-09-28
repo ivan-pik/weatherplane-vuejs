@@ -3,36 +3,51 @@
 			 <defs>
 				
 				<mask :id="uid">
-					<rect x="0" y="0" 
+					<rect x="0" y="2" 
 						width="100%"
 						height="8"
 						fill="black"
+						rx="4"
 					/>
 
-					<rect x="0" y="0" 
+					<rect
+						class="svgBar__windSpeedMask"
+						x="0" y="2" 
 						:width="windSpeedPixels"
 						height="8"
 						fill="white"
+						rx="4"
 						
 					/>
 					<line
-						class="svgBar__wingGust"
-						stroke-dasharray="2, 2"
-						x1="0" y1="4" :x2="windGustPixels" y2="4"
+						class="svgBar__windGust"
+						stroke-dasharray="2, 3"
+						x1="4" y1="6" :x2="windGustPixels" y2="6"
+						
+					/>
+					<circle
+						:cx="windSpeedPixels" 
+						cy="6" r="6"
+						fill="white"
 					/>
 				</mask>
 			</defs>
 
 			<g :mask="uidURL" :transform="shift">
+
 				<rect  
 					width="100%" 
-					class="svgBar__overThreshold"x="0" y="0" height="8"
+					class="svgBar__overThreshold"x="0" y="0" height="12" 
 				/>
 				<rect  
 					:width="windSpeedThresholdPixels" 
-					class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="8"
+					class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="12"
 				/>
 			</g>
+
+		
+
+			
 
 			
 	   
@@ -50,7 +65,7 @@
 		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold','order','chartWidth'],
 		computed: {
 			shift () {
-				let amount = this.order * 50 + 21;
+				let amount = this.order * 50 + 19;
 				return "translate(0," + amount + ")";
 			},
 			

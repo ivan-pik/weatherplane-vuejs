@@ -87,13 +87,50 @@
 	fill: $statusNo;
 }
 
-.svgBar__wingGust {
+.svgBar__windGust {
 	stroke:#fff; 
 	stroke-width:8;
+	stroke-dasharray: 2 2;
+
+	animation: dash-gust 1.5s ease-in-out forwards;
+	animation-iteration-count:infinite;
+
 }
 
-.svgBar__windSpeed {
-	
+@keyframes dash-gust {
+	0% {
+		transform: translate(0,0);
+		stroke-dashoffset: 0;
+		
+	}
+	50% {
+		transform: translate(-50%,0);
+		stroke-dashoffset: 50%;
+		
+	}
+	100% {
+		transform: translate(-0,0);
+		stroke-dashoffset: 0;
+		
+	}
+}
+
+.svgBar__windSpeedMask {
+	animation: dash-speed 1s ease-in-out forwards;
+}
+
+@keyframes dash-speed {
+	from {
+		width: 0;
+	}
+}
+
+
+
+
+// --------------------------------
+.windSpeedChart__windGust {
+	opacity: 0.5;
 }
 
 // --------------------------------
@@ -157,6 +194,4 @@ $hourWindSpeed__size: 2.2em;
 	height: 100%;
 	left: 4em;
 	width: 400px;
-	border-right: 1px solid black;
-	border-left: 1px solid black;
 }

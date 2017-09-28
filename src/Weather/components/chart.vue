@@ -1,6 +1,8 @@
 <template>
 	
-	
+	<div>
+		
+
 	<svg class="windSpeedChart"> 
 
 		<defs>
@@ -9,9 +11,17 @@
 				<stop stop-color="#ECA079" offset="80%"></stop>
 				<stop stop-color="#DF4410" offset="100%"></stop>
 			</linearGradient>
+			<mask :id="pathMaskId">
+				<path class="windSpeedChart__windSpeed" :d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"></path>
+				<path v-if="false" class="windSpeedChart__windGust" :d="curvePoints('windGust')" stroke="#fff"   stroke-width="1.5" fill="none"></path>
+			</mask>
 		</defs>
 
-		<line class="svgBar__threshold" stroke-dasharray="2, 3" :x1="windSpeedThresholdPixels" :x2="windSpeedThresholdPixels" y1="0" :y2="nOfItems * 50" />
+		<line class="svgBar__threshold" stroke-dasharray="2, 3" :x1="windSpeedThresholdPixels" :x2="windSpeedThresholdPixels" y1="0" :y2="chartHeight" />
+
+		
+
+		
 
 		<wind-speed-bar v-for="(hourWeather, index) in weather"
 			:uid="uid(hourWeather.time)" 
@@ -24,20 +34,27 @@
 			:chartWidth="chartWidth"
 		/>
 
-		<path :d="generatePath(windSpeedPoints)" stroke="#444" stroke-width="3" fill="none"></path>
-		<path :d="generatePath(windGustPoints)" stroke="#444" stroke-width="1" fill="none"></path>
-
-		
-		
-
+		<g :mask="pathMaskIdUrl()">
+			<rect  
+				width="100%" 
+				class="svgBar__overThreshold" x="0" y="0" :height="chartHeight"
+			/>
+			<rect  
+				:width="windSpeedThresholdPixels" 
+				class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" :height="chartHeight"
+			/>
+		</g>
 		
 
 	</svg>
+	</div>
 </template>
 
 <script>
 	import Vue from 'vue';
 	import windSpeedBar from './windSpeedBar.vue';
+	import * as d3 from 'd3';
+	
   
 	
 	export default {
@@ -46,35 +63,14 @@
 		components: {
 			'wind-speed-bar' : windSpeedBar
 		},
+	
 		computed: {
-			windSpeedPoints () {
-				let i = 0;
-				let points = [];
-				this.weather.forEach((hour) => {
-					points.push([
-						parseFloat(this.speedToPixels(hour.windSpeed)),
-						50*i+25
-					]);
-					i++;
-				});
-				return points;
+			pathMaskId () {
+				return "mask"+this.uid(this.weather[0].time);
 			},
-			windGustPoints () {
-				let i = 0;
-				let points = [];
-				this.weather.forEach((hour) => {
-					points.push([
-						parseFloat(this.speedToPixels(hour.windGust)),
-						50*i+25
-					]);
-					i++;
-				});
-				return points;
+			chartHeight () {
+				return (this.weather.length) * 50;
 			},
-			nOfItems () {
-				return this.weather.length;
-			},
-
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
 			},
@@ -83,34 +79,42 @@
 		
 	 
 		methods: {
+			pathMaskIdUrl () {
+				return ('url(#' + this.pathMaskId + ')');
+			},
+		
+			curvePoints (type) {
+				let i = 0;
+				let points = [];
+				let speed;
+				this.weather.forEach((hour) => {
+					if(type == "windSpeed") {
+						speed = hour.windSpeed;
+					} else if (type="windGust") {
+						speed = hour.windGust;
+					} else {
+						return false;
+					}
+					points.push([
+						parseFloat(this.speedToPixels(speed)),
+						50*i+25
+					]);
+					i++;
+				});
+
+				let path = d3.line().curve(d3.curveMonotoneY);
+				return path(points);
+			},
+
 			uid(time) {
 				let parsed = Date.parse(time);
 				return parsed;
 			},
 			speedToPixels(speed) {
 				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(1);
-			},
+			}
 			
 
-			generatePath (points) {
-				let path = "";
-				let i = 0;
-				
-				points.forEach((point) => {
-					let x = point[0];
-					let y = point[1];
-					if (i==0){
-						path += `M${x},${y}`;
-					} else {
-						let sx = x;
-						let sy = y;
-						path += `S${sx},${sy} ${x},${y} `;
-					}
-					i++;
-				});
-				
-				return path;
-			}
 		},
 		
 		data () {
