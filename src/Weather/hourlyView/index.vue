@@ -1,6 +1,6 @@
 <template>
 	<div class="weather-hourly">
-		 <day v-for="day in weather.daily" :key="day.time" :day="day"  :weather="weatherForTheDay(day.time)"  />
+		<day :weather="weather.hourly"  />
 	</div>
 </template>
 
@@ -23,22 +23,9 @@
 		},
 		computed: {
 		 
-			
-	   
 		},
 		methods: {
-			weatherForTheDay (time) {
-				let day = (new Date(time)).getDate();
-				var weatherPerHour = this.weather.hourly.filter(hour => {
-					var date = (new Date(hour.time)).getDate();
-					if (date == day) {
-						return true;
-					}
-					return false;
-				});
-
-				return weatherPerHour;
-			}
+			
 
 		},
 		data () {

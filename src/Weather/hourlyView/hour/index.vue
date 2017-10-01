@@ -5,9 +5,6 @@
 
 		<hour-time :time="weather.time" />
 
-		
-		
-
 		<wind-speed 
 			:windSpeedStatus="windSpeedStatus"
 			:windGustStatus="windGustStatus" 

@@ -1,6 +1,10 @@
 // --------------------------------
 .weather-hourly {
-
+	position: fixed;
+	top: 200px;
+	width: 100%;
+	bottom: 0;
+	overflow: auto;
 }
 
 
@@ -11,13 +15,13 @@
 	.hour:last-child {
 		border-bottom: none;
 	}
-	
+
 }
 // --------------------------------
 .dayDate {
 	height: 50px;
 	line-height: 50px;
-	
+
 	padding: 0 $widthGridSpace;
 	background: $bgDayLabel;
 	h3 {
@@ -69,7 +73,7 @@
 
 // --------------------------------
 .wind-speed-bar {
-   
+
 }
 
 .svgBar{
@@ -79,7 +83,7 @@
 }
 
 .svgBar__threshold {
-	stroke:#8E8E8E; 
+	stroke:#8E8E8E;
 	stroke-width:0.5;
 }
 
@@ -88,41 +92,9 @@
 }
 
 .svgBar__windGust {
-	stroke:#fff; 
+	stroke:#fff;
 	stroke-width:8;
-	stroke-dasharray: 2 2;
-
-	animation: dash-gust 1.5s ease-in-out forwards;
-	animation-iteration-count:infinite;
-
-}
-
-@keyframes dash-gust {
-	0% {
-		transform: translate(0,0);
-		stroke-dashoffset: 0;
-		
-	}
-	50% {
-		transform: translate(-50%,0);
-		stroke-dashoffset: 50%;
-		
-	}
-	100% {
-		transform: translate(-0,0);
-		stroke-dashoffset: 0;
-		
-	}
-}
-
-.svgBar__windSpeedMask {
-	animation: dash-speed 1s ease-in-out forwards;
-}
-
-@keyframes dash-speed {
-	from {
-		width: 0;
-	}
+	stroke-dasharray: 2 4;
 }
 
 
@@ -135,41 +107,48 @@
 
 // --------------------------------
 $hourWindSpeed__size: 2.2em;
+$hourGustSpeed__size: 1.8em;
 
 .hourWindSpeed {
 	display: inline-flex;
 	align-items: center;
 	width: ($hourWindSpeed__size*1.4);
-   
+
 }
 
 
 
 .hourWindSpeed__display {
 	color: $textColourStatus;
-	width: $hourWindSpeed__size;
-	height: $hourWindSpeed__size;
-	line-height: $hourWindSpeed__size;
-	border-radius: 50%;
+
+
 	text-align: center;
 
 	&.yes {
-		background: $statusYes;        
+		background: $statusYes;
 	}
 
 	&.no {
-		background: $statusNo;            
+		background: $statusNo;
 	}
 }
 
 .hourWindSpeed__display--speed {
 	font-size: 12px;
+	border-radius: 50%;
+	width: $hourWindSpeed__size;
+	height: $hourWindSpeed__size;
+	line-height: $hourWindSpeed__size;
 }
 
 .hourWindSpeed__display--gust {
 	font-size: 9px;
 	margin-left: -0.2em;
 	border: 1px solid #fff;
+	border-radius: 1px;
+	width: $hourGustSpeed__size;
+	height: $hourGustSpeed__size;
+	line-height: $hourGustSpeed__size;
 }
 
 // --------------------------------
@@ -188,10 +167,18 @@ $hourWindSpeed__size: 2.2em;
 .windSpeedChart {
 	display: block;
 	position: absolute;
-	top: 50px;
+	top: 0;
 	bottom: 0;
-	
+
 	height: 100%;
 	left: 4em;
 	width: 400px;
+}
+
+.windSpeedChart_cursorDot {
+	fill: #fff;
+}
+
+.windSpeedChart_cursorDotMask {
+	fill: #fff;
 }

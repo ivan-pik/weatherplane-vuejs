@@ -1,27 +1,44 @@
 <template>
-	
-	<div>
-		
-
-	<svg class="windSpeedChart"> 
-
+	<svg class="windSpeedChart"
+		v-on:mousemove="cursor"
+	> 
 		<defs>
-			<linearGradient x1="3.061617e-15%" y1="50%" x2="97.9532047%" y2="50%" id="linearGradient-1">
+			<linearGradient 
+				x1="3.061617e-15%" 
+				y1="50%" 
+				x2="97.9532047%" 
+				y2="50%" 
+				id="linearGradient-1"
+			>
 				<stop stop-color="#3CBB22" offset="0%"></stop>
 				<stop stop-color="#ECA079" offset="80%"></stop>
 				<stop stop-color="#DF4410" offset="100%"></stop>
 			</linearGradient>
-			<mask :id="pathMaskId">
-				<path class="windSpeedChart__windSpeed" :d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"></path>
-				<path v-if="false" class="windSpeedChart__windGust" :d="curvePoints('windGust')" stroke="#fff"   stroke-width="1.5" fill="none"></path>
+			<mask id="pathMask">
+
+				
+
+				<circle
+					class="windSpeedChart_cursorDotMask"
+					:cx="cursorX" 
+					:cy="cursorY"
+					r="10"
+				/>
+
+
+				
+				<path class="windSpeedChart__windSpeed" 
+					:d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"
+					ref="windSpeedPath"
+				>
+				</path>
+
+				
+				
 			</mask>
 		</defs>
 
 		<line class="svgBar__threshold" stroke-dasharray="2, 3" :x1="windSpeedThresholdPixels" :x2="windSpeedThresholdPixels" y1="0" :y2="chartHeight" />
-
-		
-
-		
 
 		<wind-speed-bar v-for="(hourWeather, index) in weather"
 			:uid="uid(hourWeather.time)" 
@@ -34,7 +51,7 @@
 			:chartWidth="chartWidth"
 		/>
 
-		<g :mask="pathMaskIdUrl()">
+		<g mask="url(#pathMask)">
 			<rect  
 				width="100%" 
 				class="svgBar__overThreshold" x="0" y="0" :height="chartHeight"
@@ -44,10 +61,40 @@
 				class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" :height="chartHeight"
 			/>
 		</g>
+
+		<g class="windSpeedChart_cursor">
+			
+			<rect  
+				width="100%" 
+				fill="#DF4410"
+				x="0" 
+				:y="cursorY-1"
+				height="2"
+			/>
+			
+			<rect  
+				:width="windSpeedThresholdPixels" 
+				fill="url(#linearGradient-1)"
+				x="0" 
+				:y="cursorY-1"
+				height="2"
+			/>
+
+			<circle
+				class="windSpeedChart_cursorDot"
+				:cx="cursorX" 
+				:cy="cursorY"
+				r="5"
+			/>
+
+			
+		</g>
+					
+
+		
 		
 
 	</svg>
-	</div>
 </template>
 
 <script>
@@ -79,6 +126,31 @@
 		
 	 
 		methods: {
+			cursor (e) {
+				let pathEl = this.$refs.windSpeedPath;
+				let pathLength = pathEl.getTotalLength();
+				
+				let y = e.pageY;
+				let pos;
+				let beginning = y, end = pathLength, target;
+				while (true) {
+					target = Math.floor((beginning + end) / 2);
+					pos = pathEl.getPointAtLength(target);
+					if ((target === end || target === beginning) && pos.y !== y) {
+						break;
+					}
+					if (pos.y > y) {
+						end = target;
+					}
+					else if (pos.y < y) {
+						beginning = target;
+					}
+					else break; //position found
+				}
+				this.cursorX = pos.x;
+				this.cursorY = y;
+				
+			},
 			pathMaskIdUrl () {
 				return ('url(#' + this.pathMaskId + ')');
 			},
@@ -120,7 +192,9 @@
 		data () {
 		  return {
 			  // @todo: find a way how to get this value dynamically - available space for the chart
-			chartWidth: 400
+			chartWidth: 400,
+			cursorX: 0,
+			cursorY: 0
 		  }
 		}
 

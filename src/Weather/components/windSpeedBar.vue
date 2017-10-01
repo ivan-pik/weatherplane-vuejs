@@ -1,64 +1,54 @@
 <template>
 	<g>
-			 <defs>
+		<defs>
+			<mask :id="uid">
+				<rect x="0" y="2" 
+					width="100%"
+					height="8"
+					fill="black"
+					rx="4"
+				/>
+
+				<rect
+					class="svgBar__windSpeedMask"
+					x="0" y="2" 
+					:width="windSpeedPixels"
+					height="8"
+					fill="white"
+					rx="4"
+				/>
+				<line
+					class="svgBar__windGust"
+					x1="4" y1="6" 
+					:x2="windGustPixels-8" 
+					y2="6"
+					
+				/>
+				<circle
+					class="svgBar__windSpeedPoint"
+					:cx="windSpeedPixels" 
+					cy="6" r="6"
+					fill="white"
+				/>
 				
-				<mask :id="uid">
-					<rect x="0" y="2" 
-						width="100%"
-						height="8"
-						fill="black"
-						rx="4"
-					/>
+			</mask>
+		</defs>
 
-					<rect
-						class="svgBar__windSpeedMask"
-						x="0" y="2" 
-						:width="windSpeedPixels"
-						height="8"
-						fill="white"
-						rx="4"
-						
-					/>
-					<line
-						class="svgBar__windGust"
-						stroke-dasharray="2, 3"
-						x1="4" y1="6" :x2="windGustPixels" y2="6"
-						
-					/>
-					<circle
-						:cx="windSpeedPixels" 
-						cy="6" r="6"
-						fill="white"
-					/>
-				</mask>
-			</defs>
-
-			<g :mask="uidURL" :transform="shift">
-
-				<rect  
-					width="100%" 
-					class="svgBar__overThreshold"x="0" y="0" height="12" 
-				/>
-				<rect  
-					:width="windSpeedThresholdPixels" 
-					class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="12"
-				/>
-			</g>
-
-		
-
-			
-
-			
-	   
+		<g :mask="uidURL" :transform="shift">
+			<rect  
+				width="100%" 
+				class="svgBar__overThreshold"x="0" y="0" height="12" 
+			/>
+			<rect  
+				:width="windSpeedThresholdPixels" 
+				class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="12"
+			/>
+		</g>
 	</g>
-		
-	
 </template>
 
 <script>
 	import Vue from 'vue';
-  
 	
 	export default {
 		name: 'windSpeedBar',
@@ -68,7 +58,6 @@
 				let amount = this.order * 50 + 19;
 				return "translate(0," + amount + ")";
 			},
-			
 			
 			// @todo: might be better to round up to whole pixels, instead of using %
 			// @todo: the gust indicator is broken, shows a wrong amount
@@ -85,25 +74,19 @@
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
 			}
-		   
 		},
 	 
 		methods: {
 			speedToPixels(speed) {
-				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(1);
+				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(0);
 			}
-
-
 		},
 		data () {
-		  return {
+			return {
 			
-		  }
+			}
 		}
-
 	}
-
-
 
 </script>
 

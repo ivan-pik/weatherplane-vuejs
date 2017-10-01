@@ -1,17 +1,14 @@
 <template>
 	<div v-if="weather" class="day-list">
-		<date :time="day.time" />
+		
 		<hour v-for="(hour, key) in weather" :weather="hour" />
 
 		<chart v-if="displayChart" 
 			:weather="weather"
 			:maxSpeedToDisplay="maxWindSpeed"
 			:maxSpeedTreshold="settingsMaxWindSpeed"
-
-			
 		/>
-	</div>
-		
+	</div>	
 </template>
 
 <script>
@@ -25,10 +22,8 @@
 		props: {
 			weather: {
 				type: Array
-			},
-			day: {
-				type: Object
-			},
+			}
+			
 			
 		},
 		components: {

@@ -3,6 +3,8 @@
 
 <div v-if="weatherData">
 
+  <weather-details />
+
   <hourly-view :weather="weatherData" />
 
 </div>
@@ -19,6 +21,7 @@
     import Vue from 'vue';
     import hourlyView from '../../Weather/hourlyView/index.vue';
     import {HTTP} from '../../http-common';
+    import weatherDetails from '../../Weather/weatherDetails/index.vue';
 
     export default {
         name: 'placeDetails',
@@ -26,7 +29,7 @@
           
         },
 				components: {
-					
+					'weather-details' : weatherDetails,
           'hourly-view' : hourlyView,
 				},
 
