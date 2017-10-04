@@ -3,6 +3,8 @@
 
 <div v-if="weatherData">
 
+  <div class="" class="mainNav mainNav--weatherDetail"></div>
+
   <weather-details />
 
   <hourly-view :weather="weatherData" />

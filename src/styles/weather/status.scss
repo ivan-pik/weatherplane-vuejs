@@ -3,7 +3,7 @@
     width: $widthStatusBar;
     overflow: hidden;
     text-indent: 100%;
-    min-height: 20px;
+    
     &.yes {
         background-color: $statusYes;
     }

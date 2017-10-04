@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="windInstrument">
 		Wind Instrument
 	</div>
 </template>

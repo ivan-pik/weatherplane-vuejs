@@ -1,7 +1,7 @@
 // --------------------------------
 .weather-hourly {
 	position: fixed;
-	top: 200px;
+	top: 270px;
 	width: 100%;
 	bottom: 0;
 	overflow: auto;
@@ -45,6 +45,7 @@
 		left: 0;
 		top: -1px;
 		bottom: 0px;
+		min-height: 20px;
 	}
 	.wind-speed-bar {
 		flex: 0 1 40%;
