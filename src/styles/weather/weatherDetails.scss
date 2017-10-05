@@ -1,13 +1,12 @@
 .mainNav {
 	height: 45px;
-	background: green;
 }
 
 .weatherDetails {
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: 185px 40px;
+	grid-template-rows: 195px 40px;
 	border-color: $colorPanel;
 	border-style: solid;
 	border-width: 0 $widthStatusBar;
@@ -51,10 +50,11 @@
 }
 
 .weatherDetails__display {
-	margin: 0 0 20px 0;
+	margin: 0 0 18px 0;
 	position: relative;
 	&:nth-child(3) {
 		margin-top: auto;
+		margin-bottom: 32px;
 	}
 	.weatherDetails__col--1 & {
 		padding-left: $widthGridSpace;
@@ -80,7 +80,7 @@
 	font-size: 9px;
 	text-transform: uppercase;
 	display: block;
-	margin: 0 0 0.4em 0;
+	margin: 0 0 0.2em 0;
 }
 
 .weatherDetails__value {
@@ -171,10 +171,14 @@
 
 .runwaySideIndicator {
 	position: absolute;
-	top: 90px;
+	top: 91px;
+	left: 0;
+	width: 100%;
+	height: 27px;
 }
 
 .runwaySideIndicator__runway {
+	transform: translate(0,13px);
 	stroke: $colorBorder;
 	stroke-width: 2;
 	stroke-dasharray: 1,6;
@@ -182,12 +186,63 @@
 	stroke-linecap: round;
 }
 
-.runwaySideIndicator__plane {
-	fill: red;
+.runwaySideIndicator__planePosition {
+	position: absolute;
+	top: 2px;
 }
 
+.runwaySideIndicator__planePosition--left {
+	left: $widthGridSpace*4;
+}
 
+.runwaySideIndicator__planePosition--right {
+	right: $widthGridSpace*4;
+	
+}
+
+.runwaySideIndicator__plane {
+	fill: #859098;
+}
 
 .windInstrument {
-	display: none;
+	position: absolute;
+	top: 14px;
+	left: 50%;
+	margin-left: -90px;
+	width: 180px;
+	height: 180px;
+}
+
+.windInstrument__dial {
+	fill: none;
+	stroke-width: 2;
+	stroke: #859098;
+}
+
+.windInstrument__dialSteps {
+	fill: none;
+	stroke-width: 9;
+	stroke: #859098;
+	stroke-dasharray: 1,17;
+	stroke-dashoffset: 0;
+}
+
+.windInstrument__maxWindSpeedIndicator {
+	fill: none;
+	stroke-width: 1;
+	stroke: $no;
+}
+
+.windInstrument__center {
+	fill: #fff;
+	stroke-width: 2;
+	stroke: #859098;
+}
+
+.windInstrument__windDirectionArrow {
+	fill: #859098;
+}
+
+.windInstrument__windDirectionIndicator {
+	fill: #859098;
 }

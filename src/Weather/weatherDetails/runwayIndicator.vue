@@ -1,13 +1,37 @@
 <template>
 	<div class="runwaySideIndicator">
-	   <svg width="373px" height="22px" viewBox="0 0 373 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	   	<defs>
+		<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+		preserveAspectRatio="none"
+		width="100%"
+		height="27"
+		viewBox="0 0 100 27"
+		>
+		<defs>
 			<path id="plane" d="M5.20001285,13.2461415 L15.6986602,12.8933205 L11.8501448,18.9409876 C11.3757324,19.6864927 11.5954965,20.6754312 12.3410016,21.1498436 C13.0865067,21.6242559 14.0754452,21.4044918 14.5498576,20.6589867 L19.574534,12.7630666 L24.4537245,12.5990949 C25.3368803,12.5694153 26.0287594,11.829416 25.9990797,10.9462603 C25.9694001,10.0631046 25.2294008,9.37122546 24.3462451,9.40090508 L19.7766052,9.55447389 L14.5498576,1.34101332 C14.0754452,0.595508209 13.0865067,0.3757441 12.3410016,0.850156442 C11.5954965,1.32456878 11.3757324,2.31350728 11.8501448,3.05901238 L16.063038,9.67927325 L5.20001285,10.0443396 L5.20001285,8.6000035 C5.20001285,7.7163492 4.4836695,7.00000584 3.60001519,7.00000584 C2.71636088,7.00000584 2.00001752,7.7163492 2.00001752,8.6000035 L2.00001752,11.6904894 C1.99999418,11.6955134 1.99999414,11.7005424 2.00001752,11.7055765 L2.00001752,14.9999942 C2.00001752,15.8836485 2.71636088,16.5999918 3.60001519,16.5999918 C4.4836695,16.5999918 5.20001285,15.8836485 5.20001285,14.9999942 L5.20001285,13.2461415 Z"></path>
 		</defs>
-		<path d="M0,0 L372,0" class="runwaySideIndicator__runway"></path>
-		<use class="runwaySideIndicator__plane" xlink:href="#plane" transform="0, 11"></use>
-		<use class="runwaySideIndicator__plane" xlink:href="#plane" transform="0, 11"></use>
-		
+		<path vector-effect="non-scaling-stroke" d="M0,0 L100,0" class="runwaySideIndicator__runway"></path>
+		</svg>
+
+		<svg 
+			v-if="leftSide"
+			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--left"
+			width="33"
+			height="27"
+			viewBox="0 0 33 27"
+			preserveAspectRatio
+		>
+			<use class="runwaySideIndicator__plane" xlink:href="#plane"></use>
+		</svg>
+		<svg 
+			v-if="rightSide"
+			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--right"
+			width="33"
+			height="27"
+			viewBox="0 0 33 27"
+			preserveAspectRatio
+			transform="scale(-1,1)"
+		>
+			<use  class="runwaySideIndicator__plane" xlink:href="#plane"></use>
 		</svg>
 	</div>
 </template>
@@ -28,7 +52,8 @@
 		
 		data () {
 		  return {
-			
+			leftSide: true,
+			rightSide: false
 		  }
 		}
 
