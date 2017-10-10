@@ -5,6 +5,8 @@
 
 		<hour-time :time="weather.time" />
 
+		<div v-if="order==0" class="hour__spaceDummy" ref="hourSpaceDummy"></div>
+
 		<wind-speed 
 			:windSpeedStatus="windSpeedStatus"
 			:windGustStatus="windGustStatus" 
@@ -43,6 +45,15 @@
 			order: {
 				type: Number
 			}
+		},
+		mounted () {
+			if(this.order === 0) {
+				this.checkWidthForChart();
+				window.addEventListener('resize', this.resizeHandler);
+			}
+		},
+		beforeDestroy () {
+			window.removeEventListener('resize', this.resizeHandler);
 		},
 		components: {
 			'status' : Status,
@@ -92,10 +103,24 @@
 				return (this.weather.precipProbability == 0)
 			}
 		},
+
 		methods: {
-		
+			resizeHandler () {
+				// @todo: this could potentially be slow
+				// @todo: Hide the chart during resizing?
+				this.checkWidthForChart();
+			},
+			checkWidthForChart () {
+				let dummyWidth = this.$refs.hourSpaceDummy.clientWidth;
+				let dummyLeftPos = (this.$refs.hourSpaceDummy.getBoundingClientRect()).left;
+				console.log('emitting event');
+				let chartSizeInfo = {
+					width: dummyWidth,
+					left: dummyLeftPos
+				}
 
-
+				this.$emit('chartSpaceDummyUpdated', chartSizeInfo);
+			}
 		},
 		data () {
 		  return {

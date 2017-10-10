@@ -33,7 +33,7 @@
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0",
-     "uglify-js": "^2.8.23",
+    "uglify-js": "^2.8.23",
     "uglifyjs-webpack-plugin": "^0.4.3"
   }
 }

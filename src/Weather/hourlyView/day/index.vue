@@ -1,13 +1,22 @@
 <template>
 	<div v-if="weather" class="day-list">
-		
-		<hour v-for="(hour, key) in weather" :weather="hour" />
+		<hour v-for="(hour, key) in weather" 
+			:order="key" 
+			:weather="hour"
+			v-on:chartSpaceDummyUpdated="chartWidthHandler"
+		/>
 
 		<chart v-if="displayChart" 
 			:weather="weather"
 			:maxSpeedToDisplay="maxWindSpeed"
 			:maxSpeedTreshold="settingsMaxWindSpeed"
+			:cursorY="cursorY"
+			:cursorX="cursorX"
+			:isTouch="isTouch"
+			:chartWidth="chartWidth"
+			:chartLeftPos="chartLeftPos"
 		/>
+		
 	</div>	
 </template>
 
@@ -22,6 +31,15 @@
 		props: {
 			weather: {
 				type: Array
+			},
+			cursorY: {
+				type: Number
+			},
+			cursorX: {
+				type: Number
+			},
+			isTouch: {
+				type: Boolean
 			}
 			
 			
@@ -44,16 +62,23 @@
 				this.weather.forEach(function(hour) {
 					i++;
 				});
+
+				if (i>1 && this.chartWidth !== false)
+
 				return (i>1);
 			}
 		},
 		methods: {
-			
-
+			chartWidthHandler (val) {
+				console.log(val);
+				this.chartWidth = val.width;
+				this.chartLeftPos = val.left;
+			}
 		},
 		data () {
 		  return {
-			
+			  chartWidth: false,
+			  chartLeftPos: 0
 		  }
 		}
 

@@ -1,6 +1,6 @@
 <template>
 	<svg class="windSpeedChart"
-		v-on:mousemove="cursor"
+		:style="chartStyle"
 	> 
 		<defs>
 			<linearGradient 
@@ -16,18 +16,15 @@
 			</linearGradient>
 			<mask id="pathMask">
 
-				
-
 				<circle
 					class="windSpeedChart_cursorDotMask"
-					:cx="cursorX" 
-					:cy="cursorY"
+					:cx="positionX" 
+					:cy="positionY"
 					r="10"
 				/>
 
-
-				
 				<path class="windSpeedChart__windSpeed" 
+					
 					:d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"
 					ref="windSpeedPath"
 				>
@@ -62,13 +59,14 @@
 			/>
 		</g>
 
+
 		<g class="windSpeedChart_cursor">
 			
 			<rect  
 				width="100%" 
 				fill="#DF4410"
 				x="0" 
-				:y="cursorY-1"
+				:y="positionY-1"
 				height="2"
 			/>
 			
@@ -76,14 +74,14 @@
 				:width="windSpeedThresholdPixels" 
 				fill="url(#linearGradient-1)"
 				x="0" 
-				:y="cursorY-1"
+				:y="positionY-1"
 				height="2"
 			/>
 
 			<circle
 				class="windSpeedChart_cursorDot"
-				:cx="cursorX" 
-				:cy="cursorY"
+				:cx="positionX" 
+				:cy="positionY"
 				r="5"
 			/>
 
@@ -91,13 +89,17 @@
 		</g>
 					
 
-		
-		
-
 	</svg>
 </template>
 
 <script>
+	/* @todo: the cursor position is lagging in Y axis when used on 
+	a touch device, potentially even on slow computers while scrolling 
+	idea: Separate the cursor into it's own SVG which would be positioned or translated via CSS in it's own layer, this should be way faster
+	The cursor will need it's own gradient with mask for the dot to change colour
+	*/
+
+
 	import Vue from 'vue';
 	import windSpeedBar from './windSpeedBar.vue';
 	import * as d3 from 'd3';
@@ -106,7 +108,7 @@
 	
 	export default {
 		name: 'chart',
-		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold'],
+		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold','cursorY','cursorX','is-touch','chartWidth','chartLeftPos'],
 		components: {
 			'wind-speed-bar' : windSpeedBar
 		},
@@ -121,34 +123,89 @@
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
 			},
+			position () {
+				return {
+					x: this.cursorX,
+					y: this.cursorY
+				}
+			},
+			chartStyle () {
+				return "width:" + this.chartWidth + "px; left:" + this.chartLeftPos + "px;";
+			}
 		},
-		
-		
+
+		watch: {
+			cursorY (val) {
+				this.cursor(this.position);
+			},
+			cursorX (val) {
+				this.cursor(this.position);
+			}
+		},
+
+		mounted () {
+			this.cursor(this.position);
+		},
 	 
 		methods: {
-			cursor (e) {
+			cursor (position) {
+
+				let y, pos, target;
+		
 				let pathEl = this.$refs.windSpeedPath;
 				let pathLength = pathEl.getTotalLength();
+				let end = pathLength;
+
 				
-				let y = e.pageY;
-				let pos;
-				let beginning = y, end = pathLength, target;
+
+				// Stop at the beginning of the curve path
+				if (position.y < 25) {
+					y = 25;
+				// Stop at the end of the curve path					
+				} else if (position.y > pathLength) {
+					y = pathLength;
+				// Cursor is withing the curve path	
+				} else {
+					y = position.y;
+				}
+
+				if (this.isTouch) {
+					if (position.y < 25) {
+						y += position.y;	
+					} else {
+						y += 25;
+					}
+					
+				}
+
+				
+				let beginning = y;
+
+				
 				while (true) {
+					// @todo: Got this calculation from example, don't really understand it yet
 					target = Math.floor((beginning + end) / 2);
+					
 					pos = pathEl.getPointAtLength(target);
+
 					if ((target === end || target === beginning) && pos.y !== y) {
 						break;
 					}
+
 					if (pos.y > y) {
+						
 						end = target;
 					}
 					else if (pos.y < y) {
 						beginning = target;
+						
+					} else {
+						break;
 					}
-					else break; //position found
 				}
-				this.cursorX = pos.x;
-				this.cursorY = y;
+
+				this.positionX = pos.x;
+				this.positionY = y;
 				
 			},
 			pathMaskIdUrl () {
@@ -191,10 +248,8 @@
 		
 		data () {
 		  return {
-			  // @todo: find a way how to get this value dynamically - available space for the chart
-			chartWidth: 400,
-			cursorX: 0,
-			cursorY: 0
+			positionX: 0,
+			positionY: 0
 		  }
 		}
 
