@@ -44,9 +44,25 @@
 			}
 		},
 		computed: {
-			
+			cursorDayIndex () {
+				return Math.max(Math.floor((this.cursorY - 25) / 50),0);
+			},
+			cursorDayProgress () {
+				let beginning = ( this.cursorDayIndex * 50 ) + 25;
+				return  Math.max((this.cursorY - beginning) / 50, 0);
+			}
 		},
+		watch: {
+			cursorY () {
+				this.$store.commit('PLACE_VIEW_CHART_CURSOR', {
+					index: this.cursorDayIndex,
+					progress: this.cursorDayProgress
+				});
+			}
+		},
+
 		methods: {
+		
 			fillSpace () {
 				let height = this.$refs.chartScroller.offsetHeight - 50;
 				this.fillSpaceHeight = "height: " + height + "px";
@@ -98,6 +114,7 @@
 				cursorTicking: false,
 				isTouch: false,
 				fillSpaceHeight: ""
+				
 			}
 		}
 

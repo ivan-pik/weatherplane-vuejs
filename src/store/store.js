@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+// @todo: separate into modules
+
 export default new Vuex.Store({
 	state: {
 		user: {
@@ -21,16 +23,19 @@ export default new Vuex.Store({
 		existingPlaceView: {
 			place: null,
 			weatherData: null,
-			layout: {
-				windBearingRelativeToRunway: false
-			},
 			weatherThresholds: {
 				// @todo: get those from API
-				windSpeed: 4,
+				windSpeed: 8,
 				temperature: 0,
 				windDirectionRelToRWY: 45,
 				crosswindSpeed: 4,
 				precipProbability: 50
+			},
+			view: {
+				chartCursorPosition: {
+					index: 0,
+					progress: 0
+				}
 			}
 		}
 
@@ -66,6 +71,9 @@ export default new Vuex.Store({
 		},
 		'PLACE_SAVE_WEATHER_DATA' (state, weather) {
 			state.existingPlaceView.weatherData = weather;
+		},
+		'PLACE_VIEW_CHART_CURSOR' (state, val) {
+			state.existingPlaceView.view.chartCursorPosition = val;
 		}
 
 	},

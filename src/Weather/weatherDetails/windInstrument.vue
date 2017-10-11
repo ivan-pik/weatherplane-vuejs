@@ -1,5 +1,5 @@
 <template>
-	<div class="windInstrument" @click="turnIt()">
+	<div class="windInstrument">
 		<svg width="180px" height="180px" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<defs>
 				<polygon
@@ -10,14 +10,14 @@
 					<rect  
 						width="90" 
 						height="180"
-						:fill="sideOpacity.leftBg"
+						:fill="sideOpacityStyle.leftBg"
 						x="0" 
 						y="0"
 					/>
 					<rect  
 						width="90" 
 						height="180"
-						:fill="sideOpacity.rightBg"
+						:fill="sideOpacityStyle.rightBg"
 						x="90" 
 						y="0"
 					/>
@@ -29,7 +29,7 @@
 					cx="90"
 					cy="90"
 					rx="74" 
-					:ry="windSpeed*2"
+					:ry="maxSpeedTreshold*2"
 				>
 				</ellipse>
 				<circle class="windInstrument__dial" cx="90" cy="90" r="74"></circle>
@@ -92,55 +92,75 @@
 	
 	export default {
 		name: 'windInstrument',
-		props: ['side'],
+		props: {
+			windBearing: {
+				type: Number
+			},
+			windSpeed: {
+				type: Number
+			},
+			windGust: {
+				type: Number
+			},
+			maxSpeedTreshold: {
+				type: Number
+			},
+			activeSide: {
+				type: String
+			}
+		},
+		mounted () {
+			this.sideOpacity(this.activeSide);
+		},
 		components: {
 			'wind-speed-bar' : windSpeedBar
 		},
-		mounted () {
-			this.turnIt();
+		watch: {
+			activeSide(val) {
+				this.sideOpacity(val);
+			}
 		},
+
 		computed: {
-			
+			angle () {
+				return this.windBearing;
+			},
+		
+			rotation () {
+				return "rotate(" + this.angle + " 90 90)"
+			}
+		},
+	 
+		methods: {
 			sideOpacity () {
 				if (this.activeSide == "left") {
-					return {
+					this.sideOpacityStyle = {
 						leftBg: "#fff",
 						rightBg: "#555"
 					}
-				} else {
-					return {
+				} else if (this.activeSide == "right") {
+					this.sideOpacityStyle = {
 						leftBg: "#555",
+						rightBg: "#fff"
+					}
+				} else {
+					this.sideOpacityStyle = {
+						leftBg: "#fff",
 						rightBg: "#fff"
 					}
 				}
 			},
-			rotation () {
-				return "rotate(" + this.angle + " 90 90)"
-			}
-			
-		},
-	 
-		methods: {
-			turnIt() {
-				this.angle = Math.random()*360;
-				this.windSpeed = Math.random()*10;
-				this.windGust = Math.random()*10;
-
-
-			}
 		},
 		
 		data () {
-		  return {
-			maxCrossWind: 40,
-			activeSide: "left",
-			angle: 0,
-			windSpeed: 0,
-			windGust: 0,
-			maxSpeedTreshold: 5
-		  }
+			return {
+				maxCrossWind: 40,
+				sideOpacityStyle: {
+					leftBg: "#fff",
+					rightBg: "#fff"
+				}
+			}
 		}
-
 	}
 </script>
 

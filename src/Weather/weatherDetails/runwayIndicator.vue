@@ -13,7 +13,7 @@
 		</svg>
 
 		<svg 
-			v-if="leftSide"
+			v-if="activeSide=='left'"
 			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--left"
 			width="33"
 			height="27"
@@ -23,7 +23,7 @@
 			<use class="runwaySideIndicator__plane" xlink:href="#plane"></use>
 		</svg>
 		<svg 
-			v-if="rightSide"
+			v-if="activeSide=='right'"
 			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--right"
 			width="33"
 			height="27"
@@ -41,7 +41,11 @@
 	
 	export default {
 		name: 'runwaySideIndicator',
-		props: ['side'],
+		props: {
+			activeSide: {
+				type: String
+			}
+		},
 		computed: {
 			
 		},
@@ -52,8 +56,6 @@
 		
 		data () {
 		  return {
-			leftSide: true,
-			rightSide: false
 		  }
 		}
 

@@ -49,6 +49,7 @@
 			'date' : Date,
 			'chart' : Chart
 		},
+		
 		computed: {
 			
 			settingsMaxWindSpeed () {

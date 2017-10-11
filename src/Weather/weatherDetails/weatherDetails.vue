@@ -10,7 +10,7 @@
 					Wind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					13 ms
+					{{windSpeed}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -19,7 +19,7 @@
 					Gusting To
 				</h3>
 				<p class="weatherDetails__value">
-					16 ms
+					{{windGust}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -28,7 +28,7 @@
 					Temperature
 				</h3>
 				<p class="weatherDetails__value">
-					16 &deg;
+					{{temperature}} &deg;
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -40,7 +40,7 @@
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueNote">Rel To RWY</span>
-					45 &deg;
+					{{windBearing}} &deg;
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -49,7 +49,7 @@
 					Crosswing Speed
 				</h3>
 				<p class="weatherDetails__value">
-					7 ms
+					{{crossWindSpeed}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -58,7 +58,7 @@
 					Chance of rain
 				</h3>
 				<p class="weatherDetails__value">
-					0 %
+					{{precipProbability}} %
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -94,9 +94,18 @@
 			</div>
 		</div>
 
-		<runway-indicator />
+		<runway-indicator
+			:activeSide="activeSide"
+		/>
 
-		<wind-instrument />
+		<wind-instrument 
+			:windBearing="windBearing"
+			:windDirectionRelToRWY="windDirectionRelToRWY"
+			:windSpeed="windSpeed"
+			:windGust="windGust"
+			:maxSpeedTreshold="maxSpeedTreshold"
+			:activeSide="activeSide"
+		/>
 
 	</div>
 	
@@ -115,6 +124,38 @@
 			'runway-indicator' : runwayIndicator,
 			'wind-instrument' : windInstrument,
 			'status' : status
+		},
+		props: {
+			windSpeed: {
+				type: Number
+			},
+			windGust: {
+				type: Number
+			},
+			temperature: {
+				type: Number
+			},
+			windBearing: {
+				type: Number
+			},
+			windDirectionRelToRWY: {
+				type: Boolean
+			},
+			crossWindSpeed: {
+				type: Number
+			},
+			precipProbability: {
+				type: Number
+			},
+			precipIntensity: {
+				type: Number
+			},
+			maxSpeedTreshold: {
+				type: Number
+			},
+			activeSide: {
+				type: String
+			}
 		},
 		computed: {
 			
