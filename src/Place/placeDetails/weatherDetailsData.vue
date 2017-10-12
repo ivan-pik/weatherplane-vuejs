@@ -13,6 +13,8 @@
 		:activeSide="activeSide"
 	></weather-details>
 
+	
+
 
 </div>
 </template>
@@ -21,10 +23,12 @@
 
 	import weatherDetails from '../../Weather/weatherDetails/weatherDetails.vue';
 	
+	
 	export default {
 		name: 'WeatherDetailsData',
 		components: {
-			'weather-details' : weatherDetails
+			'weather-details' : weatherDetails,
+			
 		},
 		props: {
 			weather: {
@@ -69,7 +73,25 @@
 				);
 			},
 			settingsMaxWindSpeed () {
-				return this.$store.state.existingPlaceView.weatherThresholds.windSpeed;
+				return this.$store.state.existingPlaceView.place.placeSettings.maxWindSpeed;
+			},
+			settingsMaxCrossWindSpeed () {
+				return this.$store.state.existingPlaceView.place.placeSettings.maxCrossWindSpeed;
+			},
+			settingsMaxWindBearingToRWY () {
+				return this.$store.state.existingPlaceView.place.placeSettings.maxWindBearingToRWY;
+			},
+			settingsRunwayOrientation () {
+				return this.$store.state.existingPlaceView.place.placeSettings.runwayOrientation;
+			},
+			settingsMinTemperature () {
+				return this.$store.state.existingPlaceView.place.placeSettings.minTemperature;
+			},
+			settingsMaxTemperature () {
+				return this.$store.state.existingPlaceView.place.placeSettings.maxTemperature;
+			},
+			settingsMaxPrecipProbability () {
+				return this.$store.state.existingPlaceView.place.placeSettings.maxPrecipProbability;
 			},
 			angle () {
 				//@todo: offset for runway
