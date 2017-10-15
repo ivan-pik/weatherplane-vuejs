@@ -45,6 +45,7 @@
 </template>
 
 <script>
+//@todo: better plane image
 	import Vue from 'vue';
 	
 	export default {

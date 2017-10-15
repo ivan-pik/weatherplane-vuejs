@@ -1,7 +1,7 @@
 <template>
 	<div class="weatherDetails">
 		<h3 class="weatherDetails__cursorAt">
-			<status :status="tempStatus" />
+			<status :status="totalStatus" />
 			<span class="weatherDetails__cursorTime">
 				<span class="weatherDetails__hour">{{cursorHours}}</span>:<span class="weatherDetails__minutes">{{cursorMinutes}}</span>
 			</span> 
@@ -17,7 +17,7 @@
 				<p class="weatherDetails__value">
 					{{windSpeed.toFixed(1)}} ms
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusWindSpeed" />
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
@@ -26,7 +26,7 @@
 				<p class="weatherDetails__value">
 					{{windGust.toFixed(1)}} ms
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusGustSpeed" />
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
@@ -35,7 +35,7 @@
 				<p class="weatherDetails__value">
 					{{temperature.toFixed(0)}} &deg;C
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusTemperature" />
 			</div>
 		</div>
 		<div class="weatherDetails__col weatherDetails__col--2">
@@ -45,9 +45,9 @@
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueNote">Rel To RWY</span>
-					{{windBearingRelToRWY.toFixed(1)}} &deg;
+					{{windBearingRelToRWY.toFixed(0)}} &deg;
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusWindDirection" />
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
@@ -56,7 +56,7 @@
 				<p class="weatherDetails__value">
 					{{crossWindComponentRounded}} ms
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusCrossWindComponent" />
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
@@ -65,7 +65,7 @@
 				<p class="weatherDetails__value">
 					{{precipProbability.toFixed(1)}} %
 				</p>
-				<status :status="tempStatus" />
+				<status :status="statusPrecipProbability" />
 			</div>
 		</div>
 		
@@ -159,6 +159,27 @@
 			},
 			crossWindComponent: {
 				type: Number
+			},
+			statusWindSpeed: {
+				type: String
+			},
+			statusGustSpeed: {
+				type: String
+			},
+			statusTemperature: {
+				type: String
+			},
+			statusWindDirection: {
+				type: String
+			},
+			statusCrossWindComponent: {
+				type: String
+			},
+			statusPrecipProbability: {
+				type: String
+			},
+			totalStatus: {
+				type: String
 			}
 		},
 		computed: {

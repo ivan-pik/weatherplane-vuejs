@@ -18,6 +18,13 @@
 		:settingsMaxCrossWindSpeed="settingsMaxCrossWindSpeed"
 		:maxWindSpeedToDisplay="maxWindSpeedToDisplay"
 		:crossWindComponent="crossWindComponent"
+		:statusWindSpeed="statusWindSpeed"
+		:statusGustSpeed="statusGustSpeed"
+		:statusTemperature="statusTemperature"
+		:statusWindDirection="statusWindDirection"
+		:statusCrossWindComponent="statusCrossWindComponent"
+		:statusPrecipProbability="statusPrecipProbability"
+		:totalStatus="totalStatus"
 
 	></weather-details>
 
@@ -44,6 +51,45 @@
 			}
 		},
 		computed: {
+			statusWindSpeed () {
+				return this.toStatus(this.windSpeed > this.settingsMaxWindSpeed);
+			},
+			statusGustSpeed () {
+				return this.toStatus(this.windGust > this.settingsMaxWindSpeed);
+			},
+			statusTemperature () {
+				return this.toStatus(this.temperature > this.settingsMaxTemperature || this.temperature < this.settingsMinTemperature);
+			},
+			statusWindDirection () {
+				return this.toStatus(Math.abs(this.windBearingRelToRWY) > this.settingsMaxWindBearingToRWY);
+			},
+			statusCrossWindComponent () {
+				return this.toStatus(this.crossWindComponent > this.settingsMaxCrossWindSpeed);
+			},
+			statusPrecipProbability () {
+				return this.toStatus(this.precipProbability > this.settingsMaxPrecipProbability);
+			},
+
+			totalStatus () {
+				let params = [
+					this.statusWindSpeed,
+					this.statusGustSpeed,
+					this.statusTemperature,
+					this.statusWindDirection,
+					this.statusCrossWindComponent,
+					this.statusPrecipProbability
+				]
+
+				let isNo = function (element, index, array) {
+					return element == "no";
+				}
+
+				if(params.some(isNo)) {
+					return "no"
+				} 
+				return "yes"
+			},
+
 			crossWindComponent () {
 				let speed = this.windSpeed;
 				let angleInRadians = this.toRadians(Math.abs(this.windBearingRelToRWY));
@@ -174,6 +220,13 @@
 		},
 	 
 		methods: {
+			toStatus (val) {
+				if (val == true) {
+					return "no";
+				} else {
+					return "yes";
+				}
+			},
 			interpolateLinear(current,next) {
 				return parseFloat(current + (next - current) * this.progress);
 			},
