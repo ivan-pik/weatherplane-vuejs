@@ -1,5 +1,5 @@
 <template>
-	<g>
+	<g :class="role">
 		<defs>
 			<mask :id="uid">
 				<rect x="0" y="2" 
@@ -15,7 +15,7 @@
 					:width="windSpeedPixels"
 					height="8"
 					fill="white"
-					rx="4"
+					:rx="(role=='windInstrument') ? 0 : 4"
 				/>
 				<line
 					class="svgBar__windGust"
@@ -27,9 +27,11 @@
 				<circle
 					class="svgBar__windSpeedPoint"
 					:cx="windSpeedPixels" 
-					cy="6" r="6"
+					cy="6" 
+					r="6"
 					fill="white"
 				/>
+
 				
 			</mask>
 		</defs>
@@ -43,7 +45,21 @@
 				:width="windSpeedThresholdPixels" 
 				class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" height="12"
 			/>
+			<circle
+				v-if="(role=='windInstrument')"
+				class="svgBar__windSpeedPoint--instrument"
+				:cx="windSpeedPixels" 
+				cy="6" 
+				r="3"
+			/>
+
+			
+
+			
+
+			
 		</g>
+		
 	</g>
 </template>
 
@@ -52,7 +68,8 @@
 	
 	export default {
 		name: 'windSpeedBar',
-		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold','order','chartWidth'],
+		// @todo: validate props
+		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold','order','chartWidth','role'],
 		computed: {
 			shift () {
 				let amount = this.order * 50 + 19;

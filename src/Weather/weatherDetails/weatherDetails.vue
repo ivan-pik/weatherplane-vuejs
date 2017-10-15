@@ -2,7 +2,12 @@
 	<div class="weatherDetails">
 		<h3 class="weatherDetails__cursorAt">
 			<status :status="tempStatus" />
-			<span class="weatherDetails__cursorTime">15:00</span> Friday 19 August 
+			<span class="weatherDetails__cursorTime">
+				<span class="weatherDetails__hour">{{cursorHours}}</span>:<span class="weatherDetails__minutes">{{cursorMinutes}}</span>
+			</span> 
+			<span class="weatherDetails__cursorDate">
+				{{cursorDate}}
+			</span>
 		</h3>
 		<div class="weatherDetails__col weatherDetails__col--1">
 			<div class="weatherDetails__display">
@@ -10,7 +15,7 @@
 					Wind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{windSpeed}} ms
+					{{windSpeed.toFixed(1)}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -19,7 +24,7 @@
 					Gusting To
 				</h3>
 				<p class="weatherDetails__value">
-					{{windGust}} ms
+					{{windGust.toFixed(1)}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -28,7 +33,7 @@
 					Temperature
 				</h3>
 				<p class="weatherDetails__value">
-					{{temperature}} &deg;
+					{{temperature.toFixed(0)}} &deg;C
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -40,7 +45,7 @@
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueNote">Rel To RWY</span>
-					{{windBearing}} &deg;
+					{{windBearingRelToRWY.toFixed(1)}} &deg;
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -49,7 +54,7 @@
 					Crosswing Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{crossWindSpeed}} ms
+					{{crossWindComponentRounded}} ms
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -58,7 +63,7 @@
 					Chance of rain
 				</h3>
 				<p class="weatherDetails__value">
-					{{precipProbability}} %
+					{{precipProbability.toFixed(1)}} %
 				</p>
 				<status :status="tempStatus" />
 			</div>
@@ -67,15 +72,21 @@
 
 		<runway-indicator
 			:activeSide="activeSide"
+			:crabAngle="crabAngle"
 		/>
 
 		<wind-instrument 
 			:windBearing="windBearing"
 			:windDirectionRelToRWY="windDirectionRelToRWY"
+			:runwayDirection="runwayDirection"
 			:windSpeed="windSpeed"
 			:windGust="windGust"
 			:maxSpeedTreshold="maxSpeedTreshold"
 			:activeSide="activeSide"
+			:windBearingRelToRWY="windBearingRelToRWY"
+			:settingsMaxCrossWindSpeed="settingsMaxCrossWindSpeed"
+			:maxWindSpeedToDisplay="maxWindSpeedToDisplay"
+			:crossWindComponent="crossWindComponent"
 		/>
 
 	</div>
@@ -112,9 +123,10 @@
 			windDirectionRelToRWY: {
 				type: Boolean
 			},
-			crossWindSpeed: {
+			runwayDirection: {
 				type: Number
 			},
+		
 			precipProbability: {
 				type: Number
 			},
@@ -126,10 +138,36 @@
 			},
 			activeSide: {
 				type: String
+			},
+			windBearingRelToRWY: {
+				type: Number
+			},
+			cursorHours: {
+				type: String
+			},
+			cursorMinutes: {
+				type: String
+			},
+			cursorDate: {
+				type: String
+			},
+			settingsMaxCrossWindSpeed: {
+				type: Number
+			},
+			maxWindSpeedToDisplay: {
+				type: Number
+			},
+			crossWindComponent: {
+				type: Number
 			}
 		},
 		computed: {
-			
+			crossWindComponentRounded () {
+				return (this.crossWindComponent).toFixed(1);
+			},
+			crabAngle () {
+				return this.windBearingRelToRWY * 0.5;
+			}
 			
 		},
 		methods: {

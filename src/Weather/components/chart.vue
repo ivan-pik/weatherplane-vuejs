@@ -11,7 +11,7 @@
 				id="linearGradient-1"
 			>
 				<stop stop-color="#3CBB22" offset="0%"></stop>
-				<stop stop-color="#ECA079" offset="80%"></stop>
+				<stop stop-color="#ECA079" offset="90%"></stop>
 				<stop stop-color="#DF4410" offset="100%"></stop>
 			</linearGradient>
 			<mask id="pathMask">
@@ -35,7 +35,12 @@
 			</mask>
 		</defs>
 
-		<line class="svgBar__threshold" stroke-dasharray="2, 3" :x1="windSpeedThresholdPixels" :x2="windSpeedThresholdPixels" y1="0" :y2="chartHeight" />
+		<line class="svgBar__threshold" 
+			:x1="windSpeedThresholdPixels"
+			:x2="windSpeedThresholdPixels" 
+			:y2="chartHeight"
+			y1="0"
+		/>
 
 		<wind-speed-bar v-for="(hourWeather, index) in weather"
 			:uid="uid(hourWeather.time)" 

@@ -14,7 +14,7 @@
         props: ['windSpeed','windGust','windSpeedStatus','windGustStatus'],
         computed: {
             windSpeedRounded () {
-                return this.roundNumber(this.windSpeed,1);
+                return this.roundNumber(this.windSpeed,0);
             },
             windGustRounded () {
                 return this.roundNumber(this.windGust,0);

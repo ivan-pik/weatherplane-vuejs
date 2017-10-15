@@ -12,6 +12,7 @@
 	border-width: 0 $widthStatusBar;
 }
 
+
 .weatherDetails__cursorAt {
 	position: absolute;
 	top: -2px;
@@ -31,6 +32,22 @@
 		margin-right: 0.2em;
 		
 	}
+}
+
+.weatherDetails__cursorTime {
+	display: inline-block;
+	min-width: 3em;
+}
+
+.weatherDetails__hour,
+.weatherDetails__minutes {
+	display: inline-block;
+	min-width: 1.3em;
+}
+
+.weatherDetails__cursorDate {
+	display: inline-block;
+	min-width: 11em;
 }
 
 .weatherDetails__col {
@@ -91,6 +108,9 @@
 .weatherDetails__valueNote {
 	font-size: 7px;
 	text-transform: uppercase;
+	position: absolute;
+	right: 8em;
+	bottom: 0.2em;
 }
 
 
@@ -178,16 +198,17 @@
 
 .runwaySideIndicator__runway {
 	transform: translate(0,13px);
-	stroke: $colorBorder;
+	stroke: #859098;
 	stroke-width: 2;
-	stroke-dasharray: 1,6;
+	stroke-dasharray: 0.5,8;
+	stroke-dashoffset: 2;
 	stroke-linejoin: round;
 	stroke-linecap: round;
 }
 
 .runwaySideIndicator__planePosition {
 	position: absolute;
-	top: 2px;
+	top: -8px;
 }
 
 .runwaySideIndicator__planePosition--left {
@@ -214,7 +235,7 @@
 
 .windInstrument__dial {
 	fill: none;
-	stroke-width: 2;
+	stroke-width: 3;
 	stroke: #859098;
 }
 
@@ -222,14 +243,16 @@
 	fill: none;
 	stroke-width: 9;
 	stroke: #859098;
-	stroke-dasharray: 1,17;
+	stroke-dasharray: 1.5,16.5;
 	stroke-dashoffset: 0;
 }
 
 .windInstrument__maxWindSpeedIndicator {
-	fill: none;
-	stroke-width: 1;
-	stroke: $no;
+	// fill: rgba($statusNo, 0.2);
+fill: none;
+	stroke: $statusNo;
+	stroke-width: 2;
+	stroke: rgba($statusNo, 0.3);
 }
 
 .windInstrument__center {
@@ -238,10 +261,28 @@
 	stroke: #859098;
 }
 
+.svgBar__windSpeedPoint--instrument {
+	fill: #fff;
+	stroke-width: 0;
+}
+
+
+
 .windInstrument__windDirectionArrow {
 	fill: #859098;
+	&.overflow {
+		fill: $no;
+	}
 }
 
 .windInstrument__windDirectionIndicator {
 	fill: #859098;
+}
+
+.windInstrument {
+	.svgBar__windGust {
+		stroke:#fff;
+		stroke-width:8;
+		stroke-dasharray: 2 2;
+	}
 }

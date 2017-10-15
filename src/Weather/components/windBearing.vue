@@ -1,45 +1,186 @@
 <template>
 	<div class="windBearing">
-       {{windBearing}}&deg;
+		<div class="windBearing__value">
+			{{bearingRelToRWY}}&deg;
+		</div>
 
+		<svg  class="windBearing__chart" width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
-       
-<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
-    <path :transform="rotate" d="M3.76650848,4 L9,4 C9.55228475,4 10,4.44771525 10,5 C10,5.55228475 9.55228475,6 9,6 L3.35830269,6 L5.4211628,8.06286011 L5.4211628,8.06286011 C5.81168709,8.4533844 5.81168709,9.08654938 5.4211628,9.47707367 L5.4211628,9.47707367 C5.0306385,9.86759796 4.39747353,9.86759796 4.00694923,9.47707367 L0.471415328,5.94153977 C0.402792138,5.87291657 0.34622746,5.79680118 0.301721296,5.71582666 C0.115576003,5.53421647 -3.6380951e-14,5.28060535 -3.64153152e-14,5 C-3.64803207e-14,4.46918979 0.413575034,4.03497521 0.936070836,4.00201052 L4.00694923,0.931132125 L4.00694923,0.931132125 C4.39747353,0.540607833 5.0306385,0.540607833 5.4211628,0.931132125 L5.4211628,0.931132125 C5.81168709,1.32165642 5.81168709,1.9548214 5.4211628,2.34534569 L3.76650848,4 Z"></path>
-</svg>
+			<svg 
+				v-if="activeSide!='none'"
+				x="6" y="6" width="26" height="26"  viewBox="-1 -1 2 2"
+			>
+				<path 
+					class="windBearing__crossWindPie"
+					:class="windBearingStatus"
+					:transform="rotateSlice"
+					:d="slice"
+				/>
+			</svg>
 
+			<circle class="windBearing__fullCircle"
+				r="12"
+				cx="19"
+				cy="19"
+			/>
+
+			<path
+				vector-effect="non-scaling-stroke"
+				d="M6,19.5 L32,19.5"
+				class="windBearing__runway"
+			></path>
+
+			
+
+			
+
+			<svg width="38px" height="38px" viewBox="0 0 38 38">
+				<g :transform="rotateChart">
+					<path
+						class="windBearing__directionLine"
+						:class="windSpeedStatus"
+						d="M 19 2 L 19 36"
+					/>
+					<path 
+						class="windBearing__directionArrow"
+						:class="windSpeedStatus"
+						d="M 14 7 L 19 1 L 24 7"
+					/>
+				</g>
+			</svg>
+		</svg>
 	</div>
 </template>
 
 <script>
-    import Vue from 'vue';
-  
+	import Vue from 'vue';
 	
-    export default {
-        name: 'windBearing',
-        props: ['windBearing','status'],
-        computed: {
-            rotate () {
-                // @todo: this points the wrong direction because of the initial SVG orientation
-                // Also pass param if it's rel to the world or runway
-                return "rotate(" + this.windBearing + ", 5, 5)";
-                
-            }
-        },
-     
-        methods: {
-		
+	export default {
+		name: 'windBearing',
+		props: {
+			windBearing: {
+				type: Number
+			},
+			windBearingStatus: {
+				type: String
+			},
+			windSpeedStatus: {
+				type: String
+			},
+			windBearingRelToRWY: {
+				type: Boolean
+			},
+			runwayDirection: {
+				type: Number
+			},
+			settingsMaxWindBearing: {
+				type: Number
+			}
+		},
+		created () {
+			this.generateSlice(this.bearingToPercents);
+		},
+		computed: {
+			angle () {
+				if (this.activeSide == "left") {
+					return this.bearingRelToRWY + 270;
+				} else if (this.activeSide == "right") {
+					return 90 + this.bearingRelToRWY * -1;
+				} else {
+					return 90 + this.bearingRelToRWY * -1;
+				}
+			},
+			bearingRelToRWY () {
+				
+				let activeSide;
+				let relBearing;
+				let runway = this.runwayDirection;
+				let windBearing = this.windBearing;
 
+				
+	
 
-        },
-        data () {
-          return {
-			
-          }
-        }
+				// offset values for the runway orientation
 
-    }
+				let offset = runway - 90;
+				windBearing = windBearing - offset;
+				// windBearing must not be negative
+				if (windBearing < 0) {
+					windBearing = 360 - windBearing;
+				}
+				// windBearing must not be larger or equal to 360
+				if (windBearing >= 360) {
+					windBearing = windBearing - 360;
+				}
+
+				// now pretend runway at 90deg
+
+				if (windBearing == 0 || windBearing == 180) {
+					activeSide = "none";
+					relBearing = windBearing - 90;
+				}  else if (windBearing <= 90 || (windBearing > 90 && windBearing < 180)) {
+					activeSide = "left";
+					relBearing = (windBearing -90);
+				} else if (
+					(windBearing > 180 && windBearing <= 270) || windBearing > 270) {
+					activeSide = "right"
+					relBearing = 270 - windBearing;
+				} 
+
+				this.activeSide = activeSide;
+				return relBearing;
+
+				
+			},
+			bearingToPercents () {
+				return (this.settingsMaxWindBearing / 180);
+			},
+			rotateSlice () {
+				let rotate = 0;
+				if (this.activeSide == "left") {
+					rotate = (90 - this.settingsMaxWindBearing) + 90;
+				} else if (this.activeSide == "right") {
+					rotate = (90 - this.settingsMaxWindBearing) - 90;
+				}
+				
+				return `rotate(${rotate} 0 0)`;
+			},
+			rotateChart () {
+				let angle = this.angle;
+				return `rotate(${angle} 19 19)`;
+			}
+		},
+	 
+		methods: {
+			getCoordinatesForPercent (percent) {
+				let x = Math.cos(2 * Math.PI * percent);
+				let y = Math.sin(2 * Math.PI * percent);
+				return [x, y];
+			},
+			generateSlice (percent) {
+				const [startX, startY] = this.getCoordinatesForPercent(0);
+				const [endX, endY] = this.getCoordinatesForPercent(percent);
+
+				// if the slice is more than 50%, take the large arc (the long way around)
+				const largeArcFlag = percent > .5 ? 1 : 0;
+
+				// create an array and join it just for code readability
+				this.slice = [
+					`M ${startX} ${startY}`, // Move
+					`A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
+					`L 0 0`, // Line
+				].join(' ');
+
+			}
+		},
+		data () {
+			return {
+				slice: '',
+				activeSide: "none"
+			}
+		}
+
+	}
 
 
 

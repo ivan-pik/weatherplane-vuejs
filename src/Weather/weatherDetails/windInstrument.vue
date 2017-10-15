@@ -8,17 +8,17 @@
 				/>
 				<mask id="inactiveMask">
 					<rect  
-						width="90" 
+						width="92" 
 						height="180"
 						:fill="sideOpacityStyle.leftBg"
-						x="0" 
+						:x="(activeSide == 'left' ? -1: -3) "  
 						y="0"
 					/>
 					<rect  
-						width="90" 
+						width="92" 
 						height="180"
 						:fill="sideOpacityStyle.rightBg"
-						x="90" 
+						:x="(activeSide == 'right' ? 89: 91) "  
 						y="0"
 					/>
 				</mask>
@@ -28,11 +28,11 @@
 					class="windInstrument__maxWindSpeedIndicator"
 					cx="90"
 					cy="90"
-					rx="74" 
-					:ry="maxSpeedTreshold*2"
+					:rx="maxWindSpeedDiameter" 
+					:ry="maxCrossWindSpeedDiameter"
 				>
 				</ellipse>
-				<circle class="windInstrument__dial" cx="90" cy="90" r="74"></circle>
+				<circle class="windInstrument__dial" cx="90" cy="90" r="72"></circle>
 				<circle class="windInstrument__dialSteps" cx="90" cy="90" r="69"></circle>
 				
 			</g>
@@ -41,9 +41,6 @@
 				x="82"
 				y="0"
 			>
-
-				
-				
 				<rect 
 					class="windInstrument__windDirectionIndicator"
 					width="4" 
@@ -51,37 +48,32 @@
 					x="6" 
 					y="16"
 				/>
-
-				
-
-				<use y="7" class="windInstrument__windDirectionArrow" xlink:href="#arrow"></use>
+				<use 
+					:class="overflowClass"
+					y="7" class="windInstrument__windDirectionArrow" xlink:href="#arrow">
+				</use>
 
 				<use y="163" class="windInstrument__windDirectionArrow" xlink:href="#arrow"></use>
 
-				<g
-					transform="rotate(-90 0 0) translate(-90,-17)"
-				>
-					<svg width="90" height="50">
+				<g transform="rotate(-90 0 0) translate(-90,-17)">
+					<svg width="71" height="50">
 						<wind-speed-bar
 							:uid="'instrumentBar'" 
+							:order="0"
+							:role="'windInstrument'"
 							:windSpeed="windSpeed" 
 							:windGust="windGust"
-							:maxSpeedToDisplay="16"
-							:maxSpeedTreshold="maxSpeedTreshold"
-							:order="0"
-							:chartWidth="69"
+							:maxSpeedToDisplay="maxWindSpeedToDisplay"
+							:maxSpeedTreshold="maxSpeedTresholdRelToBearing"
+							:chartWidth="chartWidth"
+							
 						/>
 					</svg>
 				</g>
-
-				
-				
-				
 			</svg>
 			</g>
 
 			<circle class="windInstrument__center" cx="90" cy="90" r="5"></circle>
-			
 		</svg>
 	</div>
 </template>
@@ -107,7 +99,26 @@
 			},
 			activeSide: {
 				type: String
+			},
+			windDirectionRelToRWY: {
+				type: Boolean
+			},
+			windBearingRelToRWY: {
+				type: Number
+			},
+			runwayDirection: {
+				type: Number
+			},
+			settingsMaxCrossWindSpeed: {
+				type: Number
+			},
+			maxWindSpeedToDisplay: {
+				type: Number
+			},
+			crossWindComponent: {
+				type: Number
 			}
+			
 		},
 		mounted () {
 			this.sideOpacity(this.activeSide);
@@ -122,16 +133,54 @@
 		},
 
 		computed: {
-			angle () {
-				return this.windBearing;
-			},
 		
+			maxSpeedTresholdRelToBearing () {
+
+				if (this.settingsMaxCrossWindSpeed < this.maxSpeedTreshold) {
+					return this.settingsMaxCrossWindSpeed; 
+				} else {
+					return this.maxSpeedTreshold;
+				}
+			},
+			overflowClass () {
+				if (this.windSpeed > this.maxSpeedTreshold || this.windGust > this.maxSpeedTreshold) {
+					return "overflow"
+				}
+				return false;
+			},
+			chartWidth () {
+				// This is so that maxSpeedThreshold is as wide as the wind dial circle
+				let proportion = this.maxWindSpeedToDisplay / this.maxSpeedTreshold;
+				return proportion * 70;
+			},
+			maxCrossWindSpeedDiameter () {
+				return this.speedToPixels(this.settingsMaxCrossWindSpeed);
+			},
+			maxWindSpeedDiameter () {
+				return this.speedToPixels(this.maxSpeedTreshold);
+			},
+			angle () {
+
+				if (this.activeSide == "left") {
+					return this.windBearingRelToRWY + 270;
+				} else if (this.activeSide == "right") {
+					return 90 + this.windBearingRelToRWY * -1;
+				} else {
+					return 90 + this.windBearingRelToRWY * -1;
+				}
+				
+			},
 			rotation () {
-				return "rotate(" + this.angle + " 90 90)"
+				let angle = this.angle;
+				return `rotate(${angle} 90 90)`;
 			}
 		},
 	 
 		methods: {
+			
+			speedToPixels(speed) {
+				return ((this.chartWidth/this.maxWindSpeedToDisplay) * speed).toFixed(0);
+			},
 			sideOpacity () {
 				if (this.activeSide == "left") {
 					this.sideOpacityStyle = {
@@ -159,6 +208,7 @@
 					leftBg: "#fff",
 					rightBg: "#fff"
 				}
+				
 			}
 		}
 	}

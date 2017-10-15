@@ -14,13 +14,20 @@
 			:windGust="weather.windGust"
 		/>
 
-		<wind-bearing  :status="windBearingStatus" :windBearing="weather.windBearing" />
+		<wind-bearing
+			:status="windBearingStatus"
+			:windBearing="weather.windBearing"
+			:windBearingRelToRWY="true"
+			:runwayDirection="settingsRunwayOrientation"
+			:settingsMaxWindBearing="settingsMaxWindBearing"
+			:windSpeedStatus="'yes'"
+			:windBearingStatus="'yes'"
+		/>
 
 		<weather-icon v-if="false" 
 			:icon="weather.icon" 
 			:precipProbability="weather.precipProbability" 
 			:precipIntensity="weather.precipIntensity"
-			:maxSpeedTreshold="settingsMaxWindSpeed"
 		/>
 
 		<temperature :temperature="weather.temperature" />
@@ -65,6 +72,15 @@
 			'temperature' : temperature
 		},
 		computed: {
+
+			settingsRunwayOrientation () {
+				return parseFloat(this.$store.state.existingPlaceView.place.placeSettings.runwayOrientation);
+			},
+
+			settingsMaxWindBearing () {
+				return parseFloat(this.$store.state.existingPlaceView.place.placeSettings.maxWindBearingToRWY);
+
+			},
 			
 			
 			totalStatus() {
