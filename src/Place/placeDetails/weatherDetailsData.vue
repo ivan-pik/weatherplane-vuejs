@@ -25,6 +25,7 @@
 		:statusCrossWindComponent="statusCrossWindComponent"
 		:statusPrecipProbability="statusPrecipProbability"
 		:totalStatus="totalStatus"
+		:settingsMaxWindBearingToRWY="settingsMaxWindBearingToRWY"
 
 	></weather-details>
 
@@ -67,7 +68,7 @@
 				return this.toStatus(this.crossWindComponent > this.settingsMaxCrossWindSpeed);
 			},
 			statusPrecipProbability () {
-				return this.toStatus(this.precipProbability > this.settingsMaxPrecipProbability);
+				return this.toStatus(this.precipProbability >= this.settingsMaxPrecipProbability);
 			},
 
 			totalStatus () {

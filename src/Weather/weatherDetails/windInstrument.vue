@@ -22,7 +22,24 @@
 						y="0"
 					/>
 				</mask>
+				<clipPath id="windBearingClip">
+					<circle cx="90" cy="90" r="78"></circle>
+				</clipPath>
+				
 			</defs>
+
+			<g clip-path="url(#windBearingClip)">
+				<svg x="08" y="08" width="164" height="164"  viewBox="-1 -1 2 2">
+					<path 
+						class="windInstrument__crossWindPie"
+						:class="statusWindDirection"
+						:transform="rotateSlice"
+						:d="slice"
+						
+					/>
+				</svg>
+			</g>
+			
 			<g mask="url(#inactiveMask)">
 				<ellipse
 					class="windInstrument__maxWindSpeedIndicator"
@@ -34,6 +51,8 @@
 				</ellipse>
 				<circle class="windInstrument__dial" cx="90" cy="90" r="72"></circle>
 				<circle class="windInstrument__dialSteps" cx="90" cy="90" r="69"></circle>
+
+				
 				
 			</g>
 			<g :transform="rotation">
@@ -74,6 +93,8 @@
 			</g>
 
 			<circle class="windInstrument__center" cx="90" cy="90" r="5"></circle>
+
+			
 		</svg>
 	</div>
 </template>
@@ -117,11 +138,20 @@
 			},
 			crossWindComponent: {
 				type: Number
+			},
+			settingsMaxWindBearingToRWY: {
+				type: Number
+			},
+			statusWindDirection: {
+				type: String
 			}
 			
 		},
 		mounted () {
 			this.sideOpacity(this.activeSide);
+		},
+		created () {
+			this.generateSlice(this.bearingToPercents);
 		},
 		components: {
 			'wind-speed-bar' : windSpeedBar
@@ -133,7 +163,9 @@
 		},
 
 		computed: {
-		
+			bearingToPercents () {
+				return (this.settingsMaxWindBearingToRWY / 180);
+			},
 			maxSpeedTresholdRelToBearing () {
 
 				if (this.settingsMaxCrossWindSpeed < this.maxSpeedTreshold) {
@@ -173,13 +205,27 @@
 			rotation () {
 				let angle = this.angle;
 				return `rotate(${angle} 90 90)`;
-			}
+			},
+			rotateSlice () {
+				let rotate = 0;
+				if (this.activeSide == "left") {
+					rotate = (90 - this.settingsMaxWindBearingToRWY) + 90;
+				} else if (this.activeSide == "right") {
+					rotate = (90 - this.settingsMaxWindBearingToRWY) - 90;
+				}
+				
+				return `rotate(${rotate} 0 0)`;
+			},
 		},
 	 
 		methods: {
 			
 			speedToPixels(speed) {
 				return ((this.chartWidth/this.maxWindSpeedToDisplay) * speed).toFixed(0);
+			},
+			// @todo: DRY DRY DRY
+			toRadians (angle) {
+				return angle * (Math.PI / 180);
 			},
 			sideOpacity () {
 				if (this.activeSide == "left") {
@@ -199,6 +245,27 @@
 					}
 				}
 			},
+			// @todo: DRY DRY DRY
+			getCoordinatesForPercent (percent) {
+				let x = Math.cos(2 * Math.PI * percent);
+				let y = Math.sin(2 * Math.PI * percent);
+				return [x, y];
+			},
+			// @todo: DRY DRY DRY
+			generateSlice (percent) {
+				const [startX, startY] = this.getCoordinatesForPercent(0);
+				const [endX, endY] = this.getCoordinatesForPercent(percent);
+
+				// if the slice is more than 50%, take the large arc (the long way around)
+				const largeArcFlag = percent > .5 ? 1 : 0;
+
+				// create an array and join it just for code readability
+				this.slice = [
+					`M ${startX} ${startY}`, // Move
+					`A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
+				].join(' ');
+
+			}
 		},
 		
 		data () {
@@ -207,7 +274,8 @@
 				sideOpacityStyle: {
 					leftBg: "#fff",
 					rightBg: "#fff"
-				}
+				},
+				slice: ''
 				
 			}
 		}

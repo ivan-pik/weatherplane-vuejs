@@ -11,6 +11,7 @@
 				id="linearGradient-1"
 			>
 				<stop stop-color="#3CBB22" offset="0%"></stop>
+				<stop stop-color="#3CBB22" offset="70%"></stop>
 				<stop stop-color="#ECA079" offset="90%"></stop>
 				<stop stop-color="#DF4410" offset="100%"></stop>
 			</linearGradient>

@@ -62,7 +62,7 @@
 .hour__time {
 	font-size: 15px;
 	padding: 0 0 0 $widthGridSpace;
-	min-width: 3.6em;
+	min-width: 2.6em;
 	width: 7vw;
 }
 
@@ -204,6 +204,12 @@ $hourGustSpeed__size: 1.4em;
 	stroke: #859098;
 	fill: none;
 	stroke-width: 2px;
+	&.yes {
+		stroke: $statusYes;
+	}
+	&.no {
+		stroke: $statusNo;
+	}
 }
 
 .windBearing__runway {
@@ -228,19 +234,65 @@ $hourGustSpeed__size: 1.4em;
 	stroke-width: 2px;
 	fill: none;
 	stroke: #859098;
+	&.yes {
+		stroke: $statusYes;
+	}
+	&.no {
+		stroke: $statusNo;
+	}
 }
 
 .windBearing__directionArrow {
 	stroke-width: 0px;
 	fill: #859098;
+	&.yes {
+		fill: $statusYes;
+	}
+	&.no {
+		fill: $statusNo;
+	}
+	
 }
 
+
+// --------------------------------
+.weatherIcon {
+	width: 30px;
+	height: 30px;
+	margin: 0 0 0 $widthGridSpace;
+	text-align: center;
+}
+
+.weatherIcon__image {
+	&.yes {
+		fill: $statusYes;
+	}
+	&.no {
+		fill: $statusNo;
+	}
+}
+
+.weatherIcon__NA {
+	line-height: 30px;
+	font-size: 8px;
+	font-weight: bold;
+	color: $textLabelColour;
+}
 
 // --------------------------------
 .hourTemperature {
 	font-size: 12px;
 	margin-right: $widthStatusBar;
-	padding: 0 $widthGridSpace;
+	padding: 0 $widthGridSpace 0 0;
+	min-width: 2em;
+	text-align: right;
+
+	&.yes {
+		color: $statusYes;
+	}
+	&.no {
+		color: $statusNo;
+	}
 }
 
 // --------------------------------

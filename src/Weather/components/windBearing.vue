@@ -12,13 +12,15 @@
 			>
 				<path 
 					class="windBearing__crossWindPie"
-					:class="windBearingStatus"
+					:class="statusWindDirection"
 					:transform="rotateSlice"
 					:d="slice"
 				/>
 			</svg>
 
-			<circle class="windBearing__fullCircle"
+			<circle
+				:class="statusWindDirection"
+				class="windBearing__fullCircle"
 				r="12"
 				cx="19"
 				cy="19"
@@ -38,18 +40,19 @@
 				<g :transform="rotateChart">
 					<path
 						class="windBearing__directionLine"
-						:class="windSpeedStatus"
+						:class="statusCrossWindComponent"
 						d="M 19 2 L 19 36"
 					/>
 					<path 
 						class="windBearing__directionArrow"
-						:class="windSpeedStatus"
+						:class="statusCrossWindComponent"
 						d="M 14 7 L 19 1 L 24 7"
 					/>
 				</g>
 			</svg>
 		</svg>
 	</div>
+	
 </template>
 
 <script>
@@ -61,12 +64,6 @@
 			windBearing: {
 				type: Number
 			},
-			windBearingStatus: {
-				type: String
-			},
-			windSpeedStatus: {
-				type: String
-			},
 			windBearingRelToRWY: {
 				type: Boolean
 			},
@@ -75,12 +72,31 @@
 			},
 			settingsMaxWindBearing: {
 				type: Number
+			},
+			settingsMaxCrossWindSpeed : {
+				type: Number
+			},
+			windSpeed: {
+				type: Number
+			},
+			bearingRelToRWY: {
+				type: Number
+			},
+			statusWindDirection: {
+				type: String
+			},
+			activeSide: {
+				type: String
+			},
+			statusCrossWindComponent: {
+				type: String
 			}
 		},
 		created () {
 			this.generateSlice(this.bearingToPercents);
 		},
 		computed: {
+			
 			angle () {
 				if (this.activeSide == "left") {
 					return this.bearingRelToRWY + 270;
@@ -90,48 +106,7 @@
 					return 90 + this.bearingRelToRWY * -1;
 				}
 			},
-			bearingRelToRWY () {
-				
-				let activeSide;
-				let relBearing;
-				let runway = this.runwayDirection;
-				let windBearing = this.windBearing;
-
-				
-	
-
-				// offset values for the runway orientation
-
-				let offset = runway - 90;
-				windBearing = windBearing - offset;
-				// windBearing must not be negative
-				if (windBearing < 0) {
-					windBearing = 360 - windBearing;
-				}
-				// windBearing must not be larger or equal to 360
-				if (windBearing >= 360) {
-					windBearing = windBearing - 360;
-				}
-
-				// now pretend runway at 90deg
-
-				if (windBearing == 0 || windBearing == 180) {
-					activeSide = "none";
-					relBearing = windBearing - 90;
-				}  else if (windBearing <= 90 || (windBearing > 90 && windBearing < 180)) {
-					activeSide = "left";
-					relBearing = (windBearing -90);
-				} else if (
-					(windBearing > 180 && windBearing <= 270) || windBearing > 270) {
-					activeSide = "right"
-					relBearing = 270 - windBearing;
-				} 
-
-				this.activeSide = activeSide;
-				return relBearing;
-
-				
-			},
+		
 			bearingToPercents () {
 				return (this.settingsMaxWindBearing / 180);
 			},
@@ -148,10 +123,28 @@
 			rotateChart () {
 				let angle = this.angle;
 				return `rotate(${angle} 19 19)`;
-			}
+			},
+		
+		
+		
+			crossWindComponent () {
+				let speed = this.windSpeed;
+				let angleInRadians = this.toRadians(Math.abs(this.bearingRelToRWY));
+				return speed * Math.sin(angleInRadians);
+			},
 		},
 	 
 		methods: {
+			toRadians (angle) {
+				return angle * (Math.PI / 180);
+			},
+			toStatus (val) {
+				if (val == true) {
+					return "no";
+				} else {
+					return "yes";
+				}
+			},
 			getCoordinatesForPercent (percent) {
 				let x = Math.cos(2 * Math.PI * percent);
 				let y = Math.sin(2 * Math.PI * percent);
@@ -175,8 +168,7 @@
 		},
 		data () {
 			return {
-				slice: '',
-				activeSide: "none"
+				slice: ''
 			}
 		}
 

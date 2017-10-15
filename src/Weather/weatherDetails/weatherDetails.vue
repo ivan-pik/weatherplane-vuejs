@@ -63,7 +63,7 @@
 					Chance of rain
 				</h3>
 				<p class="weatherDetails__value">
-					{{precipProbability.toFixed(1)}} %
+					{{(precipProbability*100).toFixed(0)}} %
 				</p>
 				<status :status="statusPrecipProbability" />
 			</div>
@@ -87,6 +87,8 @@
 			:settingsMaxCrossWindSpeed="settingsMaxCrossWindSpeed"
 			:maxWindSpeedToDisplay="maxWindSpeedToDisplay"
 			:crossWindComponent="crossWindComponent"
+			:settingsMaxWindBearingToRWY="settingsMaxWindBearingToRWY"
+			:statusWindDirection="statusWindDirection"
 		/>
 
 	</div>
@@ -180,6 +182,9 @@
 			},
 			totalStatus: {
 				type: String
+			},
+			settingsMaxWindBearingToRWY: {
+				type: Number
 			}
 		},
 		computed: {

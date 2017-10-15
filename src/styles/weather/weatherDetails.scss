@@ -286,3 +286,14 @@ fill: none;
 		stroke-dasharray: 2 2;
 	}
 }
+
+.windInstrument__crossWindPie {
+	stroke-width: 0.25;
+	fill: none;
+	&.yes {
+		stroke: lighten($statusYes, 40%);
+	}
+	&.no {
+		stroke: lighten($statusNo, 20%);
+	}
+}

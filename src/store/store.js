@@ -42,10 +42,10 @@ export default new Vuex.Store({
 			state.user.name = false;
 			state.user.loggedIn = false;
 		},
-				'USER_AUTHENTICATION_REQUIRED' (state) {
+		'USER_AUTHENTICATION_REQUIRED' (state) {
 			state.user.authenticationRequired = true;
 		},
-				'USER_AUTHENTICATED' (state) {
+		'USER_AUTHENTICATED' (state) {
 
 			state.user.authenticated = true;
 		},
