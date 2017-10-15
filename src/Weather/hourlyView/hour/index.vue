@@ -95,11 +95,10 @@
 				return 'no';
 			},
 			settingsMaxWindSpeed () {
-				return this.$store.state.existingPlaceView.weatherThresholds.windSpeed;
-				
+				return this.$store.state.existingPlaceView.place.placeSettings.maxWindSpeed;
 			},
 			settingsMaxWindDirectionRelToRWY () {
-				return this.$store.state.existingPlaceView.weatherThresholds.windDirectionRelToRWY;
+				return this.$store.state.existingPlaceView.place.placeSettings.maxWindBearingToRWY;
 				
 			},
 			windSpeedStatus() {

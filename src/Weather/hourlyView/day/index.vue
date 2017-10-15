@@ -53,7 +53,7 @@
 		computed: {
 			
 			settingsMaxWindSpeed () {
-				return this.$store.state.existingPlaceView.weatherThresholds.windSpeed;
+				return this.$store.state.existingPlaceView.place.placeSettings.maxWindSpeed;
 			},
 			maxWindSpeed () {
 				return this.$store.getters.maxWindSpeed;

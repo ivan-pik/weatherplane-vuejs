@@ -23,14 +23,6 @@ export default new Vuex.Store({
 		existingPlaceView: {
 			place: null,
 			weatherData: null,
-			weatherThresholds: {
-				// @todo: get those from API
-				windSpeed: 8,
-				temperature: 0,
-				windDirectionRelToRWY: 45,
-				crosswindSpeed: 4,
-				precipProbability: 50
-			},
 			view: {
 				chartCursorPosition: {
 					index: 0,
