@@ -167,11 +167,17 @@
 				return (this.settingsMaxWindBearingToRWY / 180);
 			},
 			maxSpeedTresholdRelToBearing () {
+				let x = this.maxSpeedTreshold;
+				let y = this.settingsMaxCrossWindSpeed;
 
-				if (this.settingsMaxCrossWindSpeed < this.maxSpeedTreshold) {
-					return this.settingsMaxCrossWindSpeed; 
+				if (y < x) {
+					let angle =  this.toRadians(Math.abs(this.windBearingRelToRWY));
+					let x1 = Math.pow(x, 2) * Math.pow(Math.sin(angle), 2);
+					let y1 = Math.pow(y, 2) * Math.pow(Math.cos(angle), 2);
+					let radius = (x * y) / Math.sqrt(x1 + y1);
+					return radius;
 				} else {
-					return this.maxSpeedTreshold;
+					return x;
 				}
 			},
 			overflowClass () {
