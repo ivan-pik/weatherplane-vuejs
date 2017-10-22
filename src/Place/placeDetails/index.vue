@@ -9,6 +9,8 @@
 
 	<weather-settings-overview></weather-settings-overview>
 
+	<weather-limit-settings></weather-limit-settings>
+
 	<hourly-view :weather="weatherData" />
 
 </div>
@@ -27,6 +29,7 @@
 		import {HTTP} from '../../http-common';
 		import weatherDetailsData from './weatherDetailsData.vue';
 		import limitSettingsOverview from '../../Weather/weatherDetails/limitSettingsOverview.vue';
+		import limitSettings from '../../Weather/weatherDetails/limitSettings.vue';
 
 		export default {
 				name: 'placeDetails',
@@ -37,6 +40,7 @@
 					'weather-details-data' : weatherDetailsData,
 					'hourly-view' : hourlyView,
 					'weather-settings-overview' : limitSettingsOverview,
+					'weather-limit-settings' : limitSettings
 				},
 
 			props: {
