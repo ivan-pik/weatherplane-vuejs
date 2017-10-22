@@ -45,7 +45,9 @@
 		},
 		computed: {
 			cursorDayIndex () {
-				return Math.max(Math.floor((this.cursorY - 25) / 50),0);
+				let maxCursorPosition = this.weather.hourly.length - 2;
+				let cursorPos = Math.max(Math.floor((this.cursorY - 25) / 50),0);
+				return Math.min(cursorPos,maxCursorPosition);
 			},
 			cursorDayProgress () {
 				let beginning = ( this.cursorDayIndex * 50 ) + 25;
