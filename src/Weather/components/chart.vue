@@ -168,8 +168,8 @@
 				if (position.y < 25) {
 					y = 25;
 				// Stop at the end of the curve path					
-				} else if (position.y > pathLength) {
-					y = pathLength;
+				} else if (position.y > (this.chartHeight - 25)) {
+					y = this.chartHeight-25;
 				// Cursor is withing the curve path	
 				} else {
 					y = position.y;
