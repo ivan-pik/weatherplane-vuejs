@@ -21,6 +21,8 @@
 
 <script>
 	import Vue from 'vue';
+
+	//@todo: Make the size calculations responsive
 	
 	export default {
 		name: 'uiSlider',
@@ -79,11 +81,8 @@
 		},
 		methods: {
 			alignKnobToStep () {
-				// @todo: This doesn't work when the min value isn't 0
 				let stepSize = this.sliderWidth / this.nOfSteps;
-				let newLeft = (this.returnedValue / this.step) * stepSize;
-
-
+				let newLeft = ((this.returnedValue - this.minValue) / this.step) * stepSize;
 
 				if(this.left != newLeft) {
 					let knobOffset = Math.abs(this.left - newLeft);
