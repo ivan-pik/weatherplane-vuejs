@@ -1,6 +1,8 @@
 <template>
 	<div class="uiSlider" ref="slider">
-		<div class="uiSlider__track"></div>
+		<div class="uiSlider__track"
+			@click="trackClickHandler"
+		></div>
 		<div class="uiSlider__knob"
 			ref="knob"
 			:style="concatStyles"
@@ -16,6 +18,7 @@
 				{{maxValue}}
 			</div>
 		</div>
+		{{modelValue}}
 	</div>
 </template>
 
@@ -26,6 +29,10 @@
 	
 	export default {
 		name: 'uiSlider',
+		 model: {
+			prop: 'modelValue',
+			event: 'change'
+		},
 		props: {
 			minValue: {
 				type: Number
@@ -33,7 +40,10 @@
 			maxValue: {
 				type: Number
 			},
-			currentValue: {
+			modelValue: {
+				default: 0
+			},
+			value: {
 				type: Number
 			},
 			step: {
@@ -48,7 +58,10 @@
 		},
 		mounted () {
 			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
-			this.posRight = (this.$refs.slider.getBoundingClientRect()).right; 
+			this.posRight = (this.$refs.slider.getBoundingClientRect()).right;
+			
+			this.moveKnobToValue(this.modelValue);
+			 
 		},
 		computed: {
 			concatStyles() {
@@ -77,26 +90,64 @@
 				}
 
 				return this.range / this.step;
+			},
+			stepSize () {
+				return this.sliderWidth / this.nOfSteps;
+			} 
+		},
+		watch: {
+			returnedValue () {
+				this.updateInput();
+			},
+			modelValue (val) {
+				if (!this.isKnob) {
+					console.log("no knob");
+					this.moveKnobToValue(val);
+				}
 			}
 		},
 		methods: {
-			alignKnobToStep () {
-				let stepSize = this.sliderWidth / this.nOfSteps;
-				let newLeft = ((this.returnedValue - this.minValue) / this.step) * stepSize;
+			trackClickHandler () {
 
-				if(this.left != newLeft) {
-					let knobOffset = Math.abs(this.left - newLeft);
-					let transitionTime = (knobOffset / stepSize) * 1000;
-					console.log(transitionTime);
+				let newValue = Math.min(Math.round(event.offsetX / this.stepSize), this.maxValue);
+
+				console.log(newValue);
+
+				this.moveKnobToValue(newValue);
+
+			},
+			moveKnobToValue (val) {
+				console.log('moving know', val);
+				
+				let newLeft = val * this.stepSize;
+				console.log('newLeft',newLeft);
+				this.moveKnob(newLeft);
+
+			},
+			moveKnob(distance) {
+				if(this.left != distance) {
+					
+
+					let knobOffset = Math.abs(this.left - distance);
+
+					let transitionTime = (knobOffset / this.sliderWidth) * 200;
+
 					this.transitionStyle = ` transition: all ${transitionTime}ms ease-in-out;`;
 					
-					this.left = newLeft;
+					this.left = distance;
 					
 					setTimeout(() => {
 						this.transitionStyle = '';
 					}, transitionTime);
 
 				}
+			},
+			updateInput() {
+				this.$emit('change', this.returnedValue);
+			},
+			alignKnobToStep () {
+				let newLeft = ((this.returnedValue - this.minValue) / this.step) * this.stepSize;
+				this.moveKnob(newLeft);
 			},
 			mousedownHandler () {
 				let knob = this.$refs.knob;
@@ -146,10 +197,18 @@
 	}
 	.uiSlider__track {
 		margin: 0 10px;
-		height: 2px;
-		background-color: black;
-		top: 19px;
+		height: 40px;
+		background-color: pink;
 		position: relative;
+		&::after {
+			content: '';
+			display: block;
+			height: 2px;
+			width: 100%;
+			position: absolute;
+			top: 19px;
+			background-color: #000;
+		}
 	}
 	.uiSlider__knob {
 		position: absolute;

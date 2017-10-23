@@ -1,15 +1,18 @@
 <template>
 	<div class="limitSettings">
 		<form  v-on:submit.prevent="onSubmit">
-			<label class="label" for="username">Wind Speed</label>
+			<label class="label" for="username">MaxWind Speed (ms)</label>
 			<br>
 			<ui-slider
-				:minValue="10"
-				:maxValue="100"
-				:currentValue="45"
-				:step="10"
+				:minValue="0"
+				:maxValue="50"
+				v-model="testVal"
+				:step="1"
 			/>
 			<br>
+			<input type="text"
+				v-model="testVal"
+			  />
 		</form>
 	</div>
 </template>
@@ -36,7 +39,7 @@
 		
 		data () {
 			return {
-				
+				testVal: 25
 			}
 		}
 	}
