@@ -7,9 +7,7 @@
 
 	<weather-details-data :weather="weatherData.hourly" />
 
-	<weather-settings-overview></weather-settings-overview>
-
-	<weather-limit-settings></weather-limit-settings>
+	
 
 	<hourly-view :weather="weatherData" />
 
@@ -28,8 +26,7 @@
 		import hourlyView from '../../Weather/hourlyView/index.vue';
 		import {HTTP} from '../../http-common';
 		import weatherDetailsData from './weatherDetailsData.vue';
-		import limitSettingsOverview from '../../Weather/weatherDetails/limitSettingsOverview.vue';
-		import limitSettings from '../../Weather/weatherDetails/limitSettings.vue';
+	
 
 		export default {
 				name: 'placeDetails',
@@ -39,8 +36,7 @@
 				components: {
 					'weather-details-data' : weatherDetailsData,
 					'hourly-view' : hourlyView,
-					'weather-settings-overview' : limitSettingsOverview,
-					'weather-limit-settings' : limitSettings
+					
 				},
 
 			props: {
@@ -49,27 +45,29 @@
 				}
 			},
 		 
-				computed: {
-						weatherData() {
-							return this.$store.state.existingPlaceView.weatherData;
-						}
+			computed: {
+				weatherData() {
+					return this.$store.state.existingPlaceView.weatherData;
 				},
-				created: function () {
-					this.fetchWeather();
-				},
-				methods: {
-					saveThisPlace () {
-						if (this.loggedIn) {
-							this.openSaveOptions = true;
-						}
-					},
-					fetchWeather () {
-						let oid = this.activeLocation.weather[0].oid;
-
 				
-						HTTP.get('weather/' + oid)
-								.then(response => {
-										if (response.data.success) {
+			},
+			created: function () {
+				this.fetchWeather();
+			},
+			methods: {
+				saveThisPlace () {
+					if (this.loggedIn) {
+						this.openSaveOptions = true;
+					}
+				},
+		
+				fetchWeather () {
+					let oid = this.activeLocation.weather[0].oid;
+
+			
+					HTTP.get('weather/' + oid)
+							.then(response => {
+									if (response.data.success) {
 											console.log(response.data.data);
 
 											this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data);

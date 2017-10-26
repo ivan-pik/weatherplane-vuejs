@@ -27,6 +27,9 @@ export default new Vuex.Store({
 				chartCursorPosition: {
 					index: 0,
 					progress: 0
+				},
+				limitsSettings: {
+					panelOpen: false
 				}
 			}
 		}
@@ -66,8 +69,25 @@ export default new Vuex.Store({
 		},
 		'PLACE_VIEW_CHART_CURSOR' (state, val) {
 			state.existingPlaceView.view.chartCursorPosition = val;
+		},
+		'PLACE_VIEW_LIMITS_SETTINGS' (state, val) {
+			state.existingPlaceView.view.limitsSettings.panelOpen = val;
+		},
+		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {
+			state.existingPlaceView.place.placeSettings.maxWindSpeed = val.maxWindSpeed;
+			state.existingPlaceView.place.placeSettings.maxCrossWindSpeed = val.maxCrossWindSpeed;
+			state.existingPlaceView.place.placeSettings.maxPrecipProbability = val.maxPrecipProbability;
+			state.existingPlaceView.place.placeSettings.minTemperature = val.minTemperature;
+			state.existingPlaceView.place.placeSettings.maxTemperature = val.maxTemperature;
+			state.existingPlaceView.place.placeSettings.maxWindBearingToRWY = val.maxWindBearingToRWY;
 		}
-
+	},
+	actions: {
+		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {
+			// @todo: API SAVE
+			
+			state.commit('PLACE_UPDATE_LIMITS_SETTINGS', val);
+		}
 	},
 	getters: {
 		maxWindSpeed: state => {

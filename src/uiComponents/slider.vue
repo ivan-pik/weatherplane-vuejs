@@ -18,7 +18,6 @@
 				{{maxValue}}
 			</div>
 		</div>
-		{{modelValue}}
 	</div>
 </template>
 
@@ -41,29 +40,46 @@
 				type: Number
 			},
 			modelValue: {
-				default: 0
 			},
 			value: {
 				type: Number
 			},
 			step: {
 				type: Number
+			},
+			initialValue: {
+				type: Number
+			},
+			name: {
+				type: String
 			}
 		},
 		created () {
-			// @todo: remove events on component destroy
 			document.addEventListener('mousedown', this.mousedownHandler);
 			document.addEventListener('mouseup', this.mouseupHandler);
 			document.addEventListener('mousemove', this.moveHandler);
 		},
+		beforeDestroy () {
+			document.removeEventListener('mousedown', this.mousedownHandler);
+			document.removeEventListener('mouseup', this.mouseupHandler);
+			document.removeEventListener('mousemove', this.moveHandler);
+		},
 		mounted () {
 			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
 			this.posRight = (this.$refs.slider.getBoundingClientRect()).right;
+
+			// check for value input
 			
-			this.moveKnobToValue(this.modelValue);
-			 
+			this.moveKnobToValue(this.currentValue);
 		},
 		computed: {
+			currentValue () {
+				if (this.modelValue !== undefined) {
+					return this.modelValue;
+				} else if (this.initialValue !== undefined) {
+					return this.initialValue;
+				} 
+			},
 			concatStyles() {
 				return this.leftStyle + this.transitionStyle;
 			},
@@ -99,28 +115,19 @@
 			returnedValue () {
 				this.updateInput();
 			},
-			modelValue (val) {
+			currentValue (val) {
 				if (!this.isKnob) {
-					console.log("no knob");
 					this.moveKnobToValue(val);
 				}
 			}
 		},
 		methods: {
 			trackClickHandler () {
-
 				let newValue = Math.min(Math.round(event.offsetX / this.stepSize), this.maxValue);
-
-				console.log(newValue);
-
 				this.moveKnobToValue(newValue);
-
 			},
 			moveKnobToValue (val) {
-				console.log('moving know', val);
-				
 				let newLeft = val * this.stepSize;
-				console.log('newLeft',newLeft);
 				this.moveKnob(newLeft);
 
 			},
@@ -143,7 +150,13 @@
 				}
 			},
 			updateInput() {
+				// use 'change' event when v-model is used
 				this.$emit('change', this.returnedValue);
+				// use 'update' when value is returned in an event
+				this.$emit('update', {
+					value: this.returnedValue,
+					name: this.name
+				});
 			},
 			alignKnobToStep () {
 				let newLeft = ((this.returnedValue - this.minValue) / this.step) * this.stepSize;
@@ -193,12 +206,10 @@
 	.uiSlider {
 		position: relative;
 		min-height: 40px;
-		background: orange;
 	}
 	.uiSlider__track {
 		margin: 0 10px;
 		height: 40px;
-		background-color: pink;
 		position: relative;
 		&::after {
 			content: '';
@@ -218,7 +229,6 @@
 		cursor: pointer;
 		transition: all 0s ease-in-out;
 		
-		
 		&::after {
 			position: absolute;
 			top: 10px;
@@ -233,7 +243,7 @@
 	}
 
 	.uiSlider__values {
-		margin: 40px 10px 0;
+		margin: 5px 10px 0;
 		display: flex;
 		justify-content: space-between;
 		

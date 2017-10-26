@@ -1,50 +1,62 @@
 <template>
-<div>
-	<weather-details
-		:windSpeed="windSpeed"
-		:windGust="windGust"
-		:temperature="temperature"
-		:windBearing="windBearing"
-		:windBearingRelToRWY="windBearingRelToRWY"
-		:windDirectionRelToRWY="true"
-		:precipProbability="precipProbability" 
-		:precipIntensity="0"
-		:maxSpeedTreshold="settingsMaxWindSpeed"
-		:activeSide="activeSide"
-		:runwayDirection="settingsRunwayOrientation"
-		:cursorHours="cursorHours"
-		:cursorMinutes="cursorMinutes"
-		:cursorDate="cursorDate"
-		:settingsMaxCrossWindSpeed="settingsMaxCrossWindSpeed"
-		:maxWindSpeedToDisplay="maxWindSpeedToDisplay"
-		:crossWindComponent="crossWindComponent"
-		:statusWindSpeed="statusWindSpeed"
-		:statusGustSpeed="statusGustSpeed"
-		:statusTemperature="statusTemperature"
-		:statusWindDirection="statusWindDirection"
-		:statusCrossWindComponent="statusCrossWindComponent"
-		:statusPrecipProbability="statusPrecipProbability"
-		:totalStatus="totalStatus"
-		:settingsMaxWindBearingToRWY="settingsMaxWindBearingToRWY"
+	<div>
+		<weather-details
+			:windSpeed="windSpeed"
+			:windGust="windGust"
+			:temperature="temperature"
+			:windBearing="windBearing"
+			:windBearingRelToRWY="windBearingRelToRWY"
+			:windDirectionRelToRWY="true"
+			:precipProbability="precipProbability" 
+			:precipIntensity="0"
+			:maxSpeedTreshold="settingsMaxWindSpeed"
+			:activeSide="activeSide"
+			:runwayDirection="settingsRunwayOrientation"
+			:cursorHours="cursorHours"
+			:cursorMinutes="cursorMinutes"
+			:cursorDate="cursorDate"
+			:settingsMaxCrossWindSpeed="settingsMaxCrossWindSpeed"
+			:maxWindSpeedToDisplay="maxWindSpeedToDisplay"
+			:crossWindComponent="crossWindComponent"
+			:statusWindSpeed="statusWindSpeed"
+			:statusGustSpeed="statusGustSpeed"
+			:statusTemperature="statusTemperature"
+			:statusWindDirection="statusWindDirection"
+			:statusCrossWindComponent="statusCrossWindComponent"
+			:statusPrecipProbability="statusPrecipProbability"
+			:totalStatus="totalStatus"
+			:settingsMaxWindBearingToRWY="settingsMaxWindBearingToRWY"
+			:settingMode="limitsSettingsPanelOpen"
+		></weather-details>
 
-	></weather-details>
+		<weather-settings-overview
+			v-on:buttonClicked="openWeatherLimitsSettings"
+		/>
 
-	
-
-
-</div>
+		<weather-limit-settings
+			:controls="limitSettingsControls"
+			v-if="limitsSettingsPanelOpen"
+			v-on:closePanel="openWeatherLimitsSettings"
+			v-on:saveSettings="saveSettings"
+			:settings="limitSettingsControls"
+		/>
+	</div>
 </template>
 <script>
 	import Vue from 'vue';
 
 	import weatherDetails from '../../Weather/weatherDetails/weatherDetails.vue';
-	
+	import limitSettingsOverview from '../../Weather/weatherDetails/limitSettingsOverview.vue';
+	import limitSettings from '../../Weather/weatherDetails/limitSettings.vue';
+
+	import {HTTP} from '../../http-common';
 	
 	export default {
 		name: 'WeatherDetailsData',
 		components: {
 			'weather-details' : weatherDetails,
-			
+			'weather-settings-overview' : limitSettingsOverview,
+			'weather-limit-settings' : limitSettings
 		},
 		props: {
 			weather: {
@@ -52,6 +64,52 @@
 			}
 		},
 		computed: {
+			limitSettingsControls () {
+				let controls = [
+					{
+						name: 'windSpeed',
+						label: 'Max wind speed',
+						maxValue: 50,
+						currentValue: this.settingsMaxWindSpeed
+					},
+					{
+						name: 'crossWindSpeed',
+						label: 'Max cross wind speed',
+						maxValue: 50,
+						currentValue: this.settingsMaxCrossWindSpeed
+					},
+					{
+						name: 'bearing',
+						label: 'Max crosswing bearing',
+						maxValue: 90,
+						currentValue: this.settingsMaxWindBearingToRWY
+					},
+					{
+						name: 'minTemperature',
+						label: 'Minimal Temperature',
+						minValue: 0,
+						maxValue: 50,
+						currentValue: this.settingsMinTemperature
+					},
+					{
+						name: 'maxTemperature',
+						label: 'Maximal Temperature',
+						minValue: 0,
+						maxValue: 50,
+						currentValue: this.settingsMaxTemperature
+					},
+					{
+						name: 'precipitation',
+						label: 'Chance of Rain',
+						maxValue: 100,
+						currentValue: this.settingsMaxPrecipProbability
+					},
+				];
+				return controls;
+			},
+			limitsSettingsPanelOpen () {
+				return this.$store.state.existingPlaceView.view.limitsSettings.panelOpen;
+			},
 			statusWindSpeed () {
 				return this.toStatus(this.windSpeed > this.settingsMaxWindSpeed);
 			},
@@ -209,18 +267,67 @@
 				} 
 
 				this.activeSide = activeSide;
-
-				
-				
 				return relBearing;
-
-				
 			},
-			
-			
 		},
 	 
 		methods: {
+			saveSettings (value) {
+
+				let getItem = function (items, keyword)  {
+					let result = items.filter(function (item) {
+						return item.name == keyword;
+					});
+					debugger;
+					if (result.length > 0) {
+						if (result[0].currentValue) {
+							return result[0].currentValue;
+						}
+					} else {
+						// @todo: throw error
+						console.error('Param not found:', keyword);
+					}
+					
+				};
+
+				let newSettings = {
+					maxCrossWindSpeed: getItem(value,'crossWindSpeed'),
+					maxPrecipProbability: getItem(value,'precipitation'),
+					maxWindBearingToRWY: getItem(value,'bearing'),
+					maxWindSpeed: getItem(value,'windSpeed'),
+					minTemperature: getItem(value,'minTemperature'),
+					maxTemperature: getItem(value,'maxTemperature')
+				};
+
+				// @todo build up URL
+
+				HTTP.post('places/'+this.$route.params.username + "/" + this.$route.params.place + '/update-limits', newSettings)
+					.then(response => {
+						console.log(response)
+						if (response.data.success) {
+							console.log("place updated");
+						}
+					}).catch(err => {
+						console.log(err);
+						if(err.response) {
+							this.onFailedPlaceSave();
+						}
+					});
+				
+
+				this.$store.dispatch('PLACE_UPDATE_LIMITS_SETTINGS', newSettings);
+			},
+			openWeatherLimitsSettings (val) {
+				let toggle;
+				if (val !== undefined) {
+					toggle = val;
+				} else if (this.limitsSettingsPanelOpen) {
+					toggle = false;
+				} else {
+					toggle = true;
+				}
+				this.$store.commit('PLACE_VIEW_LIMITS_SETTINGS', toggle);
+			},
 			toStatus (val) {
 				if (val == true) {
 					return "no";

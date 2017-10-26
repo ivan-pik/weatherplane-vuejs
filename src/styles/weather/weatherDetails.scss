@@ -301,10 +301,17 @@ fill: none;
 
 .limitSettings {
 	position: fixed;
-	background: red;
-	top: 240px;
+	overflow: auto;
+	background: rgba(#fff, 0.85);
+	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	z-index: 10;
+
+	.uiClose {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
 }

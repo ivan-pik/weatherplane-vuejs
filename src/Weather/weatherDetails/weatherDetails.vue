@@ -89,6 +89,7 @@
 			:crossWindComponent="crossWindComponent"
 			:settingsMaxWindBearingToRWY="settingsMaxWindBearingToRWY"
 			:statusWindDirection="statusWindDirection"
+			:settingMode="settingMode"
 		/>
 
 	</div>
@@ -185,6 +186,9 @@
 			},
 			settingsMaxWindBearingToRWY: {
 				type: Number
+			},
+			settingMode: {
+				type: Boolean
 			}
 		},
 		computed: {

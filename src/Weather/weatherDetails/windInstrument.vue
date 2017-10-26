@@ -144,6 +144,9 @@
 			},
 			statusWindDirection: {
 				type: String
+			},
+			settingMode: {
+				type: Boolean
 			}
 			
 		},
