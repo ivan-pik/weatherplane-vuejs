@@ -1,42 +1,39 @@
 <template>
 	<div class="">
-
-
 		<place-not-found v-if="place404" />
 
 		<login-view :message="message" @loggedIn="loggedIn" v-if="needToLogin" />
 
 
-    <div v-else-if="place" class="">
-
-
+		<div v-else-if="place" class="">
 			<place-details :activeLocation='place' />
-    </div>
-
-	<div v-else>
-		LOADING ...
-	</div>
-
-
 		</div>
+
+		<div v-else>
+			<load-screen text="Loading place" />
+		</div>
+
+
+	</div>
 </template>
 <script>
-    import Vue from 'vue'
-    import saveLocation from '../saveLocation/index.vue';
+	import Vue from 'vue'
+	import saveLocation from '../saveLocation/index.vue';
   
 	import {HTTP} from '../../http-common';
 	import placeNotFound from '../placeNotFound/index.vue';
 	import loginView from '../../Login/LoginView/index.vue';
 	import placeDetails from '../placeDetails/index.vue';
+	import loadScreen from '../../uiComponents/loadScreen.vue';
 
-    export default {
-        name: 'ExistingPlaceView',
-        components: {
-         
-					'place-not-found' : placeNotFound,
-					'login-view' : loginView,
-					'place-details': placeDetails
-        },
+	export default {
+		name: 'ExistingPlaceView',
+		components: {
+			'load-screen' : loadScreen,
+			'place-not-found' : placeNotFound,
+			'login-view' : loginView,
+			'place-details': placeDetails
+		},
 				created () {
 					this.loadPlaceData();
 				},
@@ -44,20 +41,18 @@
 					loggedIn () {
 					},
 					loadPlaceData () {
-
-
 						HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
-			          .then(response => {
-			              if (response.data.success) {
+					  .then(response => {
+						  if (response.data.success) {
 
 							this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
 
 
 
-			              }
-			          }).catch(err => {
+						  }
+					  }).catch(err => {
 
-				          if(err.response) {
+						  if(err.response) {
 										// @todo: DRY!!!
 										let errorCode = function(code, errors) {
 											let check = errors.filter(function( obj ) {
@@ -82,11 +77,11 @@
 											this.place404 = true;
 										}
 
-				          }
-			      });
+						  }
+				  });
 					}
 				},
-        computed: {
+		computed: {
 					authenticated () {
 						return this.$store.state.user.authenticated;
 					},
@@ -95,7 +90,7 @@
 					}
 				
 
-        },
+		},
 				watch: {
 					authenticated (authenticated) {
 						if(authenticated) {
@@ -114,7 +109,7 @@
 					}
 				}
 
-    }
+	}
 
 
 

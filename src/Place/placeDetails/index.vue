@@ -1,26 +1,17 @@
 <template>
 <div class="">
-
-<div v-if="weatherData">
-
-	<div class="" class="mainNav mainNav--weatherDetail">
-		<h1 class="mainNav__title">Woodspring Wings</h1>
-		<button class="mainNav__contextMenu">...</button>
+	<div v-if="weatherData">
+		<div class="" class="mainNav mainNav--weatherDetail">
+			<h1 class="mainNav__title">Woodspring Wings</h1>
+			<button class="mainNav__contextMenu">...</button>
+		</div>
+		<weather-details-data :weather="weatherData.hourly" />
+		<hourly-view :weather="weatherData" />
 	</div>
 
-	<weather-details-data :weather="weatherData.hourly" />
-
-	
-
-	<hourly-view :weather="weatherData" />
-
-</div>
-
-<div v-else>
-	loading weather
+	<div v-else>
+		<load-screen text="Loading Weather" />
 	</div>
-
-
 </div>
 
 </template>
@@ -29,6 +20,7 @@
 		import hourlyView from '../../Weather/hourlyView/index.vue';
 		import {HTTP} from '../../http-common';
 		import weatherDetailsData from './weatherDetailsData.vue';
+		import loadScreen from '../../uiComponents/loadScreen.vue';
 	
 
 		export default {
@@ -39,6 +31,7 @@
 				components: {
 					'weather-details-data' : weatherDetailsData,
 					'hourly-view' : hourlyView,
+					'load-screen' : loadScreen
 					
 				},
 
