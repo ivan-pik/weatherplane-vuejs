@@ -3,7 +3,10 @@
 
 <div v-if="weatherData">
 
-	<div class="" class="mainNav mainNav--weatherDetail"></div>
+	<div class="" class="mainNav mainNav--weatherDetail">
+		<h1 class="mainNav__title">Woodspring Wings</h1>
+		<button class="mainNav__contextMenu">...</button>
+	</div>
 
 	<weather-details-data :weather="weatherData.hourly" />
 
@@ -68,7 +71,6 @@
 					HTTP.get('weather/' + oid)
 							.then(response => {
 									if (response.data.success) {
-											console.log(response.data.data);
 
 											this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data);
 											
@@ -76,7 +78,6 @@
 
 										}
 								}).catch(err => {
-									console.log("ooops!")
 						});
 					
 					},
@@ -96,13 +97,10 @@
 
 						HTTP.post('places', newPlace)
 								.then(response => {
-									console.log(response)
 										if (response.data.success) {
-											console.log("place saved")
 												this.$router.push(this.userName + "/" + newPlace.placeSlug);
 										}
 								}).catch(err => {
-									console.log(err);
 								if(err.response) {
 										this.onFailedPlaceSave();
 								}

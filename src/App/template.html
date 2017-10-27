@@ -1,6 +1,17 @@
 <div id="app">
-  <navigation></navigation>
-  <keep-alive v-bind:exclude="notAliveViews">
-    <router-view></router-view>
-  </keep-alive>
+	<div class="globalMessages"
+		v-if="globalMessages.length > 0"
+	>
+		<global-message
+			v-for="(message, index) in globalMessages"
+			:text="message.text"
+			:type="message.type"
+			:dismiss="message.dismiss"
+			v-on:dismiss="dismissMessage(index)"
+		/>
+	 </div>
+	<navigation></navigation>
+	<keep-alive v-bind:exclude="notAliveViews">
+		<router-view></router-view>
+	</keep-alive>
 </div>

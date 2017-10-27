@@ -40,11 +40,9 @@ export default {
       if (errorCode("username-or-email-already-registered", errors)) {
         if(errorCode("username-exists", errors)) {
           userName = true;
-          console.log(userName);
         }
         if(errorCode("user-email-exists", errors)) {
           userEmail = true;
-          console.log(userEmail);
         }
       // Unknown errors from the API, probably something quite serious
       } else {
@@ -60,7 +58,6 @@ export default {
     },
     onSuccessfulRegistration(user) {
       // @todo: When you initially try to register existing user and then finally submit unique user, this method seems to happen 3 times after the "successful-registration" event was emitted once.
-      console.log("Registration successful method")
       Vue.set(this.errors, 'registrationFailed', false)
       Vue.set(this.errors, 'userExists', false)
       Vue.set(this.errors, 'emailExists', false)

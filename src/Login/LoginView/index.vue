@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="" class="mainNav mainNav--weatherDetail">
+            <h1 class="mainNav__title">Log-in</h1>
+        </div>
         <component v-bind:is="currentView">
         </component>
         <div>

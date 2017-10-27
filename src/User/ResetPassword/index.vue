@@ -73,7 +73,6 @@
         methods: {
             onSubmit(event) {
                 this.$validator.validateAll().then(() => {
-                    console.log(this.$route);
                     let payload = {
                         userID :  this.$route.query.userID,
                         password: this.password,

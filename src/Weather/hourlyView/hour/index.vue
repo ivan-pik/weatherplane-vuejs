@@ -108,7 +108,6 @@
 					this.statusPrecipProbability
 				];
 
-				console.log(this.statusCrossWindComponent);
 
 				let isNo = function (element, index, array) {
 					return element == "no";
@@ -235,7 +234,6 @@
 			checkWidthForChart () {
 				let dummyWidth = this.$refs.hourSpaceDummy.clientWidth;
 				let dummyLeftPos = (this.$refs.hourSpaceDummy.getBoundingClientRect()).left;
-				console.log('emitting event');
 				let chartSizeInfo = {
 					width: dummyWidth,
 					left: dummyLeftPos

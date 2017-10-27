@@ -15,7 +15,6 @@ export default {
           .then(response => {
               if (response.data.success) {
 
-								console.log(response.data.token);
 
                   saveToken(response.data.token);
 

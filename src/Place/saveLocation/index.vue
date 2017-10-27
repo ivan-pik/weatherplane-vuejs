@@ -207,13 +207,10 @@
 
 						HTTP.post('places', newPlace)
 								.then(response => {
-									console.log(response)
 										if (response.data.success) {
-											console.log("place saved")
 												this.$router.push(this.userName + "/" + newPlace.placeSlug);
 										}
 								}).catch(err => {
-									console.log(err);
 								if(err.response) {
 										this.onFailedPlaceSave();
 								}

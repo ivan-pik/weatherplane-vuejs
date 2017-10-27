@@ -7,6 +7,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		globalApp: {
+			globalMessages: []
+		},
 		user: {
 			loggedIn: false,
 			name: false,
@@ -80,7 +83,14 @@ export default new Vuex.Store({
 			state.existingPlaceView.place.placeSettings.minTemperature = val.minTemperature;
 			state.existingPlaceView.place.placeSettings.maxTemperature = val.maxTemperature;
 			state.existingPlaceView.place.placeSettings.maxWindBearingToRWY = val.maxWindBearingToRWY;
-		}
+		},
+		// GlobalApp
+		'GLOBAL_ADD_MESSAGE' (state, message) {
+			state.globalApp.globalMessages.push(message);
+		},
+		'GLOBAL_REMOVE_MESSAGE' (state, index) {
+			state.globalApp.globalMessages.splice(index, 1);
+		},
 	},
 	actions: {
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {

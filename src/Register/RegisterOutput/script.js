@@ -15,8 +15,6 @@ export default {
   },
   methods: {
     onRegisterFormChange(user) {
-      console.log("onRegisterFormChange")
-      console.log(user)
       this.currentUsername = user.username
       this.currentEmail = user.email
       this.register(user)
@@ -40,10 +38,8 @@ export default {
         body: JSON.stringify(payLoad)
       }).then(r => r.json()).then(data => {
         if (data.errors) {
-          console.log("failed emit");
           bus.$emit('failed-registration', data.errors);
         } else if (data.success) {
-          console.log("emitting successful-registration")
           bus.$emit('successful-registration')
 
         

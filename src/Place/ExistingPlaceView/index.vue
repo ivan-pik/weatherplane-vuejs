@@ -11,9 +11,6 @@
 
 
 			<place-details :activeLocation='place' />
-
-
-
     </div>
 
 	<div v-else>
@@ -45,7 +42,6 @@
 				},
 				methods: {
 					loggedIn () {
-						console.log("User is not authenticated");
 					},
 					loadPlaceData () {
 
@@ -83,7 +79,6 @@
 
 										if(errorCode("resource-does-not-exist", err.response.data.errors)) {
 											// @todo: Place pseudo 404
-											console.log("Show error");
 											this.place404 = true;
 										}
 

@@ -36,9 +36,6 @@
          
 
         },
-				created () {
-					console.log(this.$route);
-				},
         computed: {
             activeLocation() {
                 return this.$store.state.placeSearch.selectedLocation;

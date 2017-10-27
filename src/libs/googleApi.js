@@ -14,7 +14,6 @@ export const loadGoogleApi = function() {
 				}
 			).then(
 				function(googleMaps) {
-					console.log("Google Maps API loaded");
 					resolve(googleMaps);
 				}
 			).catch((err) => {

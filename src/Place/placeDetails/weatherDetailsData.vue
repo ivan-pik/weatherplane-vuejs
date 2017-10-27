@@ -278,7 +278,6 @@
 					let result = items.filter(function (item) {
 						return item.name == keyword;
 					});
-					debugger;
 					if (result.length > 0) {
 						if (result[0].currentValue) {
 							return result[0].currentValue;
@@ -299,16 +298,20 @@
 					maxTemperature: getItem(value,'maxTemperature')
 				};
 
-				// @todo build up URL
+				// @todo move this to some API module
 
 				HTTP.post('places/'+this.$route.params.username + "/" + this.$route.params.place + '/update-limits', newSettings)
 					.then(response => {
-						console.log(response)
 						if (response.data.success) {
-							console.log("place updated");
+
+							this.$store.commit('GLOBAL_ADD_MESSAGE', {
+								text: 'Settings updated',
+								type: 'success',
+								dismiss: 'auto'
+							});
+
 						}
 					}).catch(err => {
-						console.log(err);
 						if(err.response) {
 							this.onFailedPlaceSave();
 						}

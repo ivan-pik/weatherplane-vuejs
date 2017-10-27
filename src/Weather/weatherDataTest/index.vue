@@ -117,7 +117,6 @@
 							HTTP.get('weather/' + oid)
 									.then(response => {
 											if (response.data.success) {
-												console.log(response.data.data);
 												this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data)
 
 												localStorage.setItem('weather', JSON.stringify(response.data.data));
@@ -126,10 +125,8 @@
 
 											}
 									}).catch(err => {
-										console.log("ooops!")
 							});
 						} else {
-							console.log("Using local weather data")
 							let stuff = JSON.parse(localStorage.weather);
 							this.weatherDataHourly = stuff.hourly;
 						}

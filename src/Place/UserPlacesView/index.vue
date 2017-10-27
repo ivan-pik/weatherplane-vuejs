@@ -32,7 +32,6 @@
 								.then(response => {
 										if (response.data.success) {
 
-											console.log(response.data.data.places);
 											this.places = response.data.data.places;
 
 
@@ -40,7 +39,6 @@
 										}
 								}).catch(err => {
 
-									console.log("ooops!")
 
 						});
 					}

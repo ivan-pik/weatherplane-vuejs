@@ -71,7 +71,6 @@
 		},
 		methods: {
 			chartWidthHandler (val) {
-				console.log(val);
 				this.chartWidth = val.width;
 				this.chartLeftPos = val.left;
 			}
