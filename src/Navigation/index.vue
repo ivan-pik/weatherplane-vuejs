@@ -11,7 +11,10 @@
 				<a v-if="loggedIn" @click="logOut">Logout</a>
 				<router-link v-if="loggedIn" to="/settings">Settings</router-link>
 			</div>
-			<places-list />
+			<places-list
+				:role="'navigation'"
+				:userName="username"
+			/>
 		</div>
 	</nav>
 </template>
@@ -40,7 +43,8 @@
 				this.$store.commit('USER_LOG_OUT');
 			},
 			navClickHandler () {
-				if (event.target.nodeName == "A" || event.target.nodeName == "BUTTON") {
+				// @todo: this seems silly
+				if (event.target.nodeName == "A" || event.target.nodeName == "BUTTON" || event.target.parentNode.nodeName == "A") {
 					this.navOpened = false;
 				}
 			}

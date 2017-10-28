@@ -42,6 +42,10 @@
 .placesList__item {
 	display: flex;
 	position: relative;
+
+	.arranging & {
+		margin: 1em 0;
+	}
 }
 
 .placesList__contextMenuToggler {

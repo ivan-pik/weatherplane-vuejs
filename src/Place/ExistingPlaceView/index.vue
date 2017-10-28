@@ -6,6 +6,10 @@
 
 
 		<div v-else-if="place" class="">
+			<div class="" class="mainNav mainNav--weatherDetail">
+				<h1 class="mainNav__title">{{place.placeName}}</h1>
+				<button class="mainNav__contextMenu">...</button>
+			</div>
 			<place-details :activeLocation='place' />
 		</div>
 
@@ -19,7 +23,6 @@
 <script>
 	import Vue from 'vue'
 	import saveLocation from '../saveLocation/index.vue';
-  
 	import {HTTP} from '../../http-common';
 	import placeNotFound from '../placeNotFound/index.vue';
 	import loginView from '../../Login/LoginView/index.vue';
@@ -34,80 +37,71 @@
 			'login-view' : loginView,
 			'place-details': placeDetails
 		},
-				created () {
-					this.loadPlaceData();
-				},
-				methods: {
-					loggedIn () {
-					},
-					loadPlaceData () {
-						HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
-					  .then(response => {
-						  if (response.data.success) {
-
-							this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
-
-
-
-						  }
-					  }).catch(err => {
-
-						  if(err.response) {
-										// @todo: DRY!!!
-										let errorCode = function(code, errors) {
-											let check = errors.filter(function( obj ) {
-												return obj.code == code;
-											});
-											if (check.length > 0) {
-												return true;
-											}
-											return false;
-										}
-
-
-
-
-										if(errorCode("authentication-required", err.response.data.errors)) {
-											this.needToLogin = true;
-											this.$store.commit('USER_AUTHENTICATION_REQUIRED')
-										}
-
-										if(errorCode("resource-does-not-exist", err.response.data.errors)) {
-											// @todo: Place pseudo 404
-											this.place404 = true;
-										}
-
-						  }
-				  });
-					}
-				},
-		computed: {
-					authenticated () {
-						return this.$store.state.user.authenticated;
-					},
-					place () {
-						return this.$store.state.existingPlaceView.place;
-					}
-				
-
+		mounted () {
+			this.loadPlaceData();
 		},
-				watch: {
-					authenticated (authenticated) {
-						if(authenticated) {
-							this.needToLogin = false;
-							this.loadPlaceData();
+		methods: {
+			loggedIn () {
+			},
+			loadPlaceData () {
+				HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
+				.then(response => {
+					if (response.data.success) {
+						this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
+					}
+				}).catch(err => {
+					if(err.response) {
+						// @todo: DRY!!!
+						let errorCode = function(code, errors) {
+							let check = errors.filter(function( obj ) {
+								return obj.code == code;
+							});
+							if (check.length > 0) {
+								return true;
+							}
+							return false;
 						}
 
+						if(errorCode("authentication-required", err.response.data.errors)) {
+							this.needToLogin = true;
+							this.$store.commit('USER_AUTHENTICATION_REQUIRED')
+						}
+
+						if(errorCode("resource-does-not-exist", err.response.data.errors)) {
+							// @todo: Place pseudo 404
+							this.place404 = true;
+						}
 					}
-				},
-				data () {
-					return {
-						needToLogin: false,
-						place404: false,
-						message: null
-						
-					}
+				});
+			}
+		},
+		computed: {
+			authenticated () {
+				return this.$store.state.user.authenticated;
+			},
+			place () {
+				return this.$store.state.existingPlaceView.place;
+			}
+		},
+		watch: {
+			authenticated (authenticated) {
+				if(authenticated) {
+					this.needToLogin = false;
+					this.loadPlaceData();
 				}
+			},
+			'$route.params.place': function (place) {
+				this.loadPlaceData();
+			}
+		},
+		data () {
+			return {
+				needToLogin: false,
+				place404: false,
+				message: null
+				
+			}
+		}
 
 	}
 

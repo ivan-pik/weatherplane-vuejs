@@ -3,70 +3,38 @@
 		<div class="mainNav">
 			<h1 class="mainNav__title">My places</h1>
 		</div>
+
+		<places-list
+			:role="'userList'"
+			:userName="userName"
+		 />
 		
-		<ul class="placesNavigator">
-			<li v-for="place in places"
-				class="placesNavigator__place"
-			>
-				<router-link :to="userName + '/' + place.placeSlug">
-					<span class="placesNavigator__name">
-						{{place.placeName}}
-					</span>
-				</router-link>
-			</li>
-		</ul>
 	</div>
 </template>
 <script>
 	import Vue from 'vue';
-		import {HTTP} from '../../http-common';
-
+	import {HTTP} from '../../http-common';
+	import placesList from '../../Navigation/placesList.vue';
 
 	export default {
 		name: 'UserPlacesView',
-
-				created () {
-					// @load places also when component is re rendered AND when user has just logged in
-					this.loadPlacesData ()
-				},
+		components: {
+			'places-list' : placesList
+		},
 		computed: {
 			userName () {
 				return this.$route.params.username;
 			},
-		
 		},
-				methods: {
+		methods: {
 
-					loadPlacesData () {
-
-
-						HTTP.get('places/'+this.$route.params.username)
-								.then(response => {
-										if (response.data.success) {
-
-											this.places = response.data.data.places;
-
-
-
-										}
-								}).catch(err => {
-
-
-						});
-					}
-				},
-				data () {
-					return {
-						places: null
-					}
-				}
+		},
+		data () {
+			return {
+			}
+		}
 
 
 	}
 
-
-
 </script>
-<style scoped>
-
-</style>

@@ -1,10 +1,7 @@
 <template>
 <div class="">
 	<div v-if="weatherData">
-		<div class="" class="mainNav mainNav--weatherDetail">
-			<h1 class="mainNav__title">Woodspring Wings</h1>
-			<button class="mainNav__contextMenu">...</button>
-		</div>
+		
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
 	</div>

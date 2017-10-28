@@ -1,19 +1,28 @@
 <template>
 	<li class="placesList__item">
-		<span class="placesList__name">
-			Woodspring Wings {{index}} / {{contextMenuClose}}
-		</span>
+		<router-link :to="'/' + activeUserName + '/' + place.placeSlug">
+			<span class="placesList__name">
+				{{place.placeName}}
+			</span>
+		</router-link>
 		<button class="placesList__contextMenuToggler"
 			@click.stop="contextMenu"
 		>
 			...
 		</button>
-		<ul
+		<div
 			v-if="contextMenuOpen"
 			class="placesList__contextMenu">
-			<li>Place Settings</li>
-			<li>move</li>
-		</ul>
+			<button 
+				class="placesList__contextLink placesList__contextLink--settings"
+				@click="openPlaceSettings"
+			>
+				Place Settings
+			</button>
+			<button class="placesList__contextLink placesList__contextLink--move"
+				@click="moooveIt"
+			>move</button>
+		</div>
 	</li>
 </template>
 
@@ -26,10 +35,15 @@
 			},
 			index: {
 				type: Number
+			},
+			place: {
+				type: Object
 			}
 		},
 		computed: {
-		
+			activeUserName () {
+				return this.$store.state.user.name;
+			}
 		},
 		watch: {
 			contextMenuClose (value) {
@@ -40,6 +54,14 @@
 		}
 		,
 		methods: {
+			openPlaceSettings () {
+				let placeName = this.place.placeSlug;
+				let userName = this.activeUserName;
+				this.$router.push({ path: `/${userName}/${placeName}/settings` });
+			},
+			moooveIt () {
+				this.$emit('arrangeItems', this.index);
+			},
 			contextMenu () {
 				this.$emit('contextMenuTriggered');
 				this.contextMenuOpen=!this.contextMenuOpen;

@@ -14,7 +14,8 @@ export default new Vuex.Store({
 			loggedIn: false,
 			name: false,
 			authenticationRequired: false,
-			authenticated: false
+			authenticated: false,
+			places: []
 		},
 		placeSearch: {
 			place: {},
@@ -54,6 +55,9 @@ export default new Vuex.Store({
 		'USER_AUTHENTICATED' (state) {
 
 			state.user.authenticated = true;
+		},
+		'USER_SAVE_PLACES' (state, newPlaces) {
+			state.user.places = newPlaces;
 		},
 		// Place Search
 		'PLACE_SEARCH_PLACE_SELECTED' (state, place) {
@@ -95,8 +99,11 @@ export default new Vuex.Store({
 	actions: {
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {
 			// @todo: API SAVE
-			
 			state.commit('PLACE_UPDATE_LIMITS_SETTINGS', val);
+		},
+		'USER_GET_PLACES' (state, newPlaces) {
+			// @todo: API LOAD HERE
+			state.commit('USER_SAVE_PLACES', newPlaces);
 		}
 	},
 	getters: {
