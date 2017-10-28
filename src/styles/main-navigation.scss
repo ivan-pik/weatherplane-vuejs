@@ -1,7 +1,8 @@
 .main-navigation {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 3001;
 }
 
 .main-navigation__toggler {
@@ -9,12 +10,12 @@
 	width: 40px;
 	height: 40px;
 	background: red;
-	z-index: 3001;
 	position: relative;
+	z-index: 3001;
 }
 
 .main-navigation__panel {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	right: 0;
 	left: 0;
@@ -22,11 +23,39 @@
 	background: #fff;
 	z-index: 0;
 	z-index: 3000;
+	width: 100vw;
 	height: 100vh;
+	overflow: auto;
+
 }
 
 .userBar {
 	height: 40px;
 	padding: 0 0 0 50px;
 	line-height: 40px; 
+}
+
+.placesList {
+
+}
+
+.placesList__item {
+	display: flex;
+	position: relative;
+}
+
+.placesList__contextMenuToggler {
+	margin-left: auto;
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: red;
+}
+
+.placesList__contextMenu {
+	position: absolute;
+	right: 40px;
+	top: 0;
+	background: silver;
+	height: 40px;
 }

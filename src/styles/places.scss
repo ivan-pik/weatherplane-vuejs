@@ -1,0 +1,14 @@
+.placesNavigator {
+
+}
+
+.placesNavigator__place {
+	display: block;
+	border: 1px solid silver;
+	margin: 1em;
+
+	a {
+		display: block;
+		padding: 1em;
+	}
+}

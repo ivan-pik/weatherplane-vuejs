@@ -13,8 +13,8 @@ export default new Vuex.Store({
 		user: {
 			loggedIn: false,
 			name: false,
-				authenticationRequired: false,
-				authenticated: false
+			authenticationRequired: false,
+			authenticated: false
 		},
 		placeSearch: {
 			place: {},

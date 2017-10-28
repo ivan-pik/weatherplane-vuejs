@@ -11,26 +11,7 @@
 				<a v-if="loggedIn" @click="logOut">Logout</a>
 				<router-link v-if="loggedIn" to="/settings">Settings</router-link>
 			</div>
-
-			<ul class="placesList">
-				<li class="placesList__item">
-					<span class="placesList__item">
-						Woodspring Wings
-					</span>
-					<button class="placesList__contextMenuToggler">
-						...
-					</button>
-					<ul class="placesList__contextMenu">
-						<li>Place Settings</li>
-						<li>move</li>
-					</ul>
-				</li>
-			</ul>
-
-			<router-link  to="/">Add new place</router-link>
-			
-			
-			
+			<places-list />
 		</div>
 	</nav>
 </template>
@@ -38,12 +19,12 @@
 
 
 <script>
+	import placesList from './placesList.vue';
+
 	export default {
 		name: 'Navigation',
-		data() {
-			return {
-
-			}
+		components: {
+			'places-list' : placesList 
 		},
 		computed: {
 			username() {

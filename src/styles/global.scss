@@ -4,6 +4,10 @@ body {
    font-family: 'Inter UI', sans-serif;
 }
 
+#app {
+	padding-top: 45px;
+}
+
 .uiClose {
 	width: 40px;
 	height: 40px;
@@ -82,7 +86,11 @@ body {
 .mainNav {
 	height: 40px;
 	padding: 0 50px;
-	position: relative;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #fff;
 }
 
 .mainNav__title {

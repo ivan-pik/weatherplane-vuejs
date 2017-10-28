@@ -5,9 +5,11 @@
 		</div>
 		
 		<ul class="placesNavigator">
-			<li v-for="place in places">
-				<router-link :to="place.placeSlug">
-					<span class="placesNavigator">
+			<li v-for="place in places"
+				class="placesNavigator__place"
+			>
+				<router-link :to="userName + '/' + place.placeSlug">
+					<span class="placesNavigator__name">
 						{{place.placeName}}
 					</span>
 				</router-link>
@@ -30,8 +32,8 @@
 		computed: {
 			userName () {
 				return this.$route.params.username;
-			}
-
+			},
+		
 		},
 				methods: {
 
