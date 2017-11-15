@@ -55,6 +55,11 @@
 		},
 		created () {
 			this.reactiveControls = this.deep_copy(this.controls);
+
+			document.addEventListener('keyup', this.escKeyHandler);
+		},
+		beforeDestroy () {
+			document.removeEventListener('keyup', this.escKeyHandler);
 		},
 		computed: {
 			settingsTweaked () {
@@ -83,6 +88,11 @@
 			},
 			resetKnobs () {
 				
+			},
+			escKeyHandler (e) {
+				if(e.keyCode == 27) {
+					this.closePanel();
+				}
 			},
 			closePanel() {
 				this.$emit('closePanel');

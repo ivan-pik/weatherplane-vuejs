@@ -29,6 +29,12 @@
 		components: {
 			'places-list' : placesList 
 		},
+		created () {
+			document.addEventListener('keyup', this.escKeyHandler);
+		},
+		beforeDestroy () {
+			document.removeEventListener('keyup', this.escKeyHandler);
+		},
 		computed: {
 			username() {
 				return this.$store.state.user.name;
@@ -38,6 +44,9 @@
 			}
 		},
 		methods: {
+			escKeyHandler () {
+				this.navOpened = false;
+			},
 			logOut() {
 				localStorage.removeItem('id_token');
 				this.$store.commit('USER_LOG_OUT');
