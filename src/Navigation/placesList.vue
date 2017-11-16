@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div ref="placesList">
 		<div v-if="places">
 			<ul class="placesList"
 				:class="'placesList--' + role + arrangeClass"
@@ -8,9 +8,13 @@
 					v-for="(place, index) in places"
 					v-on:contextMenuTriggered="contextMenuHandler(index)"
 					v-on:arrangeItems="arrangeItems(index)"
+					v-on:itemDrag="dragHandler"
+					v-on:itemDrop="dropHandler"
 					:contextMenuClose="activeIndex"
 					:index="index"
 					:place="place"
+					:arranging="arranging"
+					:makeSpace="movePlease"
 				/>
 			</ul>
 		</div>
@@ -49,12 +53,55 @@
 					return ' arranging';
 				}
 				return false;
+			},
+			nOfItems () {
+				if (this.places) {
+					return this.places.length;
+				}
 			}
 		},
 		mounted () {
 			this.loadPlacesData();
+
+			
 		},
 		methods: {
+			getListDimensions () {
+				this.listTop = (this.$refs.placesList.getBoundingClientRect()).top;
+				this.listBottom = (this.$refs.placesList.getBoundingClientRect()).bottom;
+				this.listHeight = (this.$refs.placesList.getBoundingClientRect()).bottom;
+			},
+			getIndex (top) {
+				let newIndex;
+				if (top < this.listTop) {
+					newIndex = 0;
+				} else if (top > this.listBottom) {
+					newIndex = this.nOfItems - 1;
+				} else {
+					newIndex = Math.ceil((top - this.listTop) / 40) - 1;
+				}
+
+				newIndex = Math.max(Math.min(newIndex,this.nOfItems - 1) , 0);
+
+				console.log('newIndex',newIndex);
+
+				return newIndex;
+			},
+			dragHandler(val) {
+				let newIndex = this.getIndex(val.top);
+				this.giveMeSpace(newIndex, val.index);		
+			},
+			dropHandler (val) {
+				let newIndex = this.getIndex(val.top);
+				console.log("move",val.index, newIndex);
+				if (val.index != newIndex) {
+					// @todo: recalc places positions
+				}
+			},
+			giveMeSpace (toIndex,fromIndex) {
+
+				this.movePlease = [toIndex,fromIndex];
+			},
 			contextMenuHandler (index) {
 				this.activeIndex = index;
 			},
@@ -69,6 +116,9 @@
 						if (newPlaces !=this.places) {
 							this.$store.dispatch('USER_GET_PLACES', newPlaces);
 						}
+						this.$nextTick(function () {
+							this.getListDimensions();
+						});
 					}
 				}).catch(err => {
 					//@todo: error message
@@ -79,7 +129,11 @@
 		data() {
 			return {
 				activeIndex: -1,
-				arranging: false
+				arranging: false,
+				listTop: 0,
+				listBottom: 0,
+				listHeight: 0,
+				movePlease: [-1, null]
 			}
 		}
 	}
