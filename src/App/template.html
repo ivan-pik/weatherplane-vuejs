@@ -4,6 +4,7 @@
 	>
 		<global-message
 			v-for="(message, index) in globalMessages"
+			key="index"
 			:text="message.text"
 			:type="message.type"
 			:dismiss="message.dismiss"
