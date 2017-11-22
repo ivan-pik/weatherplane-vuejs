@@ -1,6 +1,7 @@
 <template>
 	<div v-if="weather" class="day-list">
-		<hour v-for="(hour, key) in weather" 
+		<hour v-for="(hour, key) in weather"
+			:key="key"
 			:order="key" 
 			:weather="hour"
 			v-on:chartSpaceDummyUpdated="chartWidthHandler"
