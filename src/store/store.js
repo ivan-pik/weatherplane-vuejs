@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import WPAPI from '../wpapi/index';
+
 Vue.use(Vuex);
 
 // @todo: separate into modules
@@ -80,6 +82,10 @@ export default new Vuex.Store({
 		'PLACE_VIEW_LIMITS_SETTINGS' (state, val) {
 			state.existingPlaceView.view.limitsSettings.panelOpen = val;
 		},
+		'PLACE_LIST_ORDERS_UPDATED' (state, newPlaces) {
+			
+			state.user.places = newPlaces;
+		},
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {
 			state.existingPlaceView.place.placeSettings.maxWindSpeed = val.maxWindSpeed;
 			state.existingPlaceView.place.placeSettings.maxCrossWindSpeed = val.maxCrossWindSpeed;
@@ -98,8 +104,17 @@ export default new Vuex.Store({
 	},
 	actions: {
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {
-			// @todo: API SAVE
+			// @todo: API LOAD HERE
 			state.commit('PLACE_UPDATE_LIMITS_SETTINGS', val);
+		},
+		'PLACE_UPDATE_LIST_ORDERS' (state, val) {
+			// Update the place's order Index
+
+			// SAVE TO API
+			WPAPI.reorderPlaces(val);
+			
+		
+			state.commit('PLACE_LIST_ORDERS_UPDATED', val);
 		},
 		'USER_GET_PLACES' (state, newPlaces) {
 			// @todo: API LOAD HERE

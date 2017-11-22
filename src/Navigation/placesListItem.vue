@@ -1,11 +1,9 @@
 <template>
-	<li class="placesList__itemWrapper"
-		
-	>
+	<li class="placesList__itemWrapper">
 		<div v-if="isDragging" class="placesList__itemPlaceHolder">
 		</div>
 		<div class="placesList__item"
-			v-bind:class="{ 'is-dragging': isDragging }"
+			v-bind:class="{ 'is-dragging': isDragging, 'can-transition': canTransition }"
 			v-bind:style="[itemDraggedStyle,itemMovedStyle]"
 		>
 			
@@ -60,9 +58,16 @@
 			arranging: {
 				type: Boolean
 			},
+			dragging: {
+				type: Boolean
+			},
 			makeSpace: {
 				type: Array
+			},
+			listDimensions: {
+				type: Object
 			}
+	
 		},
 		created () {
 			document.addEventListener('mousedown', this.mousedownHandler);
@@ -136,7 +141,7 @@
 					};
 				}
 			},
-			setDraggedStyle (top) {
+			setAbsoluteTop (top) {
 				this.itemDraggedStyle = {
 					position: 'absolute',
 					top: `${top}px`
@@ -146,20 +151,44 @@
 				let dragger = this.$refs.dragger;
 				if (event.target == dragger) {
 					this.isDragger = true;
+					this.canTransition = false;
 				} else {
 					this.isDragger = false;
 				}
 			},
 			mouseupHandler () {
+			
 				if (this.isDragging) {
+					this.canTransition = true;
+
+					this.setAbsoluteTop(this.alignItemToGrid(event.pageY));
 					this.dropItem();
-				}
-				this.isDragging = false;
-				this.isDragger = false;
-				this.firstMove = true;
+				} 
+
+				if (this.dragging) {
+					setTimeout(() => {
+						this.canTransition = false;
+					},200);
+					setTimeout(this.resetItem,201);
+					setTimeout(() => {
+						this.canTransition = true;
+					},202);
+					this.isDragging = false;
+					this.isDragger = false;
+					this.firstMove = true;
+					this.movingAwayFirstTime = true;
+				} 
+			},
+
+			alignItemToGrid (y) {
+				let top =  (Math.floor( ( y - 45 ) / 40 ) * 40 ) + 45;
+				return Math.min( Math.max(this.listDimensions.top, top), this.listDimensions.bottom - 40);
+			},
+
+			resetItem () {
 				this.itemDraggedStyle = {};
 				this.itemMovedStyle = {};
-				this.movingAwayFirstTime = true;
+			
 				
 			},
 			mousemoveHandler (event) {
@@ -171,27 +200,30 @@
 						if (Math.abs(this.firstPos - event.pageY) > 10) {
 							this.isDragging = true;
 							let top = event.pageY - 20;
-							this.setDraggedStyle(top);
+							this.setAbsoluteTop(top);
 							this.$emit('itemDrag', {
 								index: this.index,
 								top: event.pageY
 							});
 						}
 					}
-
-					// if (this.first) {
-					// 	this.offset = event.clientX - this.left;
-					// 	this.first = false;
-					// }
-					// let movement = Math.min(Math.max(event.clientX - this.offset, 0), this.posRight - 40);
-					// this.left =+ movement;
 				}
 			},
+			deep_copy (obj) {
+				// @todo: make object spread operator working with babel/webpack
+				return JSON.parse(JSON.stringify(obj));
+			},
 			dropItem () {
-				this.$emit('itemDrop', {
+				const itemDataAtDropMoment = this.deep_copy({
 					index: this.index,
-					top: event.pageY
+					top: event.pageY,
+					id: this.place._id,
+					oldIndex: this.place.listOrder
 				});
+
+				setTimeout(() => {
+					this.$emit('itemDrop', itemDataAtDropMoment);
+				},202);
 			},
 			openPlaceSettings () {
 				let placeName = this.place.placeSlug;
@@ -216,7 +248,8 @@
 				firstPos: 0,
 				itemDraggedStyle: {},
 				itemMovedStyle: {},
-				top: 0
+				top: 0,
+				canTransition: true
 			}
 		}
 	}

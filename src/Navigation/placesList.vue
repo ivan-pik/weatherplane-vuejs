@@ -6,6 +6,7 @@
 			>
 				<places-list-item
 					v-for="(place, index) in places"
+					key="place._id"
 					v-on:contextMenuTriggered="contextMenuHandler(index)"
 					v-on:arrangeItems="arrangeItems(index)"
 					v-on:itemDrag="dragHandler"
@@ -15,11 +16,22 @@
 					:place="place"
 					:arranging="arranging"
 					:makeSpace="movePlease"
+					:dragging="dragging"
+					:listDimensions="listDimensions"
 				/>
 			</ul>
 		</div>
+
+
+		<div v-if="arranging" class="">
+			<button @click="cancelSorting">I am done</button>
+		</div>
+
+		<div v-if="places.length == 0" class="emptyState emptyState--placesList">
+			Oh, nothing in here!
+		</div>
 		<div v-if="!loggedIn">@todo: log in to see private places or save new ones</div>
-		<router-link  to="/">Add new place</router-link>
+		<router-link v-if="!arranging"  to="/">Add new place</router-link>
 	</div>
 </template>
 
@@ -58,6 +70,13 @@
 				if (this.places) {
 					return this.places.length;
 				}
+			},
+			listDimensions () {
+				return {
+					top: this.listTop,
+					bottom: this.listBottom,
+					height: this.listHeight
+				}
 			}
 		},
 		mounted () {
@@ -66,10 +85,13 @@
 			
 		},
 		methods: {
+			cancelSorting () {
+				this.arranging = false;
+			},
 			getListDimensions () {
 				this.listTop = (this.$refs.placesList.getBoundingClientRect()).top;
 				this.listBottom = (this.$refs.placesList.getBoundingClientRect()).bottom;
-				this.listHeight = (this.$refs.placesList.getBoundingClientRect()).bottom;
+				this.listHeight = (this.$refs.placesList.getBoundingClientRect()).height;
 			},
 			getIndex (top) {
 				let newIndex;
@@ -88,6 +110,7 @@
 				return newIndex;
 			},
 			dragHandler(val) {
+				this.dragging = true;
 				let newIndex = this.getIndex(val.top);
 				this.giveMeSpace(newIndex, val.index);		
 			},
@@ -95,7 +118,32 @@
 				let newIndex = this.getIndex(val.top);
 				console.log("move",val.index, newIndex);
 				if (val.index != newIndex) {
-					// @todo: recalc places positions
+					
+
+					const directionDown = (newIndex > val.index);
+
+					let newPlaces = this.places.map((place) => {
+						
+						if (place._id == val.id) {
+							place.listOrder = newIndex;
+						} else {
+							if (directionDown && place.listOrder > val.index && place.listOrder <= newIndex) {
+								place.listOrder--
+							} else if (!directionDown && place.listOrder < val.index && place.listOrder >= newIndex) {
+								place.listOrder++
+							}
+						}
+						return place;
+					});
+
+					newPlaces.sort(function(placeA, placeB) {
+						return (placeA.listOrder > placeB.listOrder)
+					});
+
+					this.newlyOrderedList = newPlaces;
+
+					// @todo: treshold this, prevent AJAX calls while still fiddling with the menu
+					this.$store.dispatch('PLACE_UPDATE_LIST_ORDERS', newPlaces);
 				}
 			},
 			giveMeSpace (toIndex,fromIndex) {
@@ -109,11 +157,17 @@
 				this.arranging = true;
 			},
 			loadPlacesData () {
+				// @todo: move this to API models
 				HTTP.get('places/' + this.userName)
 				.then(response => {
 					if (response.data.success) {
 						let newPlaces = response.data.data.places;
 						if (newPlaces !=this.places) {
+
+							newPlaces.sort(function(placeA, placeB) {
+								return (placeA.listOrder > placeB.listOrder)
+							});
+
 							this.$store.dispatch('USER_GET_PLACES', newPlaces);
 						}
 						this.$nextTick(function () {
@@ -133,7 +187,8 @@
 				listTop: 0,
 				listBottom: 0,
 				listHeight: 0,
-				movePlease: [-1, null]
+				movePlease: [-1, null],
+				dragging: false
 			}
 		}
 	}
