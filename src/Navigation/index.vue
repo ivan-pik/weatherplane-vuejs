@@ -53,7 +53,7 @@
 			},
 			navClickHandler () {
 				// @todo: this seems silly
-				if (event.target.nodeName == "A" || event.target.nodeName == "BUTTON" || event.target.parentNode.nodeName == "A") {
+				if (event.target._prevClass == "router-link-active" || event.target.className == "router-link-active" || event.target.parentElement.className == "router-link-active") {
 					this.navOpened = false;
 				}
 			}
