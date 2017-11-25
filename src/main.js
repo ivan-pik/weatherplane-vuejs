@@ -12,7 +12,6 @@ import LoginView from './Login/LoginView/index.vue'
 import RegisterView from './Register/RegisterView/index.vue'
 import ResetPassword from './User/ResetPassword/index.vue'
 import SettingsView from './User/SettingsView/index.vue'
-import PlaceView from './Place/PlaceView/index.vue'
 import ExistingPlaceView from './Place/ExistingPlaceView/index.vue'
 import UserPlacesView from './Place/UserPlacesView/index.vue'
 import PlaceSettingsView from './Place/PlaceSettingsView/index.vue'
@@ -23,7 +22,7 @@ const routes = [
     { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
     { path: '/signup', name: 'signup', component: RegisterView },
-    { path: '/place', name: 'place', component: PlaceView },
+    { path: '/place', name: 'place', component: ExistingPlaceView },
     { path: '/:username/', component: UserPlacesView },
 		{ path: '/:username/:place', component: ExistingPlaceView },
     { path: '/:username/:place/settings', component: PlaceSettingsView }

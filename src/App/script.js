@@ -17,7 +17,6 @@ export default {
 							username: response.data.data.username
 						})
 
-
 					} else {
 						// Something unforseen happened
 					}

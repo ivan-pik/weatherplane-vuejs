@@ -10,15 +10,100 @@ const HTTP = axios.create({
 
 
 var api = {
+	// User Accounts
+	// Change order of places
 	reorderPlaces(payload) {
-		HTTP.post('/settings/reorder-places', payload)
+		HTTP.post('/places/reorder-places', payload)
 		.then(function (response) {
 			console.log(response);
 		})
 		.catch(function (error) {
 			console.log(error);
 		});
-	}
+	},
+	// Fetch place details
+	getPlace(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.get(`/places/${payload.user}/${payload.place}/`)
+			.then(function (response) {
+				resolve(response);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	},
+	// Create a new place
+	createPlace(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/places', payload)
+			.then(function (response) {
+				resolve(response);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	},
+	// Get Place Weather
+	getPlaceWeather(oid) {
+		return new Promise(function(resolve, reject) {
+			HTTP.get('weather/' + oid)
+			.then(function (response) {
+				resolve(response.data.data);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	},
+	// Get Temporary Place Weather
+	// @todo: make the API work
+	getTempPlaceWeather(coordinates) {
+		return new Promise(function(resolve, reject) {
+			HTTP.get('temporaryWeather/', {
+				params: {
+					lat: coordinates.lat,
+					lng: coordinates.lng
+				}
+			})
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.weather);
+				} else {
+					reject(response.response.data.error)
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+	// Retrieve lost password
+	retrieveLostPassword(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/login/retrieve-lost-password', payload)
+			.then(function (response) {
+				resolve(response);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	},
+	// Retrieve lost username
+	retrieveLostUsername(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/login/retrieve-lost-username', payload)
+			.then(function (response) {
+				resolve(response);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	} 
 }
 
 export default api;

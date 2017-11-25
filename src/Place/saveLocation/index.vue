@@ -151,7 +151,7 @@
 <script>
 		import Vue from 'vue';
 
-		import {HTTP} from '../../http-common';
+		import WPAPI from '../../wpapi/index';
 
 		export default {
 				name: 'saveLocation',
@@ -186,41 +186,32 @@
 					onSubmit(event) {
 						this.$validator.validateAll().then(() => {
 
-						let newPlace = {
-							placeName : this.placeName,
-							placeSlug : this.placeNameURL,
-							_userID : this.userName,
-							placeLat : this.activeLocation.coordinates.lat,
-							placeLng : this.activeLocation.coordinates.lng,
-							placeSettings : {
-								public : this.placeIsPublic,
-								runwayOrientation : this.runwayOrientation,
-								maxWindSpeed : this.maxWindSpeed,
-								maxCrossWindSpeed : this.maxCrossWindSpeed,
-								minTemperature : this.minTemperature,
-								maxTemperature : this.maxTemperature,
-								maxPrecipProbability : this.maxPrecipProbability,
-								maxWindBearingToRWY : this.maxWindBearingToRWY
-							}
-						}
-
-
-						HTTP.post('places', newPlace)
-								.then(response => {
-										if (response.data.success) {
-												this.$router.push(this.userName + "/" + newPlace.placeSlug);
-										}
-								}).catch(err => {
-								if(err.response) {
-										this.onFailedPlaceSave();
+							let newPlace = {
+								placeName : this.placeName,
+								placeSlug : this.placeNameURL,
+								_userID : this.userName,
+								placeLat : this.activeLocation.coordinates.lat,
+								placeLng : this.activeLocation.coordinates.lng,
+								placeSettings : {
+									public : this.placeIsPublic,
+									runwayOrientation : this.runwayOrientation,
+									maxWindSpeed : this.maxWindSpeed,
+									maxCrossWindSpeed : this.maxCrossWindSpeed,
+									minTemperature : this.minTemperature,
+									maxTemperature : this.maxTemperature,
+									maxPrecipProbability : this.maxPrecipProbability,
+									maxWindBearingToRWY : this.maxWindBearingToRWY
 								}
+							}
+
+							WPAPI.createPlace(newPlace).then(response => {
+								if (response.response.data.success) {
+									this.$router.push(this.userName + "/" + newPlace.placeSlug);
+								} else {
+									Vue.set(this.errors, 'placeNotSaved', true)
+								}
+							});
 						});
-						}).catch(() => {
-								// when form is invalid
-						});
-					},
-					onFailedPlaceSave() {
-						 Vue.set(this.errors, 'placeNotSaved', true)
 					}
 				},
 				data () {

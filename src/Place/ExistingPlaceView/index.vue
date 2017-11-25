@@ -24,6 +24,7 @@
 	import Vue from 'vue'
 	import saveLocation from '../saveLocation/index.vue';
 	import {HTTP} from '../../http-common';
+	import WPAPI from '../../wpapi/index';
 	import placeNotFound from '../placeNotFound/index.vue';
 	import loginView from '../../Login/LoginView/index.vue';
 	import placeDetails from '../placeDetails/index.vue';
@@ -38,38 +39,85 @@
 			'place-details': placeDetails
 		},
 		mounted () {
-			this.loadPlaceData();
+			if (this.$route.params.username && this.$route.params.place) {
+				this.loadSavedPlace();
+				return;
+			}
+
+			let tempPlace;
+
+			if (localStorage) {
+				tempPlace = localStorage.getItem('tempPlace');
+				if (tempPlace) {
+					this.loadTemporaryPlace(JSON.parse(tempPlace));
+					return;
+				}
+			} 
+
+			if (this.searchedPlace && this.searchedPlace.active) {
+				tempPlace = {
+					"placeName": this.searchedPlace.structured_formatting.main_text,
+					"placeLat": this.selectedLocation.lat,
+					"placeLng": this.selectedLocation.lng,
+					"placeSettings": {
+						"runwayOrientation": "45",
+						"public": false,
+						"maxWindSpeed": 30,
+						"maxCrossWindSpeed": 19,
+						"minTemperature": "0",
+						"maxTemperature": 45,
+						"maxPrecipProbability": 10,
+						"maxWindBearingToRWY": 60
+					}
+				}
+
+				if (localStorage) {
+					localStorage.setItem('tempPlace', JSON.stringify(tempPlace));
+				}
+				this.loadTemporaryPlace(tempPlace);
+
+				return;
+			}
+
+			// No place searched on found in localStorage
+			this.$router.push({ path: `/` });
 		},
 		methods: {
-			loggedIn () {
+			loadTemporaryPlace (tempPlace) {
+				
+				this.$store.commit('PLACE_SAVE_PLACE_DATA', tempPlace);
+
 			},
-			loadPlaceData () {
-				HTTP.get('places/'+this.$route.params.username + "/" + this.$route.params.place)
-				.then(response => {
+			loadSavedPlace () {
+
+				WPAPI.getPlace({
+					user: this.$route.params.username,
+					place: this.$route.params.place
+				}).then((response) => {
 					if (response.data.success) {
 						this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
-					}
-				}).catch(err => {
-					if(err.response) {
-						// @todo: DRY!!!
-						let errorCode = function(code, errors) {
-							let check = errors.filter(function( obj ) {
-								return obj.code == code;
-							});
-							if (check.length > 0) {
-								return true;
+					} else {
+						if(response.data.data.errors) {
+							// @todo: DRY!!!
+							let errorCode = function(code, errors) {
+								let check = errors.filter(function( obj ) {
+									return obj.code == code;
+								});
+								if (check.length > 0) {
+									return true;
+								}
+								return false;
 							}
-							return false;
-						}
 
-						if(errorCode("authentication-required", err.response.data.errors)) {
-							this.needToLogin = true;
-							this.$store.commit('USER_AUTHENTICATION_REQUIRED')
-						}
+							if(errorCode("authentication-required", response.data.errors)) {
+								this.needToLogin = true;
+								this.$store.commit('USER_AUTHENTICATION_REQUIRED')
+							}
 
-						if(errorCode("resource-does-not-exist", err.response.data.errors)) {
-							// @todo: Place pseudo 404
-							this.place404 = true;
+							if(errorCode("resource-does-not-exist", response.data.errors)) {
+								// @todo: Place pseudo 404
+								this.place404 = true;
+							}
 						}
 					}
 				});
@@ -81,6 +129,12 @@
 			},
 			place () {
 				return this.$store.state.existingPlaceView.place;
+			},
+			searchedPlace () {
+				return this.$store.state.placeSearch.place;
+			},
+			selectedLocation () {
+				return this.$store.state.placeSearch.selectedLocation.coordinates;
 			}
 		},
 		watch: {

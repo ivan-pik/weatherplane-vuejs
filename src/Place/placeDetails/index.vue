@@ -1,7 +1,6 @@
 <template>
 <div class="">
 	<div v-if="weatherData">
-		
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
 	</div>
@@ -14,8 +13,8 @@
 </template>
 <script>
 		import Vue from 'vue';
+		import WPAPI from '../../wpapi/index';
 		import hourlyView from '../../Weather/hourlyView/index.vue';
-		import {HTTP} from '../../http-common';
 		import weatherDetailsData from './weatherDetailsData.vue';
 		import loadScreen from '../../uiComponents/loadScreen.vue';
 	
@@ -55,65 +54,65 @@
 				},
 		
 				fetchWeather () {
-					let oid = this.activeLocation.weather[0].oid;
+					// Get saved place weather
+					if (this.activeLocation.weather) {
+						let oid = this.activeLocation.weather[0].oid;
 
-			
-					HTTP.get('weather/' + oid)
-							.then(response => {
-									if (response.data.success) {
+						// @todo: save to LocalStorage for 30 mins, only then load new weather ?
 
-											this.$store.commit('PLACE_SAVE_WEATHER_DATA', response.data.data);
-											
-
-
-										}
-								}).catch(err => {
+						WPAPI.getPlaceWeather(oid).then((weather) => {
+							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
 						});
-					
-					},
-					onSubmit(event) {
-						this.$validator.validateAll().then(() => {
 
-						let newPlace = {
-							placeName : this.placeName,
-							placeSlug : this.placeNameURL,
-							userID : this.userName,
-							placeLat : this.activeLocation.coordinates.lat,
-							placeLng : this.activeLocation.coordinates.lng,
-							placeSettings : {
-								public : this.placeIsPublic
+					// Get temporary place weather
+					} else {
+						let coordinates = {
+							lat: this.activeLocation.placeLat,
+							lng: this.activeLocation.placeLng
+						};
+
+						// Only load new weather if it's not in localStorage and older than 30 mins
+
+						
+						if (localStorage) {
+							let localWeather = localStorage.getItem('temporaryWeather');
+							if (localWeather) {
+								localWeather = JSON.parse(localWeather);
+
+								if (localWeather.location.latitude == coordinates.lat && localWeather.location.longitude == coordinates.lng) {
+									var time = new Date(localWeather.updated);
+									var timeout = 30 * 60000;
+									var diff = Date.now() - time;
+									if (diff < timeout) {
+										this.$store.commit('PLACE_SAVE_WEATHER_DATA', localWeather);
+										return;
+									}
+								}
 							}
 						}
 
-						HTTP.post('places', newPlace)
-								.then(response => {
-										if (response.data.success) {
-												this.$router.push(this.userName + "/" + newPlace.placeSlug);
-										}
-								}).catch(err => {
-								if(err.response) {
-										this.onFailedPlaceSave();
-								}
+						WPAPI.getTempPlaceWeather(coordinates).then((weather) => {
+							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
+
+							localStorage.setItem('temporaryWeather', JSON.stringify(weather));
+
+						}).catch((error) => {
+							// @todo: Handle error
+							console.log('omg',error);
 						});
-						}).catch(() => {
-								// when form is invalid
-						});
-					},
-					onFailedPlaceSave() {
-						 Vue.set(this.errors, 'placeNotSaved', true)
 					}
 				},
-				data () {
-					return {
-						openSaveOptions: false,
-						errors: null,
-						placeName: '',
-						placeIsPublic: false
-					}
+				
+			},
+			data () {
+				return {
+					openSaveOptions: false,
+					errors: null,
+					placeName: '',
+					placeIsPublic: false
 				}
-
+			}
 		}
-
 
 
 </script>
