@@ -51,7 +51,7 @@
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Crosswing Speed
+					Crosswind Speed
 				</h3>
 				<p class="weatherDetails__value">
 					{{crossWindComponentRounded}} ms

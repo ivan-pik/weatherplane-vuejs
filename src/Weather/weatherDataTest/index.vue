@@ -23,7 +23,7 @@
 
 <br>
 
-<label>Crosswing tolerance:</label>
+<label>Crosswind tolerance:</label>
 <br>
 <input v-model="windBearingTolerance" id="slider" type ="range" min ="4" max="90" step ="1" value ="6"/>
 <span class="value">{{windBearingTolerance}}&deg;</span>
