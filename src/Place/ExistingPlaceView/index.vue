@@ -38,23 +38,24 @@
 			'login-view' : loginView,
 			'place-details': placeDetails
 		},
+		
 		mounted () {
+			// @todo @next This doesn;t happen when searching for a new place, component is reused
+
+			// Get a saved place
 			if (this.$route.params.username && this.$route.params.place) {
+				this.$store.commit('PLACE_VIEW_TYPE', 'saved');
 				this.loadSavedPlace();
 				return;
 			}
 
 			let tempPlace;
 
-			if (localStorage) {
-				tempPlace = localStorage.getItem('tempPlace');
-				if (tempPlace) {
-					this.loadTemporaryPlace(JSON.parse(tempPlace));
-					return;
-				}
-			} 
-
+			debugger;
+			// Get a place from a search view
 			if (this.searchedPlace && this.searchedPlace.active) {
+				this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
+
 				tempPlace = {
 					"placeName": this.searchedPlace.structured_formatting.main_text,
 					"placeLat": this.selectedLocation.lat,
@@ -78,6 +79,17 @@
 
 				return;
 			}
+
+			// Check if there is a temporary place in localStorage
+
+			if (localStorage) {
+				tempPlace = localStorage.getItem('tempPlace');
+				if (tempPlace) {
+					this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
+					this.loadTemporaryPlace(JSON.parse(tempPlace));
+					return;
+				}
+			} 
 
 			// No place searched on found in localStorage
 			this.$router.push({ path: `/` });
@@ -141,11 +153,11 @@
 			authenticated (authenticated) {
 				if(authenticated) {
 					this.needToLogin = false;
-					this.loadPlaceData();
+					this.loadSavedPlace();
 				}
 			},
 			'$route.params.place': function (place) {
-				this.loadPlaceData();
+				this.loadSavedPlace();
 			}
 		},
 		data () {

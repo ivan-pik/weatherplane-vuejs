@@ -41,6 +41,9 @@
 				weatherData() {
 					return this.$store.state.existingPlaceView.weatherData;
 				},
+				placeViewType() {
+					return this.$store.state.existingPlaceView.view.placeType;
+				}
 				
 			},
 			created: function () {
@@ -54,8 +57,7 @@
 				},
 		
 				fetchWeather () {
-					// Get saved place weather
-					if (this.activeLocation.weather) {
+					if (this.placeViewType === 'saved') {
 						let oid = this.activeLocation.weather[0].oid;
 
 						// @todo: save to LocalStorage for 30 mins, only then load new weather ?
@@ -64,16 +66,15 @@
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
 						});
 
-					// Get temporary place weather
-					} else {
+						return;
+					}
+
+					if (this.placeViewType === 'temporary') {
 						let coordinates = {
 							lat: this.activeLocation.placeLat,
 							lng: this.activeLocation.placeLng
 						};
 
-						// Only load new weather if it's not in localStorage and older than 30 mins
-
-						
 						if (localStorage) {
 							let localWeather = localStorage.getItem('temporaryWeather');
 							if (localWeather) {

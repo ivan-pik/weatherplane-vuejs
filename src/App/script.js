@@ -45,7 +45,7 @@ export default {
   data() {
 	return {
 		// @todo: this doesn't work for RegisterView
-		notAliveViews: "LoginView RegisterView"
+		notAliveViews: "LoginView RegisterView ExistingPlaceView"
 	}
   }
 }

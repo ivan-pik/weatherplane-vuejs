@@ -30,6 +30,7 @@ export default new Vuex.Store({
 			place: null,
 			weatherData: null,
 			view: {
+				placeType: '',
 				chartCursorPosition: {
 					index: 0,
 					progress: 0
@@ -78,6 +79,9 @@ export default new Vuex.Store({
 		},
 		'PLACE_VIEW_CHART_CURSOR' (state, val) {
 			state.existingPlaceView.view.chartCursorPosition = val;
+		},
+		'PLACE_VIEW_TYPE' (state, val) {
+			state.existingPlaceView.view.placeType = val;
 		},
 		'PLACE_VIEW_LIMITS_SETTINGS' (state, val) {
 			state.existingPlaceView.view.limitsSettings.panelOpen = val;
