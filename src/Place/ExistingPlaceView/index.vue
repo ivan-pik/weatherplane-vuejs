@@ -51,7 +51,6 @@
 
 			let tempPlace;
 
-			debugger;
 			// Get a place from a search view
 			if (this.searchedPlace && this.searchedPlace.active) {
 				this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
