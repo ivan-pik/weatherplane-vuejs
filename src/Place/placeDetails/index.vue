@@ -1,6 +1,6 @@
 <template>
 <div class="">
-	<div v-if="weatherData">
+	<div v-if="weatherData && !weatherIsLoading">
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
 	</div>
@@ -46,6 +46,11 @@
 				}
 				
 			},
+			watch: {
+				activeLocation () {
+					this.fetchWeather();
+				}
+			},
 			created: function () {
 				this.fetchWeather();
 			},
@@ -57,6 +62,7 @@
 				},
 		
 				fetchWeather () {
+					this.weatherIsLoading = true;
 					if (this.placeViewType === 'saved') {
 						let oid = this.activeLocation.weather[0].oid;
 
@@ -64,6 +70,7 @@
 
 						WPAPI.getPlaceWeather(oid).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
+							this.weatherIsLoading = false;
 						});
 
 						return;
@@ -86,6 +93,7 @@
 									var diff = Date.now() - time;
 									if (diff < timeout) {
 										this.$store.commit('PLACE_SAVE_WEATHER_DATA', localWeather);
+										this.weatherIsLoading = false;
 										return;
 									}
 								}
@@ -94,6 +102,7 @@
 
 						WPAPI.getTempPlaceWeather(coordinates).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
+							this.weatherIsLoading = false;
 
 							localStorage.setItem('temporaryWeather', JSON.stringify(weather));
 
@@ -110,7 +119,8 @@
 					openSaveOptions: false,
 					errors: null,
 					placeName: '',
-					placeIsPublic: false
+					placeIsPublic: false,
+					weatherIsLoading: true
 				}
 			}
 		}
