@@ -80,7 +80,7 @@
 					},
 					{
 						name: 'bearing',
-						label: 'Max crosswing bearing',
+						label: 'Max crosswind bearing',
 						maxValue: 90,
 						currentValue: this.settingsMaxWindBearingToRWY
 					},
