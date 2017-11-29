@@ -67,9 +67,28 @@
 						let oid = this.activeLocation.weather[0].oid;
 
 						// @todo: save to LocalStorage for 30 mins, only then load new weather ?
+						let savedWeather = localStorage.getItem(oid);
+						if (savedWeather) {
+							savedWeather = JSON.parse(savedWeather);
+
+							if (savedWeather._id == oid) {
+								var time = new Date(savedWeather.updated);
+								var timeout = 30 * 60000;
+								var diff = Date.now() - time;
+								if (diff < timeout) {
+									this.$store.commit('PLACE_SAVE_WEATHER_DATA', savedWeather);
+									this.weatherIsLoading = false;
+									return;
+								}
+							}
+						}
 
 						WPAPI.getPlaceWeather(oid).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
+							if (localStorage) {
+								localStorage.setItem(oid, JSON.stringify(weather));
+							}
+
 							this.weatherIsLoading = false;
 						});
 
