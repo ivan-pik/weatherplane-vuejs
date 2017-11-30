@@ -40,66 +40,68 @@
 		},
 		
 		mounted () {
-			// @todo @next This doesn;t happen when searching for a new place, component is reused
-
-			// Get a saved place
-			if (this.$route.params.username && this.$route.params.place) {
-				this.$store.commit('PLACE_VIEW_TYPE', 'saved');
-				this.loadSavedPlace();
-				return;
-			}
-
-			let tempPlace;
-
-			// Get a place from a search view
-			if (this.searchedPlace && this.searchedPlace.active) {
-				this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
-
-				tempPlace = {
-					"placeName": this.searchedPlace.structured_formatting.main_text,
-					"placeLat": this.selectedLocation.lat,
-					"placeLng": this.selectedLocation.lng,
-					"placeSettings": {
-						"runwayOrientation": "45",
-						"public": false,
-						"maxWindSpeed": 30,
-						"maxCrossWindSpeed": 19,
-						"minTemperature": "0",
-						"maxTemperature": 45,
-						"maxPrecipProbability": 10,
-						"maxWindBearingToRWY": 60
-					}
-				}
-
-				if (localStorage) {
-					localStorage.setItem('tempPlace', JSON.stringify(tempPlace));
-				}
-				this.loadTemporaryPlace(tempPlace);
-
-				return;
-			}
-
-			// Check if there is a temporary place in localStorage
-
-			if (localStorage) {
-				tempPlace = localStorage.getItem('tempPlace');
-				if (tempPlace) {
-					this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
-					this.loadTemporaryPlace(JSON.parse(tempPlace));
-					return;
-				}
-			} 
-
-			// No place searched on found in localStorage
-			this.$router.push({ path: `/` });
+			this.placeLoader();
 		},
 		methods: {
-			loadTemporaryPlace (tempPlace) {
-				
-				this.$store.commit('PLACE_SAVE_PLACE_DATA', tempPlace);
 
+			placeLoader () {
+				// Get a saved place
+				if (this.$route.params.username && this.$route.params.place) {
+					this.loadSavedPlace();
+					return;
+				} else {
+					this.loadTemporaryPlace();
+				}
+			},
+			loadTemporaryPlace () {
+				let tempPlace;
+
+				// Get a place from a search view
+				if (this.searchedPlace && this.searchedPlace.active) {
+					this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
+
+					tempPlace = {
+						"placeName": this.searchedPlace.structured_formatting.main_text,
+						"placeLat": this.selectedLocation.lat,
+						"placeLng": this.selectedLocation.lng,
+						"placeSettings": {
+							"runwayOrientation": "45",
+							"public": false,
+							"maxWindSpeed": 30,
+							"maxCrossWindSpeed": 19,
+							"minTemperature": "0",
+							"maxTemperature": 45,
+							"maxPrecipProbability": 10,
+							"maxWindBearingToRWY": 60
+						}
+					}
+
+					if (localStorage) {
+						localStorage.setItem('tempPlace', JSON.stringify(tempPlace));
+					}
+					this.$store.commit('PLACE_SAVE_PLACE_DATA', tempPlace);
+
+					return;
+				}
+
+				// Check if there is a temporary place in localStorage
+
+				if (localStorage) {
+					tempPlace = localStorage.getItem('tempPlace');
+					if (tempPlace) {
+						this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
+						this.$store.commit('PLACE_SAVE_PLACE_DATA', JSON.parse(tempPlace));
+						return;
+					} else {
+						// No place searched on found in localStorage
+						this.$router.push({ path: `/` });
+					}
+				} 
+
+				
 			},
 			loadSavedPlace () {
+				this.$store.commit('PLACE_VIEW_TYPE', 'saved');
 
 				WPAPI.getPlace({
 					user: this.$route.params.username,
@@ -156,7 +158,15 @@
 				}
 			},
 			'$route.params.place': function (place) {
-				this.loadSavedPlace();
+				if (this.$route.params.place) {
+					this.loadSavedPlace();
+				}
+			},
+			'$route': function (route) {
+				if (route.name == 'place') {
+					this.loadTemporaryPlace();
+				}
+				
 			}
 		},
 		data () {
