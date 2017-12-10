@@ -1,6 +1,10 @@
 <template>
 <div class="">
 	<div v-if="weatherData && !weatherIsLoading">
+		<div class="viewTitle viewTitle--placeDetails">
+			<h1 class="viewTitle__text">{{activeLocation.placeName}}</h1>
+		</div>
+		
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
 	</div>

@@ -2,14 +2,10 @@
 	<div class="">
 		<place-not-found v-if="place404" />
 
-		<login-view :message="message" @loggedIn="loggedIn" v-if="needToLogin" />
+		<login-view :message="message" v-if="needToLogin" />
 
 
 		<div v-else-if="place" class="">
-			<div class="" class="mainNav mainNav--weatherDetail">
-				<h1 class="mainNav__title">{{place.placeName}}</h1>
-				<button class="mainNav__contextMenu">...</button>
-			</div>
 			<place-details :activeLocation='place' />
 		</div>
 
@@ -107,10 +103,11 @@
 					user: this.$route.params.username,
 					place: this.$route.params.place
 				}).then((response) => {
-					if (response.data.success) {
+					if (response.data && response.data.success) {
 						this.$store.commit('PLACE_SAVE_PLACE_DATA', response.data.data.place)
 					} else {
-						if(response.data.data.errors) {
+						if(response.response.data.errors) {
+							let errors = response.response.data.errors;
 							// @todo: DRY!!!
 							let errorCode = function(code, errors) {
 								let check = errors.filter(function( obj ) {
@@ -122,12 +119,13 @@
 								return false;
 							}
 
-							if(errorCode("authentication-required", response.data.errors)) {
+							if(errorCode("authentication-required", errors)) {
 								this.needToLogin = true;
+								this.message = "You need to log in to see this place";
 								this.$store.commit('USER_AUTHENTICATION_REQUIRED')
 							}
 
-							if(errorCode("resource-does-not-exist", response.data.errors)) {
+							if(errorCode("resource-does-not-exist", errors)) {
 								// @todo: Place pseudo 404
 								this.place404 = true;
 							}
@@ -167,6 +165,9 @@
 					this.loadTemporaryPlace();
 				}
 				
+			},
+			place (place) {
+				this.$store.commit('GLOBAL_SET_TITLE', place.placeName)
 			}
 		},
 		data () {

@@ -10,7 +10,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		globalApp: {
-			globalMessages: []
+			globalMessages: [],
+			topBarTitle: ''
 		},
 		user: {
 			loggedIn: false,
@@ -51,6 +52,9 @@ export default new Vuex.Store({
 		'USER_LOG_OUT' (state) {
 			state.user.name = false;
 			state.user.loggedIn = false;
+		},
+		'USER_SAVE_TOKEN' (state, token) {
+			state.user.token = token;
 		},
 		'USER_AUTHENTICATION_REQUIRED' (state) {
 			state.user.authenticationRequired = true;
@@ -105,6 +109,10 @@ export default new Vuex.Store({
 		'GLOBAL_REMOVE_MESSAGE' (state, index) {
 			state.globalApp.globalMessages.splice(index, 1);
 		},
+		'GLOBAL_SET_TITLE' (state, title) {
+			state.globalApp.topBarTitle = title;
+		}
+		
 	},
 	actions: {
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {

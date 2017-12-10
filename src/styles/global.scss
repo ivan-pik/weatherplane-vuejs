@@ -119,3 +119,19 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+
+
+
+
+.viewTitle {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	position: fixed;
+	top: 0;
+	left: 40px;
+	right: 40px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

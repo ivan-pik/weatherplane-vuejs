@@ -11,6 +11,38 @@ const HTTP = axios.create({
 
 var api = {
 	// User Accounts
+
+	// Authenticate
+	authenticate(credentials) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/authenticate', credentials)
+			.then(function (response) {
+
+				if (response.data.success) {
+					// @todo: fix this!
+					HTTP.interceptors.request.use(
+						config => {
+							config.headers.authorization = getLocalToken();
+							return config;
+						},
+						error => Promise.reject(error)
+					);
+
+					resolve(response.data.token);
+
+				} else {
+					reject();
+				}
+				
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+		
+	},
+
+
 	// Change order of places
 	reorderPlaces(payload) {
 		HTTP.post('/places/reorder-places', payload)
