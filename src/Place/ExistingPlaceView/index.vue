@@ -18,7 +18,6 @@
 </template>
 <script>
 	import Vue from 'vue'
-	import saveLocation from '../saveLocation/index.vue';
 	import {HTTP} from '../../http-common';
 	import WPAPI from '../../wpapi/index';
 	import placeNotFound from '../placeNotFound/index.vue';
@@ -61,7 +60,7 @@
 						"placeLat": this.selectedLocation.lat,
 						"placeLng": this.selectedLocation.lng,
 						"placeSettings": {
-							"runwayOrientation": "45",
+							"runwayOrientation": this.bearing,
 							"public": false,
 							"maxWindSpeed": 30,
 							"maxCrossWindSpeed": 19,
@@ -137,6 +136,9 @@
 		computed: {
 			authenticated () {
 				return this.$store.state.user.authenticated;
+			},
+			bearing () {
+				return this.$store.state.placeSearch.bearing;
 			},
 			place () {
 				return this.$store.state.existingPlaceView.place;

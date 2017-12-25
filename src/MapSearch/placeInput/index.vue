@@ -1,5 +1,6 @@
 <template>
     <div class="">
+    
       <form v-on:submit.prevent="onSubmit">
         <input
           @keyup.down="nextSuggestion"

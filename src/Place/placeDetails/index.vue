@@ -4,9 +4,25 @@
 		<div class="viewTitle viewTitle--placeDetails">
 			<h1 class="viewTitle__text">{{activeLocation.placeName}}</h1>
 		</div>
+
+		<div class="placeContextMenu">
+			<button class="placeContextMenu__toggler"
+			@click="contextMenuOpen=!contextMenuOpen">
+			C
+			</button>
+			<ul class="placeContextMenu__list" v-if="contextMenuOpen">
+				<li class="placeContextMenu__list-item" v-if="placeViewType=='temporary'"
+				@click="goToSaveRoute"
+				>Save location</li>
+				<li class="placeContextMenu__list-item" v-if="placeViewType=='saved'" 
+				@click="openPlaceSettings">Place Settings</li>
+			</ul>
+		</div>
 		
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
+
+		
 	</div>
 
 	<div v-else>
@@ -31,7 +47,7 @@
 				components: {
 					'weather-details-data' : weatherDetailsData,
 					'hourly-view' : hourlyView,
-					'load-screen' : loadScreen
+					'load-screen' : loadScreen,
 					
 				},
 
@@ -59,10 +75,13 @@
 				this.fetchWeather();
 			},
 			methods: {
-				saveThisPlace () {
-					if (this.loggedIn) {
-						this.openSaveOptions = true;
-					}
+				goToSaveRoute () {
+					this.contextMenuOpen = false;
+					this.$router.push('save-place');
+				},
+
+				openPlaceSettings () {
+					this.$router.push({ path: `/${this.activeLocation._userID}/${this.activeLocation.placeSlug}/settings` });
 				},
 		
 				fetchWeather () {
@@ -143,7 +162,8 @@
 					errors: null,
 					placeName: '',
 					placeIsPublic: false,
-					weatherIsLoading: true
+					weatherIsLoading: true,
+					contextMenuOpen: false
 				}
 			}
 		}

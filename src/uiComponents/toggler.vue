@@ -31,6 +31,11 @@
 		props: {
 			options: {
 				type: Array
+				// {
+				//	label: 'Both',
+				// 				value: 'both',
+				// 				default: true
+				// 	},
 			},
 		},
 		created () {

@@ -36,11 +36,6 @@ body {
 	padding: 10px;
 }
 
-.uiButton {
-	background: orange;
-	padding: 10px;
-	margin: 0 5px;
-}
 
 .globalMessages {
 	position: fixed;
@@ -138,5 +133,88 @@ body {
 
 .uiTabs {
 	height: 40px;
+	display: flex;
+}
+
+.uiTabs__tab {
+	flex: 1 1 auto;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border-bottom: 2px solid silver;
+}
+
+.uiTabs__tab--active {
+	border-bottom: 2px solid green;
+}
+
+
+// @todo: sort out
+
+.mapSearchView_wrapper {
+	position: relative;
+	height: calc(100vh - 120px);
+}
+
+
+.googleMap {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	#map {
+		position: absolute !important;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+}
+
+// ---
+
+.uiTextInputGroup {
 	display: block;
+	margin: 1em;
+
+	.help {
+		font-size: 12px;
+		display: block;
+		margin: 1em 0;
+	}
+}
+
+.uiLabel {
+	font-size: 12px;
+}
+
+.uiTextInput {
+	display: block;
+	border-bottom: 2px solid green;
+	width: 100%;
+	padding: 1em 0;
+
+	&.is-invalid {
+		border-bottom-color: red;
+		background: pink;
+	}
+}
+
+.uiButton {
+	display: block;
+	width: 100%;
+	background: green;
+	padding: 1em;
+	color: #fff;
+}
+
+.uiCheckBox {
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	background: #ddd;
+	&:checked {
+		background-color:green;
+	}
 }

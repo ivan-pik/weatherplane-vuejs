@@ -36,7 +36,7 @@
 </template>
 
 <script>
-	import {HTTP} from '../http-common';
+	import WPAPI from '../wpapi/index';
 	import placesListItem from './placesListItem.vue';
 	
 
@@ -157,26 +157,13 @@
 				this.arranging = true;
 			},
 			loadPlacesData () {
-				// @todo: move this to API models
-				HTTP.get('places/' + this.userName)
-				.then(response => {
-					if (response.data.success) {
-						let newPlaces = response.data.data.places;
-						if (newPlaces !=this.places) {
+				WPAPI.getUserPlaces(this.userName)
+				.then(places => {
+					this.$store.dispatch('USER_GET_PLACES', places);
 
-							newPlaces.sort(function(placeA, placeB) {
-								return (placeA.listOrder > placeB.listOrder)
-							});
-
-							this.$store.dispatch('USER_GET_PLACES', newPlaces);
-						}
-						this.$nextTick(function () {
-							this.getListDimensions();
-						});
-					}
-				}).catch(err => {
-					//@todo: error message
-
+					this.$nextTick(function () {
+						this.getListDimensions();
+					});
 				});
 			}
 		},

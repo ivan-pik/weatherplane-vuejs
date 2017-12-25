@@ -90,7 +90,10 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
+    watchOptions: {
+      ignored: /node_modules/
+    }
   },
   performance: {
     hints: false

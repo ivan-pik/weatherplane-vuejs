@@ -14,3 +14,31 @@
 		padding: 1em;
 	}
 }
+
+
+.placeContextMenu {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 1;
+}
+
+.placeContextMenu__toggler {
+	display: block;
+	width: 40px;
+	height: 40px;
+	background-color: #ccc;
+}
+
+.placeContextMenu__list {
+	position: absolute;
+	right: 0;
+	top: 40px;
+	background: #ccc;
+}
+
+.placeContextMenu__list-item {
+	display: block;
+	padding: 0.5em;
+	white-space: nowrap;
+}

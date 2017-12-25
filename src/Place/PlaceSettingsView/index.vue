@@ -1,33 +1,17 @@
 <template>
 	<div class="placeSettingsView">
 		<div class="mainNav">
-			<h1 class="mainNav__title">Settings</h1>
+			<h1 class="mainNav__title">Place Settings - {{place.placeName}}</h1>
 		</div>
 
-		<form  v-on:submit.prevent="onSubmit">
-			<label class="label" for="username">Place Name</label>
-			<br>
-			<input
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placeName') }"
-				name="placeName"
-				v-model="placeName"
-				type="text"
-				placeholder="Location name here"
-			>
-			<br>
-
-		</form>
-
-		// @todo: This could be component shared in Save place as well
-
-		Public
-
-		Runway orientation
-
-		Location
+		Rename <br>
+		Public <br>
+		Delete <br>
+		Runway orientation 
 
 		{{place}}
+
+		
 
 	</div>
 </template>

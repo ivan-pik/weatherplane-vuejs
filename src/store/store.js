@@ -70,6 +70,9 @@ export default new Vuex.Store({
 		'PLACE_SEARCH_PLACE_SELECTED' (state, place) {
 			state.placeSearch.place = place;
 		},
+		'PLACE_SEARCH_BEARING' (state, bearing) {
+			state.placeSearch.bearing = bearing;
+		},
 		'LOCATION_SAVE_ACTIVE_LOCATION' (state, coordinates) {
 			state.placeSearch.selectedLocation.coordinates = coordinates;
 			state.placeSearch.placeSelected = true;

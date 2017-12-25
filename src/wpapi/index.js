@@ -112,6 +112,22 @@ var api = {
 			});	
 		});
 	},
+	getUserPlaces(username) {
+		return new Promise(function(resolve, reject) {
+			HTTP.get(`/places/${username}/`)
+			.then(function (response) {
+				let newPlaces = response.data.data.places;
+				newPlaces.sort(function(placeA, placeB) {
+					return (placeA.listOrder > placeB.listOrder)
+				});
+
+				resolve(newPlaces);
+			})
+			.catch(function (error) {
+				resolve(error);
+			});	
+		});
+	},
 	// Retrieve lost password
 	retrieveLostPassword(payload) {
 		return new Promise(function(resolve, reject) {

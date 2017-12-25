@@ -4,7 +4,30 @@
 	bottom: 40px;
 	width: 100%;
 	background: rgba(green,0.5);
+	transition: all 200ms ease-in-out;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	
 }
+.bearingSelector--inactive {
+	pointer-events: none;
+	background: rgba(#fff,0);
+	opacity: 0.8;
+	.bearingSelectorDial__knob-wrapper {
+		opacity: 0;
+	}
+}
+
+.bearingSelector--active {
+	pointer-events: all;
+}
+
+.bearingSelector--activeDial {
+	background: rgba(green,0.2);
+}
+
 
 .bearingSelector__display {
 	text-align: center;

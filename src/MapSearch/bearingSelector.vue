@@ -1,5 +1,11 @@
 <template>
-		<div class="bearingSelector">
+		<div class="bearingSelector"
+			:class="{
+				'bearingSelector--activeDial' : isDragging,
+				'bearingSelector--active' : active,
+				'bearingSelector--inactive' : !active
+			}"
+		>
 
 			<div class="bearingSelector__display" v-html="bearingDisplay">
 			</div>
@@ -30,16 +36,28 @@
 						x2="300"
 						y2="150"
 					/>
-					<circle 
-						class="bearingSelectorDial__knob"
-						ref="knob"
-						cx="150"
-						cy="270"
-						r="20"
-						:class="{
-							'bearingSelectorDial__knob--active' : isDragging
-						}"
-					/>
+
+					<svg class="bearingSelectorDial__knob-wrapper" viewBox="0 0 40 40" version="1.1" ref="knob"
+						width="40" height="40"
+						x="130" y="250"
+					>
+						<circle 
+							class="bearingSelectorDial__knob"
+							cx="20"
+							cy="20"
+							r="20"
+							:class="{
+								'bearingSelectorDial__knob--active' : isDragging
+							}"
+						/>
+
+						<polygon fill="#000" points="5 20 15 10 15 30"
+						></polygon>
+						<polygon fill="#000" points="35 20 25 10 25 30"
+						></polygon>
+					</svg>
+
+					
 
 					<text class="bearingSelectorDial__direction"
 					x="50" y="140"
@@ -63,9 +81,6 @@
 				 </g>
 			</svg>
 
-			<ui-toggler
-				:options="directionOptions"
-			/>
 
 		</div>
 
@@ -91,12 +106,21 @@
 					document.removeEventListener('mousemove', this.mousemoveHandler);
 				},
 
+				props: {
+					active: {
+						type: Boolean
+					},
+					value: {
+						type: Number
+					}
+				},
+
 				computed: {
 					rotationStyle () {
 						return `rotate(${this.rotation} 150 150)`;
 					},
 					bearingDisplay () {
-						var bearingString = "" + this.bearing;
+						var bearingString = "" + this.value;
 						var slength = bearingString.length;
 
 						var spans = function (value) {
@@ -141,7 +165,9 @@
 			
 				methods: {
 					mousedownHandler (event) {
-						if (event.target == this.$refs.knob) {
+						if (event.target == this.$refs.knob ||
+							event.target.parentElement == this.$refs.knob
+						) {
 							this.isDragging = true;
 						}
 					},
@@ -180,29 +206,15 @@
 							}
 
 							this.bearing = Math.floor(newBearing);
+
+							this.$emit('input', this.bearing);
 						}
 					},
 				},
 				data () {
 					return {
 						rotation: 0,
-						bearing: 90,
 						isDragging: false,
-						directionOptions: [
-							{
-								label: 'Left',
-								value: 'left'
-							},
-							{
-								label: 'Both',
-								value: 'both',
-								default: true
-							},
-							{
-								label: 'Right',
-								value: 'right'
-							}
-						]
 					}
 				}
 		}
