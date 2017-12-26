@@ -27,13 +27,11 @@ body {
 }
 
 .uiButtonGroup {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background: black;
+	// position: fixed;
+	// bottom: 0;
+	// left: 0;
+	// right: 0;
 	display: flex;
-	padding: 10px;
 }
 
 
@@ -217,4 +215,32 @@ body {
 	&:checked {
 		background-color:green;
 	}
+}
+
+
+
+.uiGroup {
+	display: block;
+	border: 1px solid red;
+	padding: 1em;
+	margin: 1em;
+}
+
+.uiGroup__title {
+	border-bottom: 1px solid #ddd;
+	display: block;
+	width: 100%;
+}
+
+.uiModal {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: auto;
+	background: #fff;
+	z-index: 11000;
 }

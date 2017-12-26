@@ -118,16 +118,18 @@
 	background: $colorPanel;
 	height: 40px;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	color: $textLabelColour;
-	padding: 0 $widthGridSpace;
+	padding: 0 0 0 $widthGridSpace;
 }
 
 .limitSettingsOverview__button {
 	color: $textLabelColour;
 	text-transform: uppercase;
 	font-size: 9px;
+	white-space: nowrap;
+	width: 20%;
+	text-align: center;
 
 	svg {
 		vertical-align: middle;
@@ -138,11 +140,64 @@
 	}
 }	
 
+.limitSettingsOverview__params-wrapper {
+	position: relative;
+	height: 40px;
+	align-items: center;
+	width: 80%;
+}
+
+.limitSettingsOverview__params-wrapper-scroller {
+	display: flex;
+	justify-content: space-between;
+	overflow: auto;
+	height: 40px;
+	align-items: center;
+	width: 100%;
+}
+
+.limitSettingsOverview__params-wrapper-fader {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: 1;
+
+	&::after, &::before {
+		content: '';
+		display: block;
+		height: 40px;
+		width: 15px;
+		position: absolute;
+		background: rgba(237,237,237,1);
+		background: -moz-linear-gradient(left, rgba(237,237,237,1) 0%, rgba(237,237,237,0) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(237,237,237,1)), color-stop(100%, rgba(237,237,237,0)));
+		background: -webkit-linear-gradient(left, rgba(237,237,237,1) 0%, rgba(237,237,237,0) 100%);
+		background: -o-linear-gradient(left, rgba(237,237,237,1) 0%, rgba(237,237,237,0) 100%);
+		background: -ms-linear-gradient(left, rgba(237,237,237,1) 0%, rgba(237,237,237,0) 100%);
+		background: linear-gradient(to right, rgba(237,237,237,1) 0%, rgba(237,237,237,0) 100%);
+	}
+	&:after {
+		right: 0;
+		transform: rotate(180deg);
+	}
+	&:before {
+		left: 0;
+	}
+}
+
 .limitSettingsOverview__param {
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding: 0 0 0 30px;
+	margin: 0 0 0 1em;
+
+	&:last-child {
+		padding-right: 1em;
+	}
 
 	svg {
 		position: absolute;
@@ -158,7 +213,7 @@
 	order: 1;
 	font-size: 7px;
 	text-transform: uppercase;
-	
+	white-space: nowrap;
 }
 
 .limitSettingsOverview__value {
@@ -183,6 +238,20 @@
 	padding-left: 27px;
 	svg {
 		top: 4px;
+	}
+}
+
+.limitSettingsOverview__param--temperature {
+	padding-left: 18px;
+	svg {
+		top: -2px;
+	}
+}
+
+.limitSettingsOverview__param--precipProbability {
+	padding-left: 20px;
+	svg {
+		top: 2px;
 	}
 }
 

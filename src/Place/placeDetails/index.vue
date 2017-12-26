@@ -16,12 +16,13 @@
 				>Save location</li>
 				<li class="placeContextMenu__list-item" v-if="placeViewType=='saved'" 
 				@click="openPlaceSettings">Place Settings</li>
+				<li class="placeContextMenu__list-item" v-if="placeViewType=='saved'" 
+				@click="openLimitsSettings">Weather Limits Settings</li>
 			</ul>
 		</div>
 		
 		<weather-details-data :weather="weatherData.hourly" />
 		<hourly-view :weather="weatherData" />
-
 		
 	</div>
 
@@ -78,6 +79,10 @@
 				goToSaveRoute () {
 					this.contextMenuOpen = false;
 					this.$router.push('save-place');
+				},
+
+				openLimitsSettings () {
+
 				},
 
 				openPlaceSettings () {

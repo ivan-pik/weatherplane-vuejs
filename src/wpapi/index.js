@@ -53,6 +53,154 @@ var api = {
 			console.log(error);
 		});
 	},
+
+	// Update place name
+	/*
+	payload = {
+		placeName:
+		userID:
+		placeOID: 
+	}
+	*/
+	updatePlaceName(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/update-name/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error.response.data);
+			});	
+		});
+	},
+
+	// Update place slug
+	/*
+	payload = {
+		placeSlug:
+		userID:
+		placeOID: 
+	}
+	*/
+	updatePlaceSlug(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/update-slug/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error.response.data);
+			});	
+		});
+	},
+
+	// Update place privacy
+	/*
+	payload = {
+		placePrivacy:
+		userID:
+		placeOID: 
+	}
+	*/
+	updatePlacePrivacy(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/update-privacy/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				debugger;
+				reject(error.response.data);
+			});	
+		});
+	},
+
+	// Update place coordinates
+	/*
+	payload = {
+		coordinates: {lat: ,lng:}
+		userID:
+		placeOID: 
+	}
+	*/
+	updatePlaceCoordinates(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/update-coordinates/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				debugger;
+				reject(error.response.data);
+			});	
+		});
+	},
+
+	/*
+	payload = {
+		bearing: 0-359
+		userID:
+		placeOID: 
+	}
+	*/
+	updatePlaceBearing (payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/update-bearing/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error.response.data);
+			});	
+		});
+	},
+
+
+	/*
+	payload = OID
+	*/
+	deletePlace (payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post(`/places/delete/`, payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.place);
+				} else {
+					reject(response.data.data)
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error.response.data);
+			});	
+		});
+	},
+
 	// Fetch place details
 	getPlace(payload) {
 		return new Promise(function(resolve, reject) {

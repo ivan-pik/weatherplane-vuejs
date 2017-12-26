@@ -28,7 +28,7 @@ const routes = [
     { path: '/save-place', name: 'saveplace', component: SaveLocationView },
     { path: '/:username/', component: UserPlacesView },
 		{ path: '/:username/:place', component: ExistingPlaceView },
-    { path: '/:username/:place/settings', component: PlaceSettingsView }
+    { path: '/:username/:place/settings', name: 'placeSettings', component: PlaceSettingsView }
 ]
 
 const router = new VueRouter({
