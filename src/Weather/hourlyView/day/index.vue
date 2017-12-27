@@ -26,6 +26,8 @@
 	import Hour from '../hour/index.vue';
 	import Date from './date/index.vue';
 	import Chart from '../../components/chart.vue';
+
+	// @todo: Floating date labels in the hour chart
 	
 	export default {
 		name: 'day',

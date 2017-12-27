@@ -2,20 +2,36 @@
 	<div class="">
 		Settings View
 
-		@todo: use browser locales to get the best initial Setting
-		@todo: note that these need to work for logged out / new places as well
 
-		@todo: Temp unit F / C
+		<div class="uiGroup">
+			<h3 class="uiGroup__title">
+				Change Units
+			</h3>
+			<setting-units 
+			/>
+			
+		</div>
 
-		@todo: Wind unit m/s / km/h  /  mph
+		<div class="uiGroup">
+			<h3 class="uiGroup__title">
+				Change Password
+			</h3>
+			<setting-password 
+			/>
+			
+		</div>
 
-		@todo: Change password
+		<div class="uiGroup">
+			<h3 class="uiGroup__title">
+				Change Email
+			</h3>
+			<setting-email 
+			/>
+		</div>
 
-		@todo: change email
 
-		@todo: 12/24 time format
 
-		@todo: Date format
+		
 		
 
 
@@ -25,10 +41,17 @@
 </template>
 <script>
 	import Vue from 'vue'
+	import settingUnits from './settingUnits.vue';
+	import settingPassword from './settingPassword.vue';
+	import settingEmail from './settingEmail.vue';
 
 	export default {
 		name: 'SettingsView',
-
+		components: {
+			'setting-units' : settingUnits,
+			'setting-password' : settingPassword,
+			'setting-email' : settingEmail,
+		},
 		data() {
 			return {
 

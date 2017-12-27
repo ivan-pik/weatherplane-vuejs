@@ -1,0 +1,137 @@
+<template>
+	<div class="userSetting userSetting--password">
+		<div class="uiTextInputGroup">
+			<label class="uiLabel" for="placeSlug">Old password
+			</label>
+			<input
+				class="uiTextInput"
+				v-validate="{ rules: { required: true } }"
+				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
+				name="oldPassword"
+				v-model="newValue"
+				type="text"
+				placeholder="URL here"
+			>
+			
+			<span
+				v-show="validationErrors.has('oldPassword')"
+				class="help is-danger">{{ validationErrors.first('oldPassword') }}
+			</span>
+		</div>
+
+		<div class="uiTextInputGroup">
+			<label class="uiLabel" for="placeSlug">New password
+			</label>
+			<input
+				class="uiTextInput"
+				v-validate="{ rules: { required: true } }"
+				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
+				name="newPassword"
+				v-model="newValue"
+				type="text"
+				placeholder="URL here"
+			>
+			
+			<span
+				v-show="validationErrors.has('newPassword')"
+				class="help is-danger">{{ validationErrors.first('newPassword') }}
+			</span>
+		</div>
+
+		<div class="uiTextInputGroup">
+			<label class="uiLabel" for="placeSlug">Repeat new password
+			</label>
+			<input
+				class="uiTextInput"
+				v-validate="{ rules: { required: true } }"
+				:class="{'input': true, 'is-danger': validationErrors.has('newPasswordConfirm') }"
+				name="newPasswordConfirm"
+				v-model="newValue"
+				type="text"
+				placeholder="URL here"
+			>
+			
+			<span
+				v-show="validationErrors.has('newPasswordConfirm')"
+				class="help is-danger">{{ validationErrors.first('newPasswordConfirm') }}
+			</span>
+		</div>
+
+
+		<div class="uiButtonGroup" v-if="valueChanged">
+			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton">Save</button>
+			<button  @click="reset" class="uiButton">Reset</button>
+		</div>
+
+	</div>
+</template>
+
+<script>
+	import Vue from 'vue';
+	
+	export default {
+		name: 'userSettingPassword',
+		props: {
+			value: {
+				type: String
+			}
+		},
+		mounted () {
+			this.copyOriginalSetting(this.value);
+		},
+		watch: {
+			newValue (newValue) {
+				if (newValue != this.value) {
+					this.valueChanged = true;
+				} else {
+					this.valueChanged = false;
+				}
+
+				this.checkAvailability(newValue);
+			}
+		},
+		computed: {
+			placesList () {
+				return this.$store.state.user.places;
+			}
+		},
+		methods: {
+			copyOriginalSetting (value) {
+				this.newValue = this.deep_copy(value);
+			},
+			deep_copy (obj) {
+				// @todo: make object spread operator working with babel/webpack
+				return JSON.parse(JSON.stringify(obj));
+			},
+			reset() {
+				this.newValue = '' + this.value;
+			},
+			saveSetting () {
+				this.valueChanged = false;
+				this.$emit('updateSetting', this.newValue);
+			},
+			checkAvailability (newValue) {
+				var filtered = this.placesList.filter(function(item) {
+					return item.placeSlug.toLowerCase() == newValue.toLowerCase();
+				});
+
+
+				if (filtered.length != 0) {
+					this.urlAvailable =  false;
+					return false;
+				} else {
+					this.urlAvailable = true;
+					return true;
+				}
+			}
+		},
+		data () {
+			return {
+				newValue: '',
+				valueChanged: false,
+				urlAvailable: false
+			}
+		}
+	}
+
+</script>
