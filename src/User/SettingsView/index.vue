@@ -2,6 +2,8 @@
 	<div class="">
 		Settings View
 
+		// @todo: check if logged in
+
 
 		<div class="uiGroup">
 			<h3 class="uiGroup__title">

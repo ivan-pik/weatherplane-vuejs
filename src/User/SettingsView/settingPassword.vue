@@ -8,7 +8,7 @@
 				v-validate="{ rules: { required: true } }"
 				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
 				name="oldPassword"
-				v-model="newValue"
+				v-model="oldPassword"
 				type="text"
 				placeholder="URL here"
 			>
@@ -27,7 +27,7 @@
 				v-validate="{ rules: { required: true } }"
 				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
 				name="newPassword"
-				v-model="newValue"
+				v-model="newPassword"
 				type="text"
 				placeholder="URL here"
 			>
@@ -46,7 +46,7 @@
 				v-validate="{ rules: { required: true } }"
 				:class="{'input': true, 'is-danger': validationErrors.has('newPasswordConfirm') }"
 				name="newPasswordConfirm"
-				v-model="newValue"
+				v-model="newPasswordConfirm"
 				type="text"
 				placeholder="URL here"
 			>
@@ -59,8 +59,7 @@
 
 
 		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton">Save</button>
-			<button  @click="reset" class="uiButton">Reset</button>
+			<button @click="saveSetting" class="uiButton">Save</button>
 		</div>
 
 	</div>
@@ -68,6 +67,11 @@
 
 <script>
 	import Vue from 'vue';
+	import WPAPI from '../../wpapi/index';
+
+	// @todo: check if newPassword and newPasswordConfirm matches
+	// @todo: check if pass has changed
+	// @todo: handle wrong password condition
 	
 	export default {
 		name: 'userSettingPassword',
@@ -76,18 +80,14 @@
 				type: String
 			}
 		},
-		mounted () {
-			this.copyOriginalSetting(this.value);
-		},
 		watch: {
-			newValue (newValue) {
+			newPassword (newValue) {
 				if (newValue != this.value) {
 					this.valueChanged = true;
 				} else {
 					this.valueChanged = false;
 				}
 
-				this.checkAvailability(newValue);
 			}
 		},
 		computed: {
@@ -96,38 +96,42 @@
 			}
 		},
 		methods: {
-			copyOriginalSetting (value) {
-				this.newValue = this.deep_copy(value);
-			},
-			deep_copy (obj) {
-				// @todo: make object spread operator working with babel/webpack
-				return JSON.parse(JSON.stringify(obj));
-			},
-			reset() {
-				this.newValue = '' + this.value;
-			},
 			saveSetting () {
-				this.valueChanged = false;
-				this.$emit('updateSetting', this.newValue);
-			},
-			checkAvailability (newValue) {
-				var filtered = this.placesList.filter(function(item) {
-					return item.placeSlug.toLowerCase() == newValue.toLowerCase();
+				WPAPI.updatePassword(
+					{
+						password: this.oldPassword,
+						newPassword: this.newPassword
+					}
+				).then((user) => {
+					this.$store.commit('GLOBAL_ADD_MESSAGE', {
+						text: 'Password updated',
+						type: 'success',
+						dismiss: 'auto'
+					});
+					this.valueChanged = false;
+				})
+				.catch((error) => {
+						this.$store.commit('GLOBAL_ADD_MESSAGE', {
+							text: 'Ooops, something went wrong',
+							type: 'error',
+						});
 				});
-
-
-				if (filtered.length != 0) {
-					this.urlAvailable =  false;
-					return false;
-				} else {
-					this.urlAvailable = true;
+			},
+			errorCode (code, errors) {
+				let check = errors.filter(function( obj ) {
+					return obj.code == code;
+				});
+				if (check.length > 0) {
 					return true;
 				}
+				return false;
 			}
 		},
 		data () {
 			return {
-				newValue: '',
+				newPassword: '',
+				oldPassword: '',
+				newPasswordConfirm: '',
 				valueChanged: false,
 				urlAvailable: false
 			}

@@ -1,48 +1,27 @@
 <template>
 	<div class="userSetting userSetting--password">
+
 		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">Password
+			<label class="uiLabel" for="newEmail">New email
 			</label>
 			<input
 				class="uiTextInput"
 				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
-				name="oldPassword"
-				v-model="newValue"
+				:class="{'input': true, 'is-danger': validationErrors.has('newEmail') }"
+				name="newEmail"
+				v-model="newEmail"
 				type="text"
 				placeholder="URL here"
 			>
 			
 			<span
-				v-show="validationErrors.has('oldPassword')"
-				class="help is-danger">{{ validationErrors.first('oldPassword') }}
+				v-show="validationErrors.has('newEmail')"
+				class="help is-danger">{{ validationErrors.first('newEmail') }}
 			</span>
 		</div>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">New email
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
-				name="newPassword"
-				v-model="newValue"
-				type="text"
-				placeholder="URL here"
-			>
-			
-			<span
-				v-show="validationErrors.has('newPassword')"
-				class="help is-danger">{{ validationErrors.first('newPassword') }}
-			</span>
-		</div>
-
-
-
-		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton">Save</button>
-			<button  @click="reset" class="uiButton">Reset</button>
+		<div class="uiButtonGroup">
+			<button v-if="valueChanged"  @click="saveSetting" class="uiButton">Save</button>
 		</div>
 
 	</div>
@@ -50,68 +29,70 @@
 
 <script>
 	import Vue from 'vue';
+	import WPAPI from '../../wpapi/index';
 	
 	export default {
 		name: 'settingEmail',
 		props: {
-			value: {
-				type: String
-			}
+			
 		},
 		mounted () {
-			this.copyOriginalSetting(this.value);
 		},
 		watch: {
-			newValue (newValue) {
-				if (newValue != this.value) {
+			newEmail (val) {
+				if (val != '') {
 					this.valueChanged = true;
-				} else {
-					this.valueChanged = false;
 				}
-
-				this.checkAvailability(newValue);
 			}
 		},
 		computed: {
-			placesList () {
-				return this.$store.state.user.places;
+			userID () {
+				return this.$store.state.user.name;
 			}
 		},
 		methods: {
-			copyOriginalSetting (value) {
-				this.newValue = this.deep_copy(value);
-			},
-			deep_copy (obj) {
-				// @todo: make object spread operator working with babel/webpack
-				return JSON.parse(JSON.stringify(obj));
-			},
-			reset() {
-				this.newValue = '' + this.value;
-			},
 			saveSetting () {
-				this.valueChanged = false;
-				this.$emit('updateSetting', this.newValue);
-			},
-			checkAvailability (newValue) {
-				var filtered = this.placesList.filter(function(item) {
-					return item.placeSlug.toLowerCase() == newValue.toLowerCase();
+				WPAPI.updateEmail(
+					{
+						email: this.newEmail,
+						userID: this.userID
+					}
+				).then((user) => {
+					this.$store.commit('GLOBAL_ADD_MESSAGE', {
+						text: 'Email updated',
+						type: 'success',
+						dismiss: 'auto'
+					});
+					this.valueChanged = false;
+				})
+				.catch((error) => {
+					if(this.errorCode("email-already-exists", error.errors)) {
+						this.$store.commit('GLOBAL_ADD_MESSAGE', {
+							text: 'This email is already used',
+							type: 'error',
+						});
+					} else {
+						this.$store.commit('GLOBAL_ADD_MESSAGE', {
+							text: 'Ooops, something went wrong',
+							type: 'error',
+						});
+					}
 				});
-
-
-				if (filtered.length != 0) {
-					this.urlAvailable =  false;
-					return false;
-				} else {
-					this.urlAvailable = true;
+			},
+			errorCode (code, errors) {
+				let check = errors.filter(function( obj ) {
+					return obj.code == code;
+				});
+				if (check.length > 0) {
 					return true;
 				}
+				return false;
 			}
 		},
 		data () {
 			return {
-				newValue: '',
-				valueChanged: false,
-				urlAvailable: false
+				newEmail: '',
+				valueChanged: false
 			}
 		}
 	}

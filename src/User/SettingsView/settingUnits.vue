@@ -4,127 +4,145 @@
 		@todo: use browser locales to get the best initial Setting
 		@todo: note that these need to work for logged out / new places as well
 
-		@todo: Temp unit F / C
 
-		@todo: Wind unit m/s / km/h  /  mph
-
-		@todo: 12/24 time format
-
-		@todo: Date format
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">Password
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
-				name="oldPassword"
-				v-model="newValue"
-				type="text"
-				placeholder="URL here"
-			>
-			
-			<span
-				v-show="validationErrors.has('oldPassword')"
-				class="help is-danger">{{ validationErrors.first('oldPassword') }}
-			</span>
-		</div>
-
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">New email
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
-				name="newPassword"
-				v-model="newValue"
-				type="text"
-				placeholder="URL here"
-			>
-			
-			<span
-				v-show="validationErrors.has('newPassword')"
-				class="help is-danger">{{ validationErrors.first('newPassword') }}
-			</span>
-		</div>
+		
 
 
 
-		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton">Save</button>
-			<button  @click="reset" class="uiButton">Reset</button>
-		</div>
+		<ui-radio
+			:radios="dateFormatOptions"
+			v-on:change="updateDateFormatSetting"
+		>
+		<label slot="label">Date Format</label>
+		</ui-radio>
 
+		<ui-radio
+			:radios="windUnitOptions"
+			v-on:change="updateWindUnitSetting"
+		>
+		<label slot="label">Wind Unit</label>
+		</ui-radio>
+
+		<ui-radio
+			:radios="timeFormatOptions"
+			v-on:change="updateTimeFormatSetting"
+		>
+		<label slot="label">Time Format</label>
+		</ui-radio>
+
+		<ui-radio
+			:radios="temperatureOptions"
+			v-on:change="updateTemperatureSetting"
+		>
+		<label slot="label">Temperature Unit</label>
+		</ui-radio>
+
+
+		
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue';
-	
+	import uiRadio from '../../uiComponents/buttonRadio.vue';
+
 	export default {
 		name: 'settingUnits',
 		props: {
-			value: {
-				type: String
-			}
+			
+		},
+		components: {
+			'ui-radio' : uiRadio
 		},
 		mounted () {
-			this.copyOriginalSetting(this.value);
 		},
 		watch: {
-			newValue (newValue) {
-				if (newValue != this.value) {
-					this.valueChanged = true;
-				} else {
-					this.valueChanged = false;
-				}
-
-				this.checkAvailability(newValue);
-			}
+		
 		},
 		computed: {
-			placesList () {
-				return this.$store.state.user.places;
-			}
 		},
 		methods: {
-			copyOriginalSetting (value) {
-				this.newValue = this.deep_copy(value);
+			updateTemperatureSetting (value) {
+				console.log(value.value);
+				// @todo: update settings
 			},
-			deep_copy (obj) {
-				// @todo: make object spread operator working with babel/webpack
-				return JSON.parse(JSON.stringify(obj));
+			updateTimeFormatSetting (value) {
+				console.log(value.value);
+				// @todo: update settings
 			},
-			reset() {
-				this.newValue = '' + this.value;
+			updateWindUnitSetting (value) {
+				console.log(value.value);
+				// @todo: update settings
 			},
-			saveSetting () {
-				this.valueChanged = false;
-				this.$emit('updateSetting', this.newValue);
-			},
-			checkAvailability (newValue) {
-				var filtered = this.placesList.filter(function(item) {
-					return item.placeSlug.toLowerCase() == newValue.toLowerCase();
-				});
-
-
-				if (filtered.length != 0) {
-					this.urlAvailable =  false;
-					return false;
-				} else {
-					this.urlAvailable = true;
-					return true;
-				}
+			updateDateFormatSetting (value) {
+				console.log(value.value);
+				// @todo: update settings
 			}
 		},
 		data () {
 			return {
-				newValue: '',
-				valueChanged: false,
-				urlAvailable: false
+				temperatureOptions: [
+					{
+						label: '°F',
+						value: 'f',
+						active: false
+					},
+					{
+						label: '°C',
+						value: 'c',
+						active: true
+					}
+				],
+				timeFormatOptions: [
+					{
+						label: '12 Hours',
+						value: '12-hours',
+						active: false
+					},
+					{
+						label: '24 Hours',
+						value: '24-hours',
+						active: true
+					}
+				],
+				windUnitOptions: [
+					{
+						label: 'm/s',
+						value: 'meters-per-second',
+						active: true
+					},
+					{
+						label: 'km/h',
+						value: 'kilometers-per-hour',
+						active: false
+					},
+					{
+						label: 'mph',
+						value: 'miles-per-hour',
+						active: false
+					}
+				],
+				// @todo: make a list of sensible date formats
+				dateFormatOptions: [
+					{
+						label: '03-25 Wed',
+						value: 'meters-per-second',
+						active: false
+					},
+					{
+						label: '03/25 Wed',
+						value: 'meters-per-second',
+						active: false
+					},
+					{
+						label: 'March 25 Wed',
+						value: 'meters-per-second',
+						active: true
+					},
+				]
 			}
 		}
 	}
+
 
 </script>

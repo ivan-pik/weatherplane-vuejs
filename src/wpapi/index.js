@@ -299,7 +299,57 @@ var api = {
 				resolve(error);
 			});	
 		});
-	} 
+	}, 
+
+	// ----------------------------------------------------
+	// Update Password
+
+	/*
+	payload = {
+		email: String,
+		userID: String
+	}
+	*/
+
+	updateEmail(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-email', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+	// ----------------------------------------------------
+	// Update Password
+
+	/*
+	payload = {
+		password: String,
+		newPassword: String
+	}
+	*/
+
+	updatePassword(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-password', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
 }
 
 export default api;
