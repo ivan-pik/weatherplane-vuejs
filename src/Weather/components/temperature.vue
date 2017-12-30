@@ -1,16 +1,16 @@
 <template>
-	<div
+	<div 
 		class="hourTemperature"
 		:class="status"
 	>
-		{{temperature.toFixed(0)}}&deg;
+		{{temperatureDisplay}}&deg;
+		
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue';
 
-	// @todo: convert C to F depending on locale or user's settings
   
 	
 	export default {
@@ -21,6 +21,20 @@
 			},
 			status : {
 				type : String
+			}
+		},
+
+		computed: {
+			temperatureUnit () {
+				return this.$store.state.globalApp.settings.temperatureUnit;
+			},
+			temperatureDisplay () {
+				if (this.temperatureUnit == 'c') {
+					return Math.round(this.temperature);
+				} else {
+					// @todo: check this is the correct mathgic
+					return Math.round(this.temperature * 9 / 5 + 32);
+				}
 			}
 		},
 	 

@@ -77,7 +77,6 @@
 			},
 			reset() {
 				this.newValue = ['' + this.value[0], '' + this.value[1]];
-				debugger;
 			},
 			saveSetting () {
 				this.valueChanged = false;

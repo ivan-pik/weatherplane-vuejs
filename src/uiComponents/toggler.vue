@@ -103,7 +103,6 @@
 			}
 		},
 		watch: {
-		
 			currentValue (val) {
 				if (!this.isKnob) {
 					this.moveKnobToValue(val);
@@ -112,7 +111,6 @@
 		},
 		methods: {
 			trackClickHandler () {
-				debugger;
 				// @todo: this is broken
 				let newValue = Math.min(Math.round(event.offsetX / (
 					(this.posRight - this.posLeft) / this.nOfSteps)
@@ -126,12 +124,9 @@
 			},
 			moveKnob(distance) {
 				if(this.left != distance) {
-					
-
 					let knobOffset = Math.abs(this.left - distance);
 
 					let transitionTime = 200;
-
 
 					this.transitionStyle = {
 						transition: `all ${transitionTime}ms ease-in-out;`
@@ -142,7 +137,6 @@
 					setTimeout(() => {
 						this.transitionStyle = {};
 					}, transitionTime);
-
 				}
 			},
 			updateInput() {

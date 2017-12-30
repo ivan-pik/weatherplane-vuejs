@@ -302,7 +302,7 @@ var api = {
 	}, 
 
 	// ----------------------------------------------------
-	// Update Password
+	// Update Email
 
 	/*
 	payload = {
@@ -344,6 +344,122 @@ var api = {
 					resolve(response);
 				}
 				
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+
+
+	// ----------------------------------------------------
+	// Update Date Format
+
+	/*
+	payload = {
+		dateFormat: String
+	}
+	*/
+
+	updateDateFormat(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-date-format', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+
+	// ----------------------------------------------------
+	// Update Wind Unit
+
+	/*
+	payload = {
+		windUnit: String
+	}
+	*/
+
+	updateWindUnit(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-wind-unit', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+
+	// ----------------------------------------------------
+	// Update Time Format
+
+	/*
+	payload = {
+		timeFormat: String
+	}
+	*/
+
+	updateTimeFormat(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-time-format', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+	// ----------------------------------------------------
+	// Update Temperature Unit
+
+	/*
+	payload = {
+		temperatureUnit: String
+	}
+	*/
+
+	updateTemperatureUnit(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/change-temperature-unit', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+	// ----------------------------------------------------
+	// Get Public Settings
+
+	/*
+	payload = userId
+	*/
+
+	getPublicSettings(userId) {
+		return new Promise(function(resolve, reject) {
+			HTTP.get(`/settings/${userId}/`)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data);
+				}
 			})
 			.catch(function (error) {
 				reject(error);

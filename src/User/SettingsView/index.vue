@@ -2,7 +2,7 @@
 	<div class="">
 		Settings View
 
-		// @todo: check if logged in
+		
 
 
 		<div class="uiGroup">
@@ -14,7 +14,9 @@
 			
 		</div>
 
-		<div class="uiGroup">
+
+
+		<div class="uiGroup" v-if="loggedIn">
 			<h3 class="uiGroup__title">
 				Change Password
 			</h3>
@@ -23,7 +25,8 @@
 			
 		</div>
 
-		<div class="uiGroup">
+
+		<div class="uiGroup" v-if="loggedIn">
 			<h3 class="uiGroup__title">
 				Change Email
 			</h3>
@@ -53,6 +56,12 @@
 			'setting-units' : settingUnits,
 			'setting-password' : settingPassword,
 			'setting-email' : settingEmail,
+		},
+		computed: {
+			loggedIn() {
+				return this.$store.state.user.loggedIn;
+			},
+			
 		},
 		data() {
 			return {

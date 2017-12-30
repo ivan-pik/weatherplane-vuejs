@@ -25,7 +25,7 @@ export default {
       var payLoad = {
         userID :  user.username,
         password : user.password,
-        email : user.email
+        email : user.email,
       }
   // @todo: use axios resource here
       const url = `//localhost:4000/register`

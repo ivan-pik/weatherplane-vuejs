@@ -3,7 +3,8 @@
 		<h3 class="weatherDetails__cursorAt">
 			<status :status="totalStatus" />
 			<span class="weatherDetails__cursorTime">
-				<span class="weatherDetails__hour">{{cursorHours}}</span>:<span class="weatherDetails__minutes">{{cursorMinutes}}</span>
+				<span class="weatherDetails__hour">{{displayHour}}</span>:<span class="weatherDetails__minutes">{{cursorMinutes}}</span>
+				<span class="weatherDetails__am-pm" v-if="ampm">{{ampm}}</span>
 			</span> 
 			<span class="weatherDetails__cursorDate">
 				{{cursorDate}}
@@ -15,7 +16,7 @@
 					Wind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{windSpeed.toFixed(1)}} ms
+					{{windSpeedDisplay}} {{windSpeedUnitDisplay}}
 				</p>
 				<status :status="statusWindSpeed" />
 			</div>
@@ -24,7 +25,7 @@
 					Gusting To
 				</h3>
 				<p class="weatherDetails__value">
-					{{windGust.toFixed(1)}} ms
+					{{windGustDisplay}} {{windSpeedUnitDisplay}}
 				</p>
 				<status :status="statusGustSpeed" />
 			</div>
@@ -33,7 +34,7 @@
 					Temperature
 				</h3>
 				<p class="weatherDetails__value">
-					{{temperature.toFixed(0)}} &deg;C
+					{{temperatureDisplay}} &deg;{{temperatureUnitDisplay}}
 				</p>
 				<status :status="statusTemperature" />
 			</div>
@@ -54,7 +55,7 @@
 					Crosswind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{crossWindComponentRounded}} ms
+					{{crossWindComponentDisplay}} {{windSpeedUnitDisplay}}
 				</p>
 				<status :status="statusCrossWindComponent" />
 			</div>
@@ -192,21 +193,77 @@
 			}
 		},
 		computed: {
-			crossWindComponentRounded () {
-				return (this.crossWindComponent).toFixed(1);
-			},
 			crabAngle () {
 				return this.windBearingRelToRWY * 0.5;
+			},
+			timeFormat () {
+				return this.$store.state.globalApp.settings.timeFormat;
+			},
+			displayHour () {
+				if (this.timeFormat == '24-hours') {
+					this.ampm = false;
+					return this.cursorHours;
+				} else if (this.cursorHours > 12) {
+					this.ampm = 'PM';
+					return this.cursorHours - 12;
+				} else {
+					this.ampm = 'AM';
+					return this.cursorHours;
+				}
+			},
+			temperatureUnit () {
+				return this.$store.state.globalApp.settings.temperatureUnit;
+			},
+			windUnit () {
+				return this.$store.state.globalApp.settings.windUnit;
+			},
+			windSpeedUnitDisplay () {
+				if (this.windUnit == 'meters-per-second') {
+					return 'ms';
+				} else if (this.windUnit == 'kilometers-per-hour') {
+					return 'kph';
+				} else if (this.windUnit == 'miles-per-hour') {
+					return 'mph';
+				}
+			},
+			temperatureDisplay () {
+				if (this.temperatureUnit == 'c') {
+					return Math.round(this.temperature);
+				} else {
+					// @todo: check this is the correct mathgic
+					return Math.round(this.temperature * 9 / 5 + 32);
+				}
+			},
+			temperatureUnitDisplay () {
+				return this.temperatureUnit.toUpperCase();
+			},
+			windSpeedDisplay () {
+				return this.convertWindSpeedUnit(this.windSpeed);
+			},
+			windGustDisplay () {
+				return this.convertWindSpeedUnit(this.windGust);
+			},
+			crossWindComponentDisplay () {
+				return this.convertWindSpeedUnit(this.crossWindComponent);
 			}
+		
 			
 		},
 		methods: {
-			
-
+			convertWindSpeedUnit (ms) {
+				if (this.windUnit == 'meters-per-second') {
+					return ms.toFixed(1);
+				} else if (this.windUnit == 'kilometers-per-hour') {
+					return (ms * 3.6).toFixed(1);
+				} else if (this.windUnit == 'miles-per-hour') {
+					return (ms * 2.2369).toFixed(1);
+				}
+			}
 		},
 		data () {
 		  return {
-			tempStatus: 'yes'
+			tempStatus: 'yes',
+			ampm: false
 		  }
 		}
 

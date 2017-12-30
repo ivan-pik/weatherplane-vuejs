@@ -95,7 +95,6 @@
 					console.log("created");
 				},
 				mounted () {
-					debugger;
 					if (!this.placeSelected) {
 						this.$router.push('/');	
 					} else {
@@ -142,7 +141,6 @@
 								}
 							}
 
-							debugger;
 
 							WPAPI.createPlace(newPlace).then(response => {
 								if (response.data.success) {

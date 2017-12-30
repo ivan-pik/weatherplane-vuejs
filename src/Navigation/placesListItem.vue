@@ -226,7 +226,6 @@
 				},202);
 			},
 			openPlaceSettings () {
-				debugger;
 				let placeName = this.place.placeSlug;
 				let userName = this.activeUserName;
 				this.$router.push({ path: `/${userName}/${placeName}/settings` });

@@ -24,6 +24,8 @@
 <script>
 	import placesList from './placesList.vue';
 
+	// @todo: settings to open a panel, not a new view
+
 	export default {
 		name: 'Navigation',
 		components: {

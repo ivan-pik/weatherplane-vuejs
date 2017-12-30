@@ -13,10 +13,10 @@ export default new Vuex.Store({
 			globalMessages: [],
 			topBarTitle: '',
 			settings: {
-				dateFormat: '',
+				dateFormat: '',// @todo: set this
 				windUnit: '',
 				timeFormat: '',
-				temperature: '',
+				temperatureUnit: '',
 			}
 		},
 		user: {
@@ -121,17 +121,17 @@ export default new Vuex.Store({
 		'GLOBAL_SET_TITLE' (state, title) {
 			state.globalApp.topBarTitle = title;
 		},
-		'GLOBAL_SET_DATEFORMAT' (value) {
-			state.globalApp.dateFormat = value;
+		'GLOBAL_SET_DATEFORMAT' (state, value) {
+			state.globalApp.settings.dateFormat = value;
 		},
-		'GLOBAL_SET_WINDUNIT' (value) {
-			state.globalApp.windUnit = value;
+		'GLOBAL_SET_WINDUNIT' (state, value) {
+			state.globalApp.settings.windUnit = value;
 		},
-		'GLOBAL_SET_TIMEFORMAT' (value) {
-			state.globalApp.timeFormat = value;
+		'GLOBAL_SET_TIMEFORMAT' (state, value) {
+			state.globalApp.settings.timeFormat = value;
 		},
-		'GLOBAL_SET_TEMPERATURE' (value) {
-			state.globalApp.temperature = value;
+		'GLOBAL_SET_TEMPERATURE_UNIT' (state, value) {
+			state.globalApp.settings.temperatureUnit = value;
 		},
 		
 	},
