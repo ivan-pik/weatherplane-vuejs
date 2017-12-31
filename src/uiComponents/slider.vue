@@ -47,9 +47,6 @@
 			step: {
 				type: Number
 			},
-			initialValue: {
-				type: Number
-			},
 			name: {
 				type: String
 			}
@@ -68,17 +65,12 @@
 			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
 			this.posRight = (this.$refs.slider.getBoundingClientRect()).right;
 
-			// check for value input
 			
 			this.moveKnobToValue(this.currentValue);
 		},
 		computed: {
 			currentValue () {
-				if (this.modelValue !== undefined) {
-					return this.modelValue;
-				} else if (this.initialValue !== undefined) {
-					return this.initialValue;
-				} 
+				return this.modelValue;
 			},
 			concatStyles() {
 				return this.leftStyle + this.transitionStyle;
@@ -123,17 +115,19 @@
 		},
 		methods: {
 			trackClickHandler () {
-				let newValue = Math.min(Math.round(event.offsetX / this.stepSize), this.maxValue);
-				this.moveKnobToValue(newValue);
+				var progress = Math.min(this.minValue + event.offsetX / this.stepSize, this.maxValue);
+				this.moveKnobToValue(progress);
 			},
 			moveKnobToValue (val) {
-				let newLeft = val * this.stepSize;
+
+				var absoluteVal = val - (this.minValue);
+
+				let newLeft = absoluteVal * this.stepSize;
 				this.moveKnob(newLeft);
 
 			},
 			moveKnob(distance) {
 				if(this.left != distance) {
-					
 
 					let knobOffset = Math.abs(this.left - distance);
 
@@ -150,13 +144,7 @@
 				}
 			},
 			updateInput() {
-				// use 'change' event when v-model is used
 				this.$emit('change', this.returnedValue);
-				// use 'update' when value is returned in an event
-				this.$emit('update', {
-					value: this.returnedValue,
-					name: this.name
-				});
 			},
 			alignKnobToStep () {
 				let newLeft = ((this.returnedValue - this.minValue) / this.step) * this.stepSize;

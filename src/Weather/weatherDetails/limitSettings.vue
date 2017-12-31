@@ -58,7 +58,7 @@
 					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}}
 				</label>
 				<ui-slider
-					:minValue="0"
+					:minValue="-20"
 					:maxValue="40"
 					v-model="reactiveControls.minTemperature.currentValue"
 					:step="1"
