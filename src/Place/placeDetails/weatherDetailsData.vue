@@ -65,46 +65,48 @@
 		},
 		computed: {
 			limitSettingsControls () {
-				let controls = [
-					{
+				let controls = {
+					windSpeed: {
 						name: 'windSpeed',
 						label: 'Max wind speed',
 						maxValue: 50,
 						currentValue: this.settingsMaxWindSpeed
 					},
-					{
+					crossWindSpeed: {
 						name: 'crossWindSpeed',
 						label: 'Max cross wind speed',
-						maxValue: 50,
+						maxValue: this.settingsMaxWindSpeed,
 						currentValue: this.settingsMaxCrossWindSpeed
 					},
-					{
+					bearing: {
 						name: 'bearing',
 						label: 'Max crosswind bearing',
+						minValue: 0,
 						maxValue: 90,
 						currentValue: this.settingsMaxWindBearingToRWY
 					},
-					{
+					minTemperature: {
 						name: 'minTemperature',
 						label: 'Minimal Temperature',
-						minValue: 0,
-						maxValue: 50,
+						minValue: -40,
+						maxValue: this.settingsMaxTemperature,
 						currentValue: this.settingsMinTemperature
 					},
-					{
+					maxTemperature: {
 						name: 'maxTemperature',
 						label: 'Maximal Temperature',
-						minValue: 0,
+						minValue: this.settingsMinTemperature,
 						maxValue: 50,
 						currentValue: this.settingsMaxTemperature
 					},
-					{
+					precipitation: {
 						name: 'precipitation',
 						label: 'Chance of Rain',
+						minValue: 0,
 						maxValue: 100,
 						currentValue: this.settingsMaxPrecipProbability
 					},
-				];
+				};
 				return controls;
 			},
 			limitsSettingsPanelOpen () {
@@ -274,28 +276,13 @@
 		methods: {
 			saveSettings (value) {
 
-				let getItem = function (items, keyword)  {
-					let result = items.filter(function (item) {
-						return item.name == keyword;
-					});
-					if (result.length > 0) {
-						if (result[0].currentValue) {
-							return result[0].currentValue;
-						}
-					} else {
-						// @todo: throw error
-						console.error('Param not found:', keyword);
-					}
-					
-				};
-
 				let newSettings = {
-					maxCrossWindSpeed: getItem(value,'crossWindSpeed'),
-					maxPrecipProbability: getItem(value,'precipitation'),
-					maxWindBearingToRWY: getItem(value,'bearing'),
-					maxWindSpeed: getItem(value,'windSpeed'),
-					minTemperature: getItem(value,'minTemperature'),
-					maxTemperature: getItem(value,'maxTemperature')
+					maxCrossWindSpeed: value.crossWindSpeed.currentValue,
+					maxPrecipProbability: value.precipitation.currentValue,
+					maxWindBearingToRWY: value.bearing.currentValue,
+					maxWindSpeed: value.windSpeed.currentValue,
+					minTemperature: value.minTemperature.currentValue,
+					maxTemperature: value.maxTemperature.currentValue
 				};
 
 				// @todo move this to some API module

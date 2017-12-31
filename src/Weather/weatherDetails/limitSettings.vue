@@ -8,17 +8,91 @@
 
 			<div
 				class="limitSettings__control"
-				v-for="control in reactiveControls"
 			>
 				<label class="uiLabel">
-					{{control.label}}
+					{{reactiveControls.windSpeed.label}}: {{reactiveControls.windSpeed.currentValue}}
 				</label>
 				<ui-slider
-					:minValue="control.minValue || 0"
-					:maxValue="control.maxValue"
-					v-model="control.currentValue"
+					:minValue="reactiveControls.windSpeed.minValue || 0"
+					:maxValue="reactiveControls.windSpeed.maxValue"
+					v-model="reactiveControls.windSpeed.currentValue"
 					:step="1"
-					:name="control.name"
+					:name="reactiveControls.windSpeed.name"
+				/>
+			</div>
+
+			<div
+				class="limitSettings__control"
+			>
+				<label class="uiLabel">
+					{{reactiveControls.crossWindSpeed.label}}: {{reactiveControls.crossWindSpeed.currentValue}}
+				</label>
+				<ui-slider
+					:minValue="reactiveControls.crossWindSpeed.minValue || 0"
+					:maxValue="reactiveControls.windSpeed.currentValue"
+					v-model="reactiveControls.crossWindSpeed.currentValue"
+					:step="1"
+					:name="reactiveControls.crossWindSpeed.name"
+				/>
+			</div>
+
+			<div
+				class="limitSettings__control"
+			>
+				<label class="uiLabel">
+					{{reactiveControls.bearing.label}}: {{reactiveControls.bearing.currentValue}}
+				</label>
+				<ui-slider
+					:minValue="reactiveControls.bearing.minValue || 0"
+					:maxValue="reactiveControls.bearing.maxValue"
+					v-model="reactiveControls.bearing.currentValue"
+					:step="1"
+					:name="reactiveControls.bearing.name"
+				/>
+			</div>
+
+			<div
+				class="limitSettings__control"
+			>
+				<label class="uiLabel">
+					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}}
+				</label>
+				<ui-slider
+					:minValue="0"
+					:maxValue="40"
+					v-model="reactiveControls.minTemperature.currentValue"
+					:step="1"
+					:name="reactiveControls.minTemperature.name"
+				/>
+			</div>
+
+			<div
+				class="limitSettings__control"
+			>
+				<label class="uiLabel">
+					{{reactiveControls.maxTemperature.label}}: {{reactiveControls.maxTemperature.currentValue}}
+				</label>
+				<ui-slider
+					:minValue="0"
+					:maxValue="40"
+					v-model="reactiveControls.maxTemperature.currentValue"
+					:step="1"
+					:name="reactiveControls.maxTemperature.name"
+				/>
+			</div>
+
+			<div
+				class="limitSettings__control"
+			>
+				<label class="uiLabel">
+					{{reactiveControls.precipitation.label}}: {{reactiveControls.precipitation.currentValue}}
+				</label>
+				<ui-slider
+					:minValue="reactiveControls.precipitation.minValue || 0"
+					:maxValue="reactiveControls.precipitation.maxValue"
+					v-model="reactiveControls.precipitation.currentValue"
+					:step="1"
+					:name="reactiveControls.precipitation.name"
 				/>
 			</div>
 
@@ -50,7 +124,7 @@
 		},
 		props: {
 			controls: {
-				type: Array
+				type: Object
 			}
 		},
 		created () {
@@ -64,11 +138,33 @@
 		computed: {
 			settingsTweaked () {
 				let differences = 0;
-				 for (var i = 0; i < this.controls.length; i++) {
-					if (this.controls[i].currentValue != this.reactiveControls[i].currentValue) {
-						differences++;
-					} 
-				} 
+
+				
+
+				if (this.reactiveControls.windSpeed.currentValue != this.controls.windSpeed.currentValue) {
+					differences++;
+				}
+
+				if (this.reactiveControls.crossWindSpeed.currentValue != this.controls.crossWindSpeed.currentValue) {
+					differences++;
+				}
+
+				if (this.reactiveControls.bearing.currentValue != this.controls.bearing.currentValue) {
+					differences++;
+				}
+
+				if (this.reactiveControls.minTemperature.currentValue != this.controls.minTemperature.currentValue) {
+					differences++;
+				}
+
+				if (this.reactiveControls.maxTemperature.currentValue != this.controls.maxTemperature.currentValue) {
+					differences++;
+				}
+
+				if (this.reactiveControls.precipitation.currentValue != this.controls.precipitation.currentValue) {
+					differences++;
+				}
+
 				if (differences != 0) {
 					return true;
 				} else {

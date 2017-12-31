@@ -93,7 +93,7 @@
 				return this.left / this.sliderWidth;
 			},
 			range () {
-				return this.maxValue - this.minValue;
+				return  this.maxValue - this.minValue;
 			},
 			returnedValue () {
 				let notSteppedValue =  this.minValue + this.range * this.progress;

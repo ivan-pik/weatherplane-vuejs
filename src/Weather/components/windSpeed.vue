@@ -1,7 +1,7 @@
 <template>
 	<div class="hourWindSpeed">
-		<div :class="windSpeedStatus" class="hourWindSpeed__display hourWindSpeed__display--speed">{{windSpeedRounded}}</div>
-		<div :class="windGustStatus" v-if="displayGust" class="hourWindSpeed__display hourWindSpeed__display--gust">{{windGustRounded}}</div>
+		<div :class="windSpeedStatus" class="hourWindSpeed__display hourWindSpeed__display--speed">{{windSpeedDisplay}}</div>
+		<div :class="windGustStatus" v-if="displayGust" class="hourWindSpeed__display hourWindSpeed__display--gust">{{windGustDisplay}}</div>
 	</div>
 </template>
 
@@ -13,22 +13,30 @@
 		name: 'windSpeed',
 		props: ['windSpeed','windGust','windSpeedStatus','windGustStatus'],
 		computed: {
-			windSpeedRounded () {
-				return this.roundNumber(this.windSpeed,0);
-			},
-			windGustRounded () {
-				return this.roundNumber(this.windGust,0);
-			},
 			displayGust () {
-				return (this.roundNumber(this.windSpeed,0) != this.roundNumber(this.windGust,0));
+				return ( this.windSpeed.toFixed() != this.windGust.toFixed() );
+			},
+			windUnit () {
+				return this.$store.state.globalApp.settings.windUnit;
+			},
+			windSpeedDisplay () {
+				return this.convertWindSpeedUnit(this.windSpeed);
+			},
+			windGustDisplay () {
+				return this.convertWindSpeedUnit(this.windGust);
 			},
 		},
 	 
 		methods: {
-			roundNumber (value, length) {
-				return value.toFixed(length);
-			},
-
+			convertWindSpeedUnit (ms) {
+				if (this.windUnit == 'meters-per-second') {
+					return ms.toFixed(1);
+				} else if (this.windUnit == 'kilometers-per-hour') {
+					return (ms * 3.6).toFixed(1);
+				} else if (this.windUnit == 'miles-per-hour') {
+					return (ms * 2.2369).toFixed(1);
+				}
+			}
 		},
 		data () {
 		  return {
