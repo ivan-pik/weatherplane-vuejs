@@ -1,6 +1,12 @@
 <template>
 	<div class="hour">
 
+		<date-label 
+			 v-if="displayLabel"
+			 :date="dateDisplay"
+			 :scrollPosition="scrollPosition"
+		/>
+
 		<status :status="totalStatus" />
 
 		<hour-time :time="weather.time" />
@@ -44,6 +50,7 @@
 
 <script>
 	import Vue from 'vue';
+	import dateLabel from '../../components/dateLabel.vue';
 	import Status from '../../components/status.vue';
 	import hourTime from '../../components/hourTime.vue';
 	import windSpeed from '../../components/windSpeed.vue';
@@ -59,6 +66,9 @@
 			},
 			order: {
 				type: Number
+			},
+			scrollPosition: {
+				type: Number
 			}
 		},
 		mounted () {
@@ -71,6 +81,7 @@
 			window.removeEventListener('resize', this.resizeHandler);
 		},
 		components: {
+			'date-label' : dateLabel,
 			'status' : Status,
 			'hour-time': hourTime,
 			'wind-speed' : windSpeed,
@@ -79,6 +90,23 @@
 			'temperature' : temperature
 		},
 		computed: {
+			displayLabel () {
+				if (this.order === 0) {
+					return false;
+				} else {
+					var hour = (new Date(this.weather.time)).getHours();
+					if (hour === 0) {
+						return true;
+					} else {
+						return false;
+					}
+
+				}
+			},
+			dateDisplay () {
+				var awesomeDate = new Date(this.weather.time);
+				return awesomeDate.toLocaleDateString(navigator.language, { weekday: 'long', day: 'numeric', month: 'long' });
+			},
 
 			settingsRunwayOrientation () {
 				return parseFloat(this.$store.state.existingPlaceView.place.placeSettings.runwayOrientation);

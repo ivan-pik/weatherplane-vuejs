@@ -1,9 +1,12 @@
 <template>
 	<div v-if="weather" class="day-list">
+
+
 		<hour v-for="(hour, key) in weather"
 			:key="key"
 			:order="key" 
 			:weather="hour"
+			:scrollPosition="scrollPosition"
 			v-on:chartSpaceDummyUpdated="chartWidthHandler"
 		/>
 
@@ -43,6 +46,9 @@
 			},
 			isTouch: {
 				type: Boolean
+			},
+			scrollPosition: {
+				type: Number
 			}
 			
 			
@@ -52,8 +58,10 @@
 			'date' : Date,
 			'chart' : Chart
 		},
+
 		
 		computed: {
+			
 			
 			settingsMaxWindSpeed () {
 				return this.$store.state.existingPlaceView.place.placeSettings.maxWindSpeed;
@@ -62,6 +70,7 @@
 				return this.$store.getters.maxWindSpeed;
 			},
 			displayChart () {
+				// @todo: I forgot WTF is this for?
 				let i = 0;
 				this.weather.forEach(function(hour) {
 					i++;
@@ -76,12 +85,12 @@
 			chartWidthHandler (val) {
 				this.chartWidth = val.width;
 				this.chartLeftPos = val.left;
-			}
+			},
 		},
 		data () {
 		  return {
 			  chartWidth: false,
-			  chartLeftPos: 0
+			  chartLeftPos: 0,
 		  }
 		}
 
@@ -90,3 +99,4 @@
 
 
 </script>
+

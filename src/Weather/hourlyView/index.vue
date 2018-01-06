@@ -11,6 +11,7 @@
 			:cursorY="cursorY"
 			:cursorX="cursorX"
 			:isTouch="isTouch"
+			:scrollPosition="lastScrollPosition"
 		/>
 
 		<div class="scroller__spacer"
@@ -115,7 +116,7 @@
 				lastCursorPosition: 0,
 				cursorTicking: false,
 				isTouch: false,
-				fillSpaceHeight: ""
+				fillSpaceHeight: "",
 				
 			}
 		}
