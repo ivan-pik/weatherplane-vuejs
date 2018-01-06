@@ -119,11 +119,11 @@
 			},
 			convertWindSpeedUnit (ms) {
 				if (this.windUnit == 'meters-per-second') {
-					return ms.toFixed(1);
+					return ms.toFixed(0);
 				} else if (this.windUnit == 'kilometers-per-hour') {
-					return (ms * 3.6).toFixed(1);
+					return (ms * 3.6).toFixed(0);
 				} else if (this.windUnit == 'miles-per-hour') {
-					return (ms * 2.2369).toFixed(1);
+					return (ms * 2.2369).toFixed(0);
 				}
 			},
 			convertTemperatureUnit (c) {
