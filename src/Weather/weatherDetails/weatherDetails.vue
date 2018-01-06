@@ -104,7 +104,7 @@
 	import status from '../components/status.vue';
 
 	export default {
-		name: 'day',
+		name: 'weatherDetails',
 		
 		components: {
 			'runway-indicator' : runwayIndicator,
@@ -205,7 +205,11 @@
 					return this.cursorHours;
 				} else if (this.cursorHours > 12) {
 					this.ampm = 'PM';
-					return this.cursorHours - 12;
+					var time = this.cursorHours - 12;
+					if (time < 10) {
+						return '0' + time;
+					}
+
 				} else {
 					this.ampm = 'AM';
 					return this.cursorHours;
