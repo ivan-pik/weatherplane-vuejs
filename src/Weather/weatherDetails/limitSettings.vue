@@ -10,7 +10,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.windSpeed.label}}: {{reactiveControls.windSpeed.currentValue}}
+					{{reactiveControls.windSpeed.label}}: {{reactiveControls.windSpeed.currentValue}} {{windSpeedUnitDisplay}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.windSpeed.minValue"
@@ -26,7 +26,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.crossWindSpeed.label}}: {{reactiveControls.crossWindSpeed.currentValue}}
+					{{reactiveControls.crossWindSpeed.label}}: {{reactiveControls.crossWindSpeed.currentValue}} {{windSpeedUnitDisplay}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.crossWindSpeed.minValue || 0"
@@ -42,7 +42,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.bearing.label}}: {{reactiveControls.bearing.currentValue}}
+					{{reactiveControls.bearing.label}}: {{reactiveControls.bearing.currentValue}} °
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.bearing.minValue || 0"
@@ -58,7 +58,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}}
+					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}} {{temperatureUnitDisplay}}
 				</label>
 				<ui-slider
 					:minValue="this.convertTemperatureUnit(-20,'c', this.temperatureUnit)"
@@ -74,7 +74,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.maxTemperature.label}}: {{reactiveControls.maxTemperature.currentValue}}
+					{{reactiveControls.maxTemperature.label}}: {{reactiveControls.maxTemperature.currentValue}} {{temperatureUnitDisplay}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.minTemperature.currentValue + 1"
@@ -90,7 +90,7 @@
 				class="limitSettings__control"
 			>
 				<label class="uiLabel">
-					{{reactiveControls.precipitation.label}}: {{reactiveControls.precipitation.currentValue}}
+					{{reactiveControls.precipitation.label}}: {{reactiveControls.precipitation.currentValue}} %
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.precipitation.minValue || 0"
@@ -232,6 +232,7 @@
 			},
 			saveSettings () {
 				var controls = this.normaliseUnits(this.deep_copy(this.reactiveControls));
+				this.originalControls = this.deep_copy(this.reactiveControls);
 				this.$emit('saveSettings', controls);
 			},
 			convertWindSpeedUnit (wind, fromWindUnit, toWindUnit) {
