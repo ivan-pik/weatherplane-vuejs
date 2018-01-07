@@ -9,13 +9,13 @@
 		></div>
 		<div class="uiSlider__values">
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
-				{{minValue}}
+				{{minValue}} {{unit}}
 			</div>
 			<div class="uiSlider__currentValue">
-				{{returnedValue}}
+				{{knobValue}} {{unit}}
 			</div>
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--max">
-				{{maxValue}}
+				{{maxValue}} {{unit}}
 			</div>
 		</div>
 	</div>
@@ -25,6 +25,8 @@
 	import Vue from 'vue';
 
 	//@todo: Make the size calculations responsive
+	//@todo: Better aligning of knob to the nearest possible value
+	//@todo: returns NaN when min and maxValue are 0
 	
 	export default {
 		name: 'uiSlider',
@@ -49,6 +51,9 @@
 			},
 			name: {
 				type: String
+			},
+			unit: {
+				type: String
 			}
 		},
 		created () {
@@ -64,9 +69,9 @@
 		mounted () {
 			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
 			this.posRight = (this.$refs.slider.getBoundingClientRect()).right;
-
-			
 			this.moveKnobToValue(this.currentValue);
+			this.knobValue = this.currentValue;
+			
 		},
 		computed: {
 			currentValue () {
@@ -82,15 +87,15 @@
 				return this.posRight - this.posLeft - 40;
 			},
 			progress () {
-				return this.left / this.sliderWidth;
+
+				return ;
+
+				// return this.left / this.sliderWidth;
 			},
 			range () {
 				return  this.maxValue - this.minValue;
 			},
-			returnedValue () {
-				let notSteppedValue =  this.minValue + this.range * this.progress;
-				return Math.floor(notSteppedValue / this.step) * this.step;
-			},
+			
 			nOfSteps () {
 				if (this.range % this.step != 0) {
 					// @todo: rework to a prop validation
@@ -104,27 +109,44 @@
 			} 
 		},
 		watch: {
-			returnedValue () {
-				this.updateInput();
+			maxValue () {
+				this.moveKnobToValue(this.currentValue);
+			},
+			minValue () {
+				this.moveKnobToValue(this.currentValue);
 			},
 			currentValue (val) {
 				if (!this.isKnob) {
 					this.moveKnobToValue(val);
+					this.knobValue = val;
 				}
 			}
 		},
 		methods: {
 			trackClickHandler () {
-				var progress = Math.min(this.minValue + event.offsetX / this.stepSize, this.maxValue);
-				this.moveKnobToValue(progress);
+				let clickedToProgress = Math.min(Math.max( (event.offsetX - 10) / this.sliderWidth, 0),1);
+
+				let newValue = this.alignValueToStep(this.getValueFromProgress(clickedToProgress));
+
+				this.updateInput(newValue);
+				this.knobValue = newValue;
 			},
+
+			getValueFromProgress (progress) {
+				return this.minValue + (this.range * progress)
+			},
+
+			alignValueToStep (value) {
+				return Math.floor(value / this.step) * this.step;
+			},
+
+	
+
+
 			moveKnobToValue (val) {
-
 				var absoluteVal = val - (this.minValue);
-
 				let newLeft = absoluteVal * this.stepSize;
 				this.moveKnob(newLeft);
-
 			},
 			moveKnob(distance) {
 				if(this.left != distance) {
@@ -143,11 +165,14 @@
 
 				}
 			},
-			updateInput() {
-				this.$emit('change', this.returnedValue);
+			updateInput(value) {
+				this.$emit('change', value);
+			},
+			alignValueToClosestStep (value) {
+				return ((this.value - this.minValue) / this.step) * this.stepSize;
 			},
 			alignKnobToStep () {
-				let newLeft = ((this.returnedValue - this.minValue) / this.step) * this.stepSize;
+				let newLeft = ((this.knobValue - this.minValue) / this.step) * this.stepSize;
 				this.moveKnob(newLeft);
 			},
 			mousedownHandler () {
@@ -159,10 +184,14 @@
 				}
 			},
 			mouseupHandler () {
+				if (this.isKnob) {
+					this.alignKnobToStep();
+					this.updateInput(this.knobValue);
+				}
 				this.isKnob = false;
 				this.first = true;
 				this.offset = 0;
-				this.alignKnobToStep();
+				
 			},
 			moveHandler () {
 				if (this.isKnob) {
@@ -172,6 +201,8 @@
 					}
 					let movement = Math.min(Math.max(event.clientX - this.offset, 0), this.posRight - 40);
 					this.left =+ movement;
+					this.knobProgress = this.left / this.sliderWidth;
+					this.knobValue = this.alignValueToStep(this.getValueFromProgress(this.knobProgress));
 				}
 			},
 		},
@@ -184,7 +215,9 @@
 				first: true,
 				offset: 0,
 				knobClass: '',
-				transitionStyle: ''
+				transitionStyle: '',
+				knobProgress: 0,
+				knobValue: 0,
 			}
 		}
 	}

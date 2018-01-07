@@ -18,6 +18,7 @@
 					v-model="reactiveControls.windSpeed.currentValue"
 					:step="1"
 					:name="reactiveControls.windSpeed.name"
+					:unit="windSpeedUnitDisplay"
 				/>
 			</div>
 
@@ -33,6 +34,7 @@
 					v-model="reactiveControls.crossWindSpeed.currentValue"
 					:step="1"
 					:name="reactiveControls.crossWindSpeed.name"
+					:unit="windSpeedUnitDisplay"
 				/>
 			</div>
 
@@ -48,6 +50,7 @@
 					v-model="reactiveControls.bearing.currentValue"
 					:step="1"
 					:name="reactiveControls.bearing.name"
+					:unit="'deg'"
 				/>
 			</div>
 
@@ -59,10 +62,11 @@
 				</label>
 				<ui-slider
 					:minValue="-20"
-					:maxValue="40"
+					:maxValue="reactiveControls.maxTemperature.currentValue - 1"
 					v-model="reactiveControls.minTemperature.currentValue"
 					:step="1"
 					:name="reactiveControls.minTemperature.name"
+					:unit="temperatureUnitDisplay"
 				/>
 			</div>
 
@@ -73,11 +77,12 @@
 					{{reactiveControls.maxTemperature.label}}: {{reactiveControls.maxTemperature.currentValue}}
 				</label>
 				<ui-slider
-					:minValue="0"
-					:maxValue="40"
+					:minValue="reactiveControls.minTemperature.currentValue + 1"
+					:maxValue="60"
 					v-model="reactiveControls.maxTemperature.currentValue"
 					:step="1"
 					:name="reactiveControls.maxTemperature.name"
+					:unit="temperatureUnitDisplay"
 				/>
 			</div>
 
@@ -93,6 +98,7 @@
 					v-model="reactiveControls.precipitation.currentValue"
 					:step="1"
 					:name="reactiveControls.precipitation.name"
+					:unit="'%'"
 				/>
 			</div>
 
@@ -129,6 +135,7 @@
 		},
 		created () {
 			this.reactiveControls = this.deep_copy(this.controls);
+			this.originalControls = this.deep_copy(this.controls);
 
 			document.addEventListener('keyup', this.escKeyHandler);
 		},
@@ -141,27 +148,27 @@
 
 				
 
-				if (this.reactiveControls.windSpeed.currentValue != this.controls.windSpeed.currentValue) {
+				if (this.reactiveControls.windSpeed.currentValue != this.originalControls.windSpeed.currentValue) {
 					differences++;
 				}
 
-				if (this.reactiveControls.crossWindSpeed.currentValue != this.controls.crossWindSpeed.currentValue) {
+				if (this.reactiveControls.crossWindSpeed.currentValue != this.originalControls.crossWindSpeed.currentValue) {
 					differences++;
 				}
 
-				if (this.reactiveControls.bearing.currentValue != this.controls.bearing.currentValue) {
+				if (this.reactiveControls.bearing.currentValue != this.originalControls.bearing.currentValue) {
 					differences++;
 				}
 
-				if (this.reactiveControls.minTemperature.currentValue != this.controls.minTemperature.currentValue) {
+				if (this.reactiveControls.minTemperature.currentValue != this.originalControls.minTemperature.currentValue) {
 					differences++;
 				}
 
-				if (this.reactiveControls.maxTemperature.currentValue != this.controls.maxTemperature.currentValue) {
+				if (this.reactiveControls.maxTemperature.currentValue != this.originalControls.maxTemperature.currentValue) {
 					differences++;
 				}
 
-				if (this.reactiveControls.precipitation.currentValue != this.controls.precipitation.currentValue) {
+				if (this.reactiveControls.precipitation.currentValue != this.originalControls.precipitation.currentValue) {
 					differences++;
 				}
 
@@ -170,9 +177,39 @@
 				} else {
 					return false;
 				}
-			}
+			},
+			windUnit () {
+				return this.$store.state.globalApp.settings.windUnit;
+			},
+			temperatureUnit () {
+				return this.$store.state.globalApp.settings.temperatureUnit;
+			},
+			temperatureUnitDisplay () {
+				return '°' + this.temperatureUnit.toUpperCase();
+			},
+			windSpeedUnitDisplay () {
+				if (this.windUnit == 'meters-per-second') {
+					return 'ms';
+				} else if (this.windUnit == 'kilometers-per-hour') {
+					return 'kph';
+				} else if (this.windUnit == 'miles-per-hour') {
+					return 'mph';
+				}
+			},
+		
 		},
 		watch: {
+			windUnit () {
+				this.recalcUnits();
+			},
+			temperatureUnit () {
+				this.recalcUnits();
+			},
+			'reactiveControls.windSpeed.currentValue' (val) {
+				if (val < this.reactiveControls.crossWindSpeed.currentValue) {
+					this.reactiveControls.crossWindSpeed.currentValue = val;
+				}
+			}
 		},
 	 
 		methods: {
@@ -180,7 +217,7 @@
 				return JSON.parse(JSON.stringify(obj));
 			},
 			resetControls () {
-				this.reactiveControls = this.deep_copy(this.controls);
+				this.reactiveControls = this.deep_copy(this.originalControls);
 			},
 			resetKnobs () {
 				
@@ -194,14 +231,100 @@
 				this.$emit('closePanel');
 			},
 			saveSettings () {
-				this.$emit('saveSettings', this.reactiveControls);
+				var controls = this.normaliseUnits(this.deep_copy(this.reactiveControls));
+				this.$emit('saveSettings', controls);
+			},
+			convertWindSpeedUnit (wind, fromWindUnit, toWindUnit) {
+				if (fromWindUnit == 'meters-per-second') {
+					if (toWindUnit == 'meters-per-second') {
+						return wind;
+					} else if (toWindUnit == 'kilometers-per-hour') {
+						return (wind * 3.6).toFixed(1);
+					} else if (toWindUnit == 'miles-per-hour') {
+						return (wind * 2.2369).toFixed(1);
+					}
+				} else if (fromWindUnit == 'kilometers-per-hour') {
+					if (toWindUnit == 'meters-per-second') {
+						return wind * 0.277777778;
+					} else if (toWindUnit == 'kilometers-per-hour') {
+						return wind;
+					} else if (toWindUnit == 'miles-per-hour') {
+						return wind * 0.621371192;
+					}
+				} else if (fromWindUnit == 'miles-per-hour') {
+					if (toWindUnit == 'meters-per-second') {
+						return wind * 0.44704;
+					} else if (toWindUnit == 'kilometers-per-hour') {
+						return wind * 0.621371192
+					} else if (toWindUnit == 'miles-per-hour') {
+						return wind;
+					}
+				}
+				
+			},
+			convertTemperatureUnit (temperature, fromTemperatureUnit, toTemperatureUnit) {
+				if (fromTemperatureUnit == 'c') {
+					if (toTemperatureUnit == 'c') {
+						return temperature;
+					} else if (toTemperatureUnit == 'f') {
+						return temperature * 9 / 5 + 32
+					}
+				} else if (fromTemperatureUnit == 'f') {
+					if (toTemperatureUnit == 'c') {
+						return (temperature -32) * 5 / 9;
+					} else if (toTemperatureUnit == 'f') {
+						return temperature;
+					}
+				}
+			},
+			recalcUnits () {
+				this.reactiveControls.windSpeed.currentValue = this.convertWindSpeedUnit(this.reactiveControls.windSpeed.currentValue,'meters-per-second', this.windUnit);
+				this.originalControls.windSpeed.currentValue = this.convertWindSpeedUnit(this.originalControls.windSpeed.currentValue,'meters-per-second', this.windUnit);
+
+				this.reactiveControls.crossWindSpeed.currentValue = this.convertWindSpeedUnit(this.reactiveControls.crossWindSpeed.currentValue,'meters-per-second', this.windUnit);
+				this.originalControls.crossWindSpeed.currentValue = this.convertWindSpeedUnit(this.originalControls.crossWindSpeed.currentValue,'meters-per-second', this.windUnit);
+
+				this.reactiveControls.minTemperature.currentValue = this.convertTemperatureUnit(this.reactiveControls.minTemperature.currentValue, 'c', this.temperatureUnit);
+				this.originalControls.minTemperature.currentValue = this.convertTemperatureUnit(this.originalControls.minTemperature.currentValue, 'c', this.temperatureUnit);
+
+				this.reactiveControls.maxTemperature.currentValue = this.convertTemperatureUnit(this.reactiveControls.maxTemperature.currentValue, 'c', this.temperatureUnit);
+				this.originalControls.maxTemperature.currentValue = this.convertTemperatureUnit(this.originalControls.maxTemperature.currentValue, 'c', this.temperatureUnit);
+
+			},
+			normaliseUnits (controls) {
+				controls.windSpeed.currentValue = parseFloat( 
+					(this.convertWindSpeedUnit(
+					controls.windSpeed.currentValue,
+					this.windUnit,
+					'meters-per-second'))
+					.toFixed(1) ); 
+				controls.crossWindSpeed.currentValue = parseFloat( 
+					(this.convertWindSpeedUnit(
+					controls.crossWindSpeed.currentValue,
+					this.windUnit,
+					'meters-per-second'))
+					.toFixed(1) ); 
+				controls.minTemperature.currentValue = parseFloat( 
+					(this.convertTemperatureUnit(
+					controls.minTemperature.currentValue,
+					this.temperatureUnit,
+					'c')).toFixed(1) ); 
+				controls.maxTemperature.currentValue = parseFloat( 
+					(this.convertTemperatureUnit(
+					controls.maxTemperature.currentValue,
+					this.temperatureUnit,
+					'c'))
+					.toFixed(1) ); 
+				return controls;
 			}
+			
 		},
 		
 		data () {
 			return {
 				reset: false,
-				reactiveControls: []
+				reactiveControls: [],
+				originalControls: [],
 				
 			}
 		}

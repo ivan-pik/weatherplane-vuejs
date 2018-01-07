@@ -69,7 +69,8 @@
 					windSpeed: {
 						name: 'windSpeed',
 						label: 'Max wind speed',
-						maxValue: 50,
+						minValue: 0,
+						maxValue: 50, //ms
 						currentValue: this.settingsMaxWindSpeed
 					},
 					crossWindSpeed: {
