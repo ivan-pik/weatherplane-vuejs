@@ -1,11 +1,20 @@
 <template>
 	<div class="uiSlider" ref="slider">
+		<div class="uiSlider__trackValue"
+			v-bind:style="{
+				'width': this.left + 'px',
+				'transition' : `all ${this.transitionTime}ms ease-in-out`
+				}"
+		></div>
 		<div class="uiSlider__track"
 			@click="trackClickHandler"
 		></div>
 		<div class="uiSlider__knob"
 			ref="knob"
-			:style="concatStyles"
+			v-bind:style="{
+				'left': this.left + 'px',
+				'transition' : `all ${this.transitionTime}ms ease-in-out`
+				}"
 		></div>
 		<div class="uiSlider__values">
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
@@ -77,20 +86,9 @@
 			currentValue () {
 				return this.modelValue;
 			},
-			concatStyles() {
-				return this.leftStyle + this.transitionStyle;
-			},
-			leftStyle () {
-				return `left: ${this.left}px; `;
-			},
+			
 			sliderWidth () {
 				return this.posRight - this.posLeft - 40;
-			},
-			progress () {
-
-				return ;
-
-				// return this.left / this.sliderWidth;
 			},
 			range () {
 				return  this.maxValue - this.minValue;
@@ -140,9 +138,6 @@
 				return Math.floor(value / this.step) * this.step;
 			},
 
-	
-
-
 			moveKnobToValue (val) {
 				var absoluteVal = val - (this.minValue);
 				let newLeft = absoluteVal * this.stepSize;
@@ -150,17 +145,17 @@
 			},
 			moveKnob(distance) {
 				if(this.left != distance) {
-
+					
 					let knobOffset = Math.abs(this.left - distance);
 
-					let transitionTime = (knobOffset / this.sliderWidth) * 200;
+					let transitionTime = (knobOffset / this.sliderWidth) * 400;
 
-					this.transitionStyle = ` transition: all ${transitionTime}ms ease-in-out;`;
+					this.transitionTime = transitionTime;
 					
 					this.left = distance;
 					
 					setTimeout(() => {
-						this.transitionStyle = '';
+						this.transitionTime = 0;
 					}, transitionTime);
 
 				}
@@ -215,7 +210,7 @@
 				first: true,
 				offset: 0,
 				knobClass: '',
-				transitionStyle: '',
+				transitionTime: 0,
 				knobProgress: 0,
 				knobValue: 0,
 			}
@@ -240,6 +235,21 @@
 			position: absolute;
 			top: 19px;
 			background-color: #000;
+		}
+	}
+	.uiSlider__trackValue {
+		position: absolute;
+		left: 10px;
+		z-index: 1;
+		pointer-events: none;
+		&::after {
+			content: '';
+			display: block;
+			height: 2px;
+			width: 100%;
+			position: absolute;
+			top: 19px;
+			background-color: red;
 		}
 	}
 	.uiSlider__knob {
