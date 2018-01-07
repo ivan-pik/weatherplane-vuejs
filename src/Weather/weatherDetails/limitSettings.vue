@@ -13,8 +13,8 @@
 					{{reactiveControls.windSpeed.label}}: {{reactiveControls.windSpeed.currentValue}}
 				</label>
 				<ui-slider
-					:minValue="reactiveControls.windSpeed.minValue || 0"
-					:maxValue="reactiveControls.windSpeed.maxValue"
+					:minValue="reactiveControls.windSpeed.minValue"
+					:maxValue="convertWindSpeedUnit(reactiveControls.windSpeed.maxValue,'meters-per-second',this.windUnit)"
 					v-model="reactiveControls.windSpeed.currentValue"
 					:step="1"
 					:name="reactiveControls.windSpeed.name"
@@ -50,7 +50,7 @@
 					v-model="reactiveControls.bearing.currentValue"
 					:step="1"
 					:name="reactiveControls.bearing.name"
-					:unit="'deg'"
+					:unit="'°'"
 				/>
 			</div>
 
@@ -61,7 +61,7 @@
 					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}}
 				</label>
 				<ui-slider
-					:minValue="-20"
+					:minValue="this.convertTemperatureUnit(-20,'c', this.temperatureUnit)"
 					:maxValue="reactiveControls.maxTemperature.currentValue - 1"
 					v-model="reactiveControls.minTemperature.currentValue"
 					:step="1"
@@ -78,7 +78,7 @@
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.minTemperature.currentValue + 1"
-					:maxValue="60"
+					:maxValue="this.convertTemperatureUnit(60,'c', this.temperatureUnit)"
 					v-model="reactiveControls.maxTemperature.currentValue"
 					:step="1"
 					:name="reactiveControls.maxTemperature.name"
@@ -235,47 +235,52 @@
 				this.$emit('saveSettings', controls);
 			},
 			convertWindSpeedUnit (wind, fromWindUnit, toWindUnit) {
+				let result;
 				if (fromWindUnit == 'meters-per-second') {
 					if (toWindUnit == 'meters-per-second') {
-						return wind;
+						result = wind;
 					} else if (toWindUnit == 'kilometers-per-hour') {
-						return (wind * 3.6).toFixed(1);
+						result = (wind * 3.6).toFixed(1);
 					} else if (toWindUnit == 'miles-per-hour') {
-						return (wind * 2.2369).toFixed(1);
+						result = (wind * 2.2369).toFixed(1);
 					}
 				} else if (fromWindUnit == 'kilometers-per-hour') {
 					if (toWindUnit == 'meters-per-second') {
-						return wind * 0.277777778;
+						result = wind * 0.277777778;
 					} else if (toWindUnit == 'kilometers-per-hour') {
-						return wind;
+						result = wind;
 					} else if (toWindUnit == 'miles-per-hour') {
-						return wind * 0.621371192;
+						result = wind * 0.621371192;
 					}
 				} else if (fromWindUnit == 'miles-per-hour') {
 					if (toWindUnit == 'meters-per-second') {
-						return wind * 0.44704;
+						result = wind * 0.44704;
 					} else if (toWindUnit == 'kilometers-per-hour') {
-						return wind * 0.621371192
+						result = wind * 0.621371192
 					} else if (toWindUnit == 'miles-per-hour') {
-						return wind;
+						result = wind;
 					}
 				}
+
+				return parseFloat(result);
 				
 			},
 			convertTemperatureUnit (temperature, fromTemperatureUnit, toTemperatureUnit) {
+				let result;
 				if (fromTemperatureUnit == 'c') {
 					if (toTemperatureUnit == 'c') {
-						return temperature;
+						result = temperature;
 					} else if (toTemperatureUnit == 'f') {
-						return temperature * 9 / 5 + 32
+						result = temperature * 9 / 5 + 32
 					}
 				} else if (fromTemperatureUnit == 'f') {
 					if (toTemperatureUnit == 'c') {
-						return (temperature -32) * 5 / 9;
+						result = (temperature -32) * 5 / 9;
 					} else if (toTemperatureUnit == 'f') {
-						return temperature;
+						result = temperature;
 					}
 				}
+				return parseFloat(result);
 			},
 			recalcUnits () {
 				this.reactiveControls.windSpeed.currentValue = this.convertWindSpeedUnit(this.reactiveControls.windSpeed.currentValue,'meters-per-second', this.windUnit);

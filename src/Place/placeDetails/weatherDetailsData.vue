@@ -68,20 +68,21 @@
 				let controls = {
 					windSpeed: {
 						name: 'windSpeed',
-						label: 'Max wind speed',
+						label: 'Maximum Wind Speed',
 						minValue: 0,
 						maxValue: 50, //ms
 						currentValue: this.settingsMaxWindSpeed
 					},
 					crossWindSpeed: {
 						name: 'crossWindSpeed',
-						label: 'Max cross wind speed',
+						label: 'Maximum Cross-Wind Speed',
+						minValue: 0,
 						maxValue: this.settingsMaxWindSpeed,
 						currentValue: this.settingsMaxCrossWindSpeed
 					},
 					bearing: {
 						name: 'bearing',
-						label: 'Max crosswind bearing',
+						label: 'Maximal Crosswind Bearing',
 						minValue: 0,
 						maxValue: 90,
 						currentValue: this.settingsMaxWindBearingToRWY
@@ -90,19 +91,19 @@
 						name: 'minTemperature',
 						label: 'Minimal Temperature',
 						minValue: -40,
-						maxValue: this.settingsMaxTemperature,
+						maxValue: this.settingsMaxTemperature - 1,
 						currentValue: this.settingsMinTemperature
 					},
 					maxTemperature: {
 						name: 'maxTemperature',
 						label: 'Maximal Temperature',
-						minValue: this.settingsMinTemperature,
-						maxValue: 50,
+						minValue: this.settingsMinTemperature + 1,
+						maxValue: 60,
 						currentValue: this.settingsMaxTemperature
 					},
 					precipitation: {
 						name: 'precipitation',
-						label: 'Chance of Rain',
+						label: 'Maximum Chance of Rain',
 						minValue: 0,
 						maxValue: 100,
 						currentValue: this.settingsMaxPrecipProbability
