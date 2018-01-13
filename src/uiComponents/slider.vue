@@ -1,5 +1,7 @@
 <template>
-	<div class="uiSlider" ref="slider">
+	<div class="uiSlider" ref="slider"
+	:class="{'disabled' : disabled}"
+	>
 		<div class="uiSlider__trackValue"
 			v-bind:style="{
 				'width': this.left + 'px',
@@ -91,7 +93,13 @@
 				return this.posRight - this.posLeft - 40;
 			},
 			range () {
-				return  this.maxValue - this.minValue;
+				let range = this.maxValue - this.minValue;
+				if (range == 0) {
+					this.disabled = true;
+				} else {
+					this.disabled = false;
+				}
+				return range;
 			},
 			
 			nOfSteps () {
@@ -103,7 +111,12 @@
 				return this.range / this.step;
 			},
 			stepSize () {
-				return this.sliderWidth / this.nOfSteps;
+				if (this.nOfSteps != 0) {
+					return this.sliderWidth / this.nOfSteps;
+				} else {
+					return 1;
+				}
+				
 			} 
 		},
 		watch: {
@@ -117,6 +130,8 @@
 				if (!this.isKnob) {
 					this.moveKnobToValue(val);
 					this.knobValue = val;
+
+
 				}
 			}
 		},
@@ -203,6 +218,7 @@
 		},
 		data () {
 			return {
+				disabled: false,
 				left: 0,
 				posLeft: 0,
 				posRight: 0,
@@ -222,6 +238,10 @@
 	.uiSlider {
 		position: relative;
 		min-height: 40px;
+		&.disabled {
+			opacity: 0.3;
+			pointer-events: none;
+		}
 	}
 	.uiSlider__track {
 		margin: 0 10px;
