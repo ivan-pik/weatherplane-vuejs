@@ -159,13 +159,13 @@
 				return this.$store.state.existingPlaceView.place.placeSettings.maxTemperature;
 			},
 			temperatureStatus () {
-				if (this.settingsMinTemperature < this.weather.temperature || this.weather.temperature < this.settingsMaxTemperature) {
+				if (this.settingsMinTemperature <= Math.round(this.weather.temperature) && Math.round(this.weather.temperature) <= this.settingsMaxTemperature) {
 					return "yes";
 				}
 				return "no";
 			},
 			statusPrecipProbability () {
-				if (this.weather.precipProbability <= this.settingsMaxPrecipProbability) {
+				if ((this.weather.precipProbability * 100) <= this.settingsMaxPrecipProbability) {
 					return "yes";
 				}
 				return "no";
