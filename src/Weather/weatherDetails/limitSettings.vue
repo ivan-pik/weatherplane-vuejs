@@ -136,6 +136,7 @@
 		created () {
 			this.reactiveControls = this.deep_copy(this.controls);
 			this.originalControls = this.deep_copy(this.controls);
+			this.recalcUnits();
 
 			document.addEventListener('keyup', this.escKeyHandler);
 		},
@@ -263,7 +264,7 @@
 					}
 				}
 
-				return parseFloat(result);
+				return Math.round(parseFloat(result));
 				
 			},
 			convertTemperatureUnit (temperature, fromTemperatureUnit, toTemperatureUnit) {
@@ -281,7 +282,7 @@
 						result = temperature;
 					}
 				}
-				return parseFloat(result);
+				return Math.round(parseFloat(result));
 			},
 			recalcUnits () {
 				this.reactiveControls.windSpeed.currentValue = this.convertWindSpeedUnit(this.reactiveControls.windSpeed.currentValue,'meters-per-second', this.windUnit);
