@@ -13,6 +13,8 @@
 		></div>
 		<div class="uiSlider__knob"
 			ref="knob"
+			v-on:touchstart="touchStart"
+			v-on:touchend="touchEnd"
 			v-bind:style="{
 				'left': this.left + 'px',
 				'transition' : `all ${this.transitionTime}ms ease-in-out`
@@ -71,11 +73,13 @@
 			document.addEventListener('mousedown', this.mousedownHandler);
 			document.addEventListener('mouseup', this.mouseupHandler);
 			document.addEventListener('mousemove', this.moveHandler);
+			document.addEventListener('touchmove', this.moveHandler);
 		},
 		beforeDestroy () {
 			document.removeEventListener('mousedown', this.mousedownHandler);
 			document.removeEventListener('mouseup', this.mouseupHandler);
 			document.removeEventListener('mousemove', this.moveHandler);
+			document.addEventListener('touchmove', this.moveHandler);
 		},
 		mounted () {
 			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
@@ -136,6 +140,14 @@
 			}
 		},
 		methods: {
+			touchStart () {
+				this.isTouch = true;
+				this.isKnob = true;
+			},
+			touchEnd () {
+				this.isTouch = false;
+				this.mouseupHandler();
+			},
 			trackClickHandler () {
 				let clickedToProgress = Math.min(Math.max( (event.offsetX - 10) / this.sliderWidth, 0),1);
 
@@ -204,17 +216,22 @@
 				
 			},
 			moveHandler () {
+				
 				if (this.isKnob) {
+					var pointerX = this.isTouch ? event.touches[0].clientX : event.clientX;
 					if (this.first) {
-						this.offset = event.clientX - this.left;
+						this.offset = pointerX - this.left;
 						this.first = false;
 					}
-					let movement = Math.min(Math.max(event.clientX - this.offset, 0), this.posRight - 40);
+					let movement = Math.min(Math.max(pointerX - this.offset, 0), this.posRight - 40);
 					this.left =+ movement;
 					this.knobProgress = this.left / this.sliderWidth;
 					this.knobValue = this.alignValueToStep(this.getValueFromProgress(this.knobProgress));
 				}
 			},
+			touchmoveHandler () {
+				
+			}
 		},
 		data () {
 			return {
@@ -229,6 +246,7 @@
 				transitionTime: 0,
 				knobProgress: 0,
 				knobValue: 0,
+				isTouch: false
 			}
 		}
 	}
