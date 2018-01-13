@@ -1,5 +1,5 @@
 <template>
-	<svg class="windSpeedChart"
+	<svg class="windSpeedChart" 
 		:style="chartStyle"
 	> 
 		<defs>
@@ -71,7 +71,7 @@
 			<rect  
 				width="100%" 
 				fill="#DF4410"
-				x="0" 
+				x="10" 
 				:y="positionY-1"
 				height="2"
 			/>
@@ -79,7 +79,7 @@
 			<rect  
 				:width="windSpeedThresholdPixels" 
 				fill="url(#linearGradient-1)"
-				x="0" 
+				x="10" 
 				:y="positionY-1"
 				height="2"
 			/>
@@ -231,7 +231,7 @@
 						return false;
 					}
 					points.push([
-						parseFloat(this.speedToPixels(speed)),
+						parseFloat(this.speedToPixels(speed)) + this.chartOffsetX,
 						50*i+25
 					]);
 					i++;
@@ -255,7 +255,8 @@
 		data () {
 		  return {
 			positionX: 0,
-			positionY: 0
+			positionY: 0,
+			chartOffsetX: 10,
 		  }
 		}
 

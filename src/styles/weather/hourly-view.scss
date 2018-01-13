@@ -62,8 +62,8 @@
 .hour__time {
 	font-size: 15px;
 	padding: 0 0 0 $widthGridSpace;
-	min-width: 2.9em;
-	width: 7vw;
+	min-width: 3em;
+	width: 8vw;
 }
 
 .hour__time__sup {
@@ -119,7 +119,7 @@ $hourGustSpeed__size: 1.4em;
 .hourWindSpeed {
 	display: inline-flex;
 	align-items: center;
-	width: ($hourWindSpeed__size*1.4);
+	width: ($hourWindSpeed__size*1.6);
 
 }
 

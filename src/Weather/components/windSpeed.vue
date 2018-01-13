@@ -20,10 +20,10 @@
 				return this.$store.state.globalApp.settings.windUnit;
 			},
 			windSpeedDisplay () {
-				return this.convertWindSpeedUnit(this.windSpeed);
+				return Math.round(this.convertWindSpeedUnit(this.windSpeed));
 			},
 			windGustDisplay () {
-				return this.convertWindSpeedUnit(this.windGust);
+				return Math.round(this.convertWindSpeedUnit(this.windGust));
 			},
 		},
 	 

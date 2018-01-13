@@ -2,7 +2,7 @@
 	<g :class="role">
 		<defs>
 			<mask :id="uid">
-				<rect x="0" y="2" 
+				<rect x="10" y="2" 
 					width="100%"
 					height="8"
 					fill="black"
@@ -11,7 +11,7 @@
 
 				<rect
 					class="svgBar__windSpeedMask"
-					x="0" y="2" 
+					x="10" y="2" 
 					:width="windSpeedPixels"
 					height="8"
 					fill="white"
@@ -19,14 +19,14 @@
 				/>
 				<line
 					class="svgBar__windGust"
-					x1="4" y1="6" 
-					:x2="windGustPixels-8" 
+					x1="14" y1="6" 
+					:x2="windGustPixels-4" 
 					y2="6"
 					
 				/>
 				<circle
 					class="svgBar__windSpeedPoint"
-					:cx="windSpeedPixels" 
+					:cx="circleCX" 
 					cy="6" 
 					r="6"
 					fill="white"
@@ -39,7 +39,7 @@
 		<g :mask="uidURL" :transform="shift">
 			<rect  
 				width="100%" 
-				class="svgBar__overThreshold"x="0" y="0" height="12" 
+				class="svgBar__overThreshold" x="0" y="0" height="12" 
 			/>
 			<rect  
 				:width="windSpeedThresholdPixels" 
@@ -85,6 +85,9 @@
 			windSpeedPixels () {
 				return this.speedToPixels(this.windSpeed);
 			},
+			circleCX () {
+				return parseFloat(this.windSpeedPixels) + this.chartOffsetX;
+			},
 			windGustPixels () {
 				return this.speedToPixels(this.windGust);
 			},
@@ -100,7 +103,7 @@
 		},
 		data () {
 			return {
-			
+				chartOffsetX: 10
 			}
 		}
 	}

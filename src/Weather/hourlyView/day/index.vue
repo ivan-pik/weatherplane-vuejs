@@ -84,13 +84,14 @@
 		methods: {
 			chartWidthHandler (val) {
 				this.chartWidth = val.width;
-				this.chartLeftPos = val.left;
+				this.chartLeftPos = val.left - this.chartOffsetX;
 			},
 		},
 		data () {
 		  return {
 			  chartWidth: false,
-			  chartLeftPos: 0,
+			  chartLeftPos: 10,
+			  chartOffsetX: 10
 		  }
 		}
 
