@@ -121,7 +121,7 @@
 				return this.toStatus(this.windGust > this.settingsMaxWindSpeed);
 			},
 			statusTemperature () {
-				return this.toStatus(this.temperature > this.settingsMaxTemperature || this.temperature < this.settingsMinTemperature);
+				return this.toStatus(!(this.settingsMinTemperature <= Math.round(this.temperature) && Math.round(this.temperature) <= this.settingsMaxTemperature));
 			},
 			statusWindDirection () {
 				return this.toStatus(Math.abs(this.windBearingRelToRWY) > this.settingsMaxWindBearingToRWY);
@@ -130,7 +130,11 @@
 				return this.toStatus(this.crossWindComponent > this.settingsMaxCrossWindSpeed);
 			},
 			statusPrecipProbability () {
-				return this.toStatus(this.precipProbability >= this.settingsMaxPrecipProbability);
+				if ((this.precipProbability * 100) <= this.settingsMaxPrecipProbability) {
+					return this.toStatus(false);
+				} else {
+					return this.toStatus(true);
+				}
 			},
 
 			totalStatus () {
