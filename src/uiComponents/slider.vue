@@ -134,8 +134,6 @@
 				if (!this.isKnob) {
 					this.moveKnobToValue(val);
 					this.knobValue = val;
-
-
 				}
 			}
 		},
@@ -162,7 +160,7 @@
 			},
 
 			alignValueToStep (value) {
-				return Math.floor(value / this.step) * this.step;
+				return (Math.floor(value / this.step) * this.step) + (Math.round(value % this.step) * this.step);
 			},
 
 			moveKnobToValue (val) {
