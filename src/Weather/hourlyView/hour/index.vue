@@ -1,11 +1,18 @@
 <template>
-	<div class="hour">
-
+	<div class="hour"
+		v-bind:class="{
+			'hour--night' : (sunProgress == -1),
+			'hour--sunRising' : (sunProgress > -1 && sunProgress < 0),
+			'hour--day' : (sunProgress == 0),
+			'hour--sunSetting' : (sunProgress > 0 && sunProgress < 1),
+		}"
+	>
 		<date-label 
 			 v-if="displayLabel"
 			 :date="dateDisplay"
 			 :scrollPosition="scrollPosition"
 		/>
+		
 
 		<status :status="totalStatus" />
 
@@ -45,6 +52,22 @@
 			:temperature="weather.temperature"
 			:status="temperatureStatus"
 		/>
+
+		<div class="sunTimeIndicator"
+			v-bind:class="{
+				'sunTimeIndicator--night' : (sunProgress == -1),
+				'sunTimeIndicator--sunRising' : (sunProgress > -1 && sunProgress < 0),
+				'sunTimeIndicator--day' : (sunProgress == 0),
+				'sunTimeIndicator--sunSetting' : (sunProgress > 0 && sunProgress < 1),
+			}"
+			
+		>
+			<div class="sunTimeIndicator__progress"
+				:style="heightStyle"
+			>
+
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -69,6 +92,9 @@
 			},
 			scrollPosition: {
 				type: Number
+			},
+			sunTimes: {
+				type: Object
 			}
 		},
 		mounted () {
@@ -76,6 +102,7 @@
 				this.checkWidthForChart();
 				window.addEventListener('resize', this.resizeHandler);
 			}
+			
 		},
 		beforeDestroy () {
 			window.removeEventListener('resize', this.resizeHandler);
@@ -89,7 +116,14 @@
 			'wind-bearing' : windBearing,
 			'temperature' : temperature
 		},
+		watch: {
+			sunTimes () {
+				this.computeSunTimes();
+			},
+			
+		},
 		computed: {
+		
 			displayLabel () {
 				if (this.order === 0) {
 					return false;
@@ -241,9 +275,46 @@
 
 				
 			},
+			
 		},
 
 		methods: {
+			computeSunTimes () {
+				
+				let currentHour = (new Date(this.weather.time)).getHours();
+				let sunsetHour = (new Date(this.sunTimes.sunsetTime)).getHours();
+				let sunriseHour = (new Date(this.sunTimes.sunriseTime)).getHours();
+				if (currentHour < sunriseHour) {
+					this.sunProgress = -1; // night
+				} else if (currentHour == sunriseHour) {
+					let sunriseMinutes = (new Date(this.sunTimes.sunriseTime)).getMinutes();
+					let progress = (sunriseMinutes / 60).toFixed(2);
+					this.sunProgress = -progress; // Sun rising
+				} else if (currentHour > sunriseHour && currentHour < sunsetHour) {
+					this.sunProgress = 0; // Day
+				}
+				else if (currentHour == sunsetHour) {
+					debugger;
+					let sunsetMinutes = (new Date(this.sunTimes.sunsetTime)).getMinutes();
+					let progress = (1 - sunsetMinutes / 60).toFixed(2);
+					this.sunProgress = progress; // Sun setting
+				} else if (currentHour > sunsetHour) {
+					this.sunProgress = -1; // Night
+				}
+
+				this.calcHeightStyle(this.sunProgress);
+				
+			
+			},
+			calcHeightStyle (progress) {
+				if (progress == -1 || progress == 0) {
+					this.heightStyle = '';
+					return;
+				} 
+				let height = Math.max(Math.abs(progress) * 100 - 10, 0); // - 20 for fade
+				debugger;
+				this.heightStyle = `height: ${height}%;`;
+			},
 			toRadians (angle) {
 				return angle * (Math.PI / 180);
 			},
@@ -272,8 +343,8 @@
 		},
 		data () {
 		  return {
-			
-			
+			sunProgress: 1, // -1 night, -1 0 sunrise, 0 day, 0-1 sunset
+			heightStyle: ''
 
 		  }
 		}

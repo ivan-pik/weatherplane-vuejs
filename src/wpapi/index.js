@@ -124,7 +124,6 @@ var api = {
 				
 			})
 			.catch(function (error) {
-				debugger;
 				reject(error.response.data);
 			});	
 		});
@@ -150,7 +149,6 @@ var api = {
 				
 			})
 			.catch(function (error) {
-				debugger;
 				reject(error.response.data);
 			});	
 		});

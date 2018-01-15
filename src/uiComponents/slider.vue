@@ -283,11 +283,11 @@
 		&::after {
 			content: '';
 			display: block;
-			height: 2px;
+			height: 4px;
 			width: 100%;
 			position: absolute;
-			top: 19px;
-			background-color: red;
+			top: 18px;
+			background-color: rgb(0, 175, 23);
 		}
 	}
 	.uiSlider__knob {

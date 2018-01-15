@@ -37,17 +37,10 @@
 						<path d="M11,20 C6.038,20 2,15.963 2,11 C2,6.038 6.038,2 11,2 C15.963,2 20,6.038 20,11 C20,15.963 15.963,20 11,20 M11,0 C4.9346,0 0,4.9346 0,11 C0,17.0654 4.9346,22 11,22 C17.0654,22 22,17.0654 22,11 C22,4.9346 17.0654,0 11,0" id="Fill-1"></path>
 						<polygon id="Triangle-3" points="9.98997852 10.8361123 17.8807525 3.5655619 21.3159014 10.8361123 18.1950691 19.2544306"></polygon>
 					</svg>
-					<h3 class="limitSettingsOverview__label">Wind Direction</h3>
+					<h3 class="limitSettingsOverview__label">Direction</h3>
 					<p class="limitSettingsOverview__value">± {{settingsMaxWindBearingToRWY}}&deg;</p>
 				</div>
 
-				<div class="limitSettingsOverview__param limitSettingsOverview__param--temperature">
-					<svg width="22px" height="24px" viewBox="0 0 22 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-						<path d="M5.679,24.247c-2.946,0 -5.334,-2.388 -5.334,-5.333c0,-1.351 0.506,-2.58 1.333,-3.52l0,-11.146c0,-2.209 1.791,-4.001 4.001,-4.001c2.208,0 3.999,1.792 3.999,4.001l0,11.146c0.828,0.94 1.333,2.169 1.333,3.52c0,2.945 -2.387,5.333 -5.332,5.333Zm1.333,-7.63l0,-2.861l0,-6.842l0,-2.666c0,-0.736 -0.597,-1.334 -1.333,-1.334c-0.737,0 -1.334,0.598 -1.334,1.334l0,12.369c-0.794,0.462 -1.333,1.312 -1.333,2.297c0,1.472 1.194,2.667 2.667,2.667c1.472,0 2.667,-1.195 2.667,-2.667c0,-0.985 -0.541,-1.835 -1.334,-2.297Zm-1.333,4.297c-1.104,0 -2.001,-0.896 -2.001,-2c0,-0.871 0.559,-1.602 1.334,-1.878l0,-6.831l1.333,0l0,6.831c0.775,0.276 1.334,1.008 1.334,1.878c0,1.104 -0.896,2 -2,2Z"/>
-					</svg>
-					<h3 class="limitSettingsOverview__label">Temperature</h3>
-					<p class="limitSettingsOverview__value">{{settingsMinTemperature}} - {{settingsMaxTemperature}} &deg;{{temperatureUnitDisplay}}</p>
-				</div>
 
 				<div class="limitSettingsOverview__param limitSettingsOverview__param--precipProbability">
 					<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -56,6 +49,15 @@
 					<h3 class="limitSettingsOverview__label">Precip Prob.</h3>
 					<p class="limitSettingsOverview__value">{{settingsMaxPrecipProbability}} %</p>
 				</div>
+
+				<div class="limitSettingsOverview__param limitSettingsOverview__param--temperature">
+					<svg width="22px" height="24px" viewBox="0 0 22 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<path d="M5.679,24.247c-2.946,0 -5.334,-2.388 -5.334,-5.333c0,-1.351 0.506,-2.58 1.333,-3.52l0,-11.146c0,-2.209 1.791,-4.001 4.001,-4.001c2.208,0 3.999,1.792 3.999,4.001l0,11.146c0.828,0.94 1.333,2.169 1.333,3.52c0,2.945 -2.387,5.333 -5.332,5.333Zm1.333,-7.63l0,-2.861l0,-6.842l0,-2.666c0,-0.736 -0.597,-1.334 -1.333,-1.334c-0.737,0 -1.334,0.598 -1.334,1.334l0,12.369c-0.794,0.462 -1.333,1.312 -1.333,2.297c0,1.472 1.194,2.667 2.667,2.667c1.472,0 2.667,-1.195 2.667,-2.667c0,-0.985 -0.541,-1.835 -1.334,-2.297Zm-1.333,4.297c-1.104,0 -2.001,-0.896 -2.001,-2c0,-0.871 0.559,-1.602 1.334,-1.878l0,-6.831l1.333,0l0,6.831c0.775,0.276 1.334,1.008 1.334,1.878c0,1.104 -0.896,2 -2,2Z"/>
+					</svg>
+					<h3 class="limitSettingsOverview__label">Temperature</h3>
+					<p class="limitSettingsOverview__value">{{settingsMinTemperature}} &ndash; {{settingsMaxTemperature}} &deg;{{temperatureUnitDisplay}}</p>
+				</div>
+
 			</div>
 
 		</div>

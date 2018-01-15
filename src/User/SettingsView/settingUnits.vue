@@ -88,7 +88,6 @@
 
 			setActiveOption (radios,activeValue) {
 				radios.forEach(radio => {
-					debugger;
 					if (radio.value == activeValue) {
 						radio.active = true;
 					}

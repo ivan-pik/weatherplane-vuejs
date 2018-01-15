@@ -4,7 +4,8 @@
 
 		<hour v-for="(hour, key) in weather"
 			:key="key"
-			:order="key" 
+			:order="key"
+			:sunTimes="sunTimes[key]" 
 			:weather="hour"
 			:scrollPosition="scrollPosition"
 			v-on:chartSpaceDummyUpdated="chartWidthHandler"
@@ -36,6 +37,9 @@
 		name: 'day',
 		props: {
 			weather: {
+				type: Array
+			},
+			sunTimes: {
 				type: Array
 			},
 			cursorY: {

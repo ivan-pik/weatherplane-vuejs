@@ -8,6 +8,7 @@
 	>
 		<day 
 			:weather="weather.hourly"
+			:sunTimes="sunTimes"
 			:cursorY="cursorY"
 			:cursorX="cursorX"
 			:isTouch="isTouch"
@@ -36,8 +37,9 @@
 
 		},
 		mounted () {
-			
+			this.attachSunTimesToHours();
 			this.fillSpace();
+			
 		},
 		props: {
 			weather: {
@@ -53,7 +55,7 @@
 			cursorDayProgress () {
 				let beginning = ( this.cursorDayIndex * 50 ) + 25;
 				return  Math.max((this.cursorY - beginning) / 50, 0);
-			}
+			},
 		},
 		watch: {
 			cursorY () {
@@ -61,11 +63,32 @@
 					index: this.cursorDayIndex,
 					progress: this.cursorDayProgress
 				});
+			},
+			weather () {
+				this.attachSunTimesToHours();
 			}
 		},
 
 		methods: {
-		
+			attachSunTimesToHours () {
+				console.log('attachSunTimesToHours');
+				this.weather.daily.forEach(day => {
+					let sunTimesDayDate = (new Date(day.time)).getDate();
+
+					let hour = this.weather.hourly.forEach(hour =>{
+						let hourDate = (new Date(hour.time)).getDate();
+						
+						if (hourDate == sunTimesDayDate) {
+							this.sunTimes.push({
+								'sunriseTime' : day.sunriseTime,
+								'sunsetTime' : day.sunsetTime
+							});
+						}
+						
+					});
+
+				});
+			},
 			fillSpace () {
 				let height = this.$refs.chartScroller.offsetHeight - 50;
 				this.fillSpaceHeight = "height: " + height + "px";
@@ -77,7 +100,7 @@
 			},
 			chartPointer (e) {
 				if(!this.isTouch) {
-					let pos = e.pageY - 280;
+					let pos = e.pageY - 280; // @todo: replace magic number
 					this.lastCursorPosition = pos;
 
 					if (!this.cursorTicking) {
@@ -117,7 +140,7 @@
 				cursorTicking: false,
 				isTouch: false,
 				fillSpaceHeight: "",
-				
+				sunTimes: []
 			}
 		}
 
