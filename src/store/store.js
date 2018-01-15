@@ -27,10 +27,10 @@ export default new Vuex.Store({
 			places: []
 		},
 		placeSearch: {
-			place: {},
-				placeSelected: false,
-				selectedLocation: {
-				coordinates: {}
+			place: null,
+			placeSelected: false,
+			selectedLocation: {
+			coordinates: {}
 			}
 		},
 		existingPlaceView: {

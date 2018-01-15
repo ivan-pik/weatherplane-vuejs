@@ -1,6 +1,10 @@
 <template>
 		<div class="">
-			<place-input v-if="!placeChosen" v-bind:placeInput="place"></place-input>
+			<place-input 
+				v-if="!placeChosen" 
+				v-on:suggestionHighlighted="suggestionHighlighted" 
+			/>
+
 			<ui-tabs
 				v-if="placeChosen"
 				:tabs="tabs"
@@ -18,8 +22,7 @@
 					v-model="bearing"
 				/>
 			</div>
-
-			<button @click="choosePlace" v-if="!placeChosen">Choose this place</button>
+			<button @click="choosePlace" v-if="place">Choose this place</button>
 			<button @click="setBearing" v-if="placeChosen">Set Bearing</button>
 
 		</div>
@@ -31,6 +34,7 @@
 		import map from '../map/index.vue';
 		import bearingSelector from '../bearingSelector.vue';
 		import uiTabs from '../../uiComponents/tabs.vue';
+		
 
 		export default {
 				name: 'MapSearchView',
@@ -38,19 +42,16 @@
 					'place-input' : placeInput,
 					'location-map' : map,
 					'bearing-selector' : bearingSelector,
-					'ui-tabs' : uiTabs
+					'ui-tabs' : uiTabs,
+					
 				},
-				created: function () {
-					this.$on('placeSelected', selectedPlace => {
-						this.$store.commit('PLACE_SEARCH_PLACE_SELECTED', selectedPlace)
-					 });
-				},
+		
 				computed: {
 						place() {
-								return this.$store.state.placeSearch.place;
+							return this.$store.state.placeSearch.place;
 						},
 						showMap () {
-							if (this.place.description) {
+							if (this.place) {
 								return true;
 							} else {
 								return false;
@@ -58,6 +59,9 @@
 						}
 				},
 				methods: {
+					suggestionHighlighted (place) {
+						this.$store.commit('PLACE_SEARCH_PLACE_SELECTED', place)
+					},
 					choosePlace () {
 						this.placeChosen = true;
 					},

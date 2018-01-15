@@ -1,138 +1,103 @@
 <template>
-    <div class="">
-    
-      <form v-on:submit.prevent="onSubmit">
-        <input
-          @keyup.down="nextSuggestion"
-          @keyup.up="prevSuggestion"
-          @input="resetSuggestions"
-          id="placeSearch"
-          type="text"
-          v-model="place"
-          placeholder="Search for a place"
-          autocomplete="off"
-        >
-        <suggestion-dropdown v-if="displaySuggestionsList" v-bind:suggestions="suggestions" v-bind:newList="suggestionDropdown.newList" v-bind:keyEvent="suggestionDropdown.keyEvent"></suggestion-dropdown>
-        <div class="error" v-if="noResults">No results found</div>
-      </form>
-    </div>
+		<div class="">
+		
+			<form v-on:submit.prevent="onSubmit">
+				<input
+					id="placeSearch"
+					type="text"
+					v-model="place"
+					@input="autocompleteRequest(place)"
+					placeholder="Search for a place"
+					autocomplete="off"
+				>
+				
+
+				<suggestions-list
+					:suggestions="suggestionsList"
+					v-on:suggestionHighlighted="suggestionHighlighted"
+				/>
+
+				<div class="error" v-if="noResults">No results found</div>
+			</form>
+		</div>
 
 </template>
 <script>
-    import Vue from 'vue'
+		import Vue from 'vue'
+		import suggestionsList from '../../uiComponents/suggestionsList.vue';
+		
+		import {loadGoogleApi} from '../../libs/googleApi.js';
 
-    import suggestionsDropdown from './suggestionsDropdown/index.vue';
-    import {loadGoogleApi} from '../../libs/googleApi.js';
+		export default {
+				name: 'placeInput',
+				components: {
+					'suggestions-list' : suggestionsList
+				},
+				props: ['placeInput'],
+				created: function () {
+						loadGoogleApi().then(function(googleApi) {
+							this.service = new googleApi.places.AutocompleteService();
+						}.bind(this), function(error) {
+							console.error("Failed!", error);
+						}
+					);
+				},
+				computed: {
+					suggestionsList () {
+						return this.suggestions.map(suggestion => {
+							return suggestion.description;
+						});
+						
+					}
+				},
+			
+				methods: {
+					suggestionHighlighted (key) {
+						this.place = this.suggestions[key].description;
+						this.$emit('suggestionHighlighted', this.suggestions[key]);
+					},
+					onSubmit () {
+						this.suggestions = [];
+					},
+					autocompleteRequest(place) {
+						if (place == "") {
+							this.suggestions = [];
+							this.noResults = false;
+							return;
+						}
 
-    export default {
-        name: 'placeInput',
-        components: {
-          'suggestion-dropdown' : suggestionsDropdown
-        },
-        props: ['placeInput'],
-        created: function () {
-          this.$on('activeSuggestion', activeSuggestion => {
-            let resetActiveClass = function (element, index, array) {
-              if (element.active) {
-                element.active = false;
-              }
-            }
-            this.suggestions.forEach(resetActiveClass);
-            Vue.set(this.suggestions[activeSuggestion], 'active', true)
-
-            this.place = this.suggestions[activeSuggestion].description;
-            this.activeSuggestion = true;
-            this.$parent.$emit('placeSelected', this.suggestions[activeSuggestion]);
-
-           });
-           
-            loadGoogleApi().then(function(googleApi) {
-              this.service = new googleApi.places.AutocompleteService();
-            }.bind(this), function(error) {
-              console.error("Failed!", error);
-            }
-
-          );
-        },
-
-        watch: {
-          place: function (newPlace) {
-            if (!this.activeSuggestion) {
-              this.autocompleteRequest(newPlace);
-            }
-          }
-        },
-        methods: {
-          onSubmit (ev) {
-            this.displaySuggestionsList = false;
-          },
-          autocompleteRequest(place) {
-            if (place == "") {
-              this.suggestions = [];
-              return;
-            }
-
-            let request = {
-              input: place
-            }
-
-            this.service.getPlacePredictions(request, this.displaySuggestions)
-          },
-          displaySuggestions(predictions, status) {
-            if (status != google.maps.places.PlacesServiceStatus.OK) {
-              if (status == 'ZERO_RESULTS') {
-                this.suggestions = [];
-                this.noResults = true;
-                this.resetSuggestions();
-              }
-              return;
-            }
-            this.suggestions = predictions;
-            this.suggestionDropdown.newList = true;
-            this.displaySuggestionsList = true;
-            this.noResults = false;
-            this.$nextTick(function () {
-              this.suggestionDropdown.newList = false;
-            })
-          },
-          nextSuggestion(event) {
-            this.suggestionDropdown.keyEvent = 'down';
-            this.$nextTick(function () {
-              this.suggestionDropdown.keyEvent = null;
-            })
-          },
-          prevSuggestion(event) {
-            this.suggestionDropdown.keyEvent = 'up';
-            this.$nextTick(function () {
-              this.suggestionDropdown.keyEvent = null;
-            })
-          },
-          resetSuggestions() {
-            this.activeSuggestion = false;
-
-          }
-        },
-        data() {
-            return {
-                place: "",
-                displaySuggestionsList: true,
-                suggestions: [],
-                activeSuggestion: null,
-                noResults : false,
-                suggestionDropdown: {
-                  isActive : false,
-                  keyEvent: null,
-                  newList: false
-                }
-            }
-        }
-    }
+						// (query, callback)
+						this.service.getPlacePredictions({input: place}, this.displaySuggestions)
+					},
+					displaySuggestions(predictions, status) {
+						if (status != google.maps.places.PlacesServiceStatus.OK) {
+							if (status == 'ZERO_RESULTS') {
+								this.suggestions = [];
+								this.noResults = true;
+							}
+							return;
+						}
+						this.suggestions = predictions;
+						this.noResults = false;
+					},
+				},
+				data() {
+						return {
+								place: "",
+								suggestions: [],
+								noResults : false,
+						}
+				}
+		}
 
 
 
 </script>
 <style scoped>
+#placeSearch {
+	display: block;
+}
 .suggestions.active {
-  background-color: red;
+	background-color: red;
 }
 </style>
