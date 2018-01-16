@@ -1,14 +1,9 @@
 <template>
 	<div class="googleMap">
 
+		<div id="map" ref="mapWraper"></div>
 
-	<div id="map" ref="mapWraper">
-		Map
 	</div>
-
-
-
-		</div>
 </template>
 
 <script>
@@ -23,6 +18,9 @@
 				},
 				disableControls: {
 					type: Boolean
+				},
+				lockMarker: {
+					type: Boolean
 				}
 			},
 			created () {
@@ -34,7 +32,6 @@
 					this.mapWidget = new googleApi.Map(this.$refs.mapWraper, {
 						center: {lat: -12.1430911, lng: -77.0227697},
 						zoom: 16,
-						// disableDefaultUI: true,
 						streetViewControl: false,
 						mapTypeId: 'satellite',
 						rotateControl: false,
@@ -48,16 +45,12 @@
 						}
 					});
 
-					let mapWidget = this.mapWidget;
-
-					// place marker
-					google.maps.event.addListener(mapWidget, 'click', (event) => {
+					// place marker on click
+					google.maps.event.addListener(this.mapWidget, 'click', (event) => {
 						 this.placeMarker(event.latLng);
 					 });
 
-
-
-					 this.updateMap();
+					this.updateMap();
 
 				}.bind(this), function(error) {
 					console.error("Failed!", error);
@@ -76,22 +69,22 @@
 						this.mapWidget.set('zoomControl', true);
 						this.mapWidget.set('mapTypeControl', true);
 					}
+				},
+				lockMarker (lockMarker) {
+					if (lockMarker) {
+
+					}
 				}
 			},
 
-
 			methods: {
-
-				saveActiveLocation(coordinates) {
-					this.$store.commit('LOCATION_SAVE_ACTIVE_LOCATION', coordinates);
+				emitLocation(coordinates) {
+					this.$emit('placeSelected', coordinates);
 				},
 
 				placeMarker (location) {
 
-
 					this.clearOverlays();
-
-					// @todo: you are repeating yourself
 
 					var marker = new google.maps.Marker({
 							position: location,
@@ -104,67 +97,47 @@
 							lat: marker.getPosition().lat(),
 							lng: marker.getPosition().lng()
 						}
-						this.saveActiveLocation(coordinates);
+						this.emitLocation(coordinates);
 					 });
-
-					this.markersArray.push(marker);
-
-					this.mapWidget.setCenter(location);
 
 					let coordinates = {
 						lat: marker.getPosition().lat(),
 						lng: marker.getPosition().lng()
 					}
 
-					this.saveActiveLocation(coordinates);
+					this.emitLocation(coordinates);
 
+					this.markersArray.push(marker);
 
+					this.mapWidget.setCenter(location);
+
+					this.emitLocation(coordinates);
 
 				},
 
 				clearOverlays () {
-					for (var i = 0; i < this.markersArray.length; i++ ) {
-						this.markersArray[i].setMap(null);
-					}
-					this.markersArray.length = 0;
+					this.markersArray.forEach(marker => {
+						marker.setMap(null);
+					})
 				},
 
 				updateMap () {
 					var geocoder = new this.googleApi.Geocoder;
 					geocoder.geocode({'placeId': this.place.place_id}, (results, status) => {
-							if (status === 'OK') {
-								if (results[0]) {
-										this.mapWidget.setZoom(16);
-										this.mapWidget.setCenter(results[0].geometry.location);
+						if (status === 'OK') {
+							if (results[0]) {
+									this.mapWidget.setZoom(16);
+									this.mapWidget.setCenter(results[0].geometry.location);
 
-										// @todo: you are repeating yourself
-
-										var marker = new this.googleApi.Marker({
-											map: this.mapWidget,
-											position: results[0].geometry.location,
-											draggable: true
-										});
-
-										let coordinates = {
-											lat: marker.getPosition().lat(),
-											lng: marker.getPosition().lng()
-										}
-
-
-										this.saveActiveLocation(coordinates);
-
-										google.maps.event.addListener(marker, 'dragend', function() { console.log('marker dragged'); } );
-
-
-										this.markersArray.push(marker);
-								} else {
-										// @todo: No results found
-								}
+									this.placeMarker(results[0].geometry.location);
+									
 							} else {
-								console.error('Geocoder failed due to: ' + status);
+									// @todo: No results found
 							}
+						} else {
+							console.error('Geocoder failed due to: ' + status);
+						}
 					});
-
 				}
 			},
 			data() {
