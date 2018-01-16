@@ -294,7 +294,6 @@
 					this.sunProgress = 0; // Day
 				}
 				else if (currentHour == sunsetHour) {
-					debugger;
 					let sunsetMinutes = (new Date(this.sunTimes.sunsetTime)).getMinutes();
 					let progress = (1 - sunsetMinutes / 60).toFixed(2);
 					this.sunProgress = progress; // Sun setting
@@ -312,7 +311,6 @@
 					return;
 				} 
 				let height = Math.max(Math.abs(progress) * 100 - 10, 0); // - 20 for fade
-				debugger;
 				this.heightStyle = `height: ${height}%;`;
 			},
 			toRadians (angle) {
