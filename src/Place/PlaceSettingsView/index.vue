@@ -40,8 +40,10 @@
 				Location
 			</h3>
 			<setting-location
-				:value="[place.placeLat, place.placeLng]"
-				v-on:updateSetting="updateCoordinates"
+				:location="[place.placeLat, place.placeLng]"
+				:bearing="place.placeSettings.runwayOrientation"
+				v-on:updateLocation="updateCoordinates"
+				v-on:updateBearing="updateBearing"
 			/>
 		</div>
 
@@ -66,8 +68,6 @@
 
 
 
-		
-
 	</div>
 </template>
 
@@ -84,6 +84,7 @@
 	import settingBearing from './settingBearing.vue';
 	import settingDelete from './settingDelete.vue';
 	
+	
 	export default {
 		name: 'placeSettingsView',
 		components: {
@@ -93,6 +94,7 @@
 			'setting-location' : settingLocation,
 			'setting-bearing' : settingBearing,
 			'setting-delete' : settingDelete,
+			
 		},
 		computed: {
 			place () {
@@ -322,7 +324,8 @@
 		data () {
 			return {
 				originalPlace: {},
-				nameAvailable: false
+				nameAvailable: false,
+				
 			}
 		}
 	}

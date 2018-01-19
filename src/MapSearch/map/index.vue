@@ -16,6 +16,9 @@
 				place: {
 					type: Object
 				},
+				coordinates: {
+					type: Array 
+				},
 				disableControls: {
 					type: Boolean
 				},
