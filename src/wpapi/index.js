@@ -325,6 +325,31 @@ var api = {
 	},
 
 	// ----------------------------------------------------
+	// Update Weather Range
+
+	/*
+	payload = {
+		weatherRange: Number (Int),
+		userID: String
+	}
+	*/
+
+	updateWeatherRange(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/settings/update-weather-range', payload)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response);
+				}
+				
+			})
+			.catch(function (error) {
+				reject(error);
+			});	
+		});
+	},
+
+	// ----------------------------------------------------
 	// Update Password
 
 	/*
