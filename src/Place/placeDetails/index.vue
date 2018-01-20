@@ -64,7 +64,10 @@
 				},
 				placeViewType() {
 					return this.$store.state.existingPlaceView.view.placeType;
-				}
+				},
+				settingWeatherRange() {
+					return this.$store.state.globalApp.settings.weatherRange;
+				},
 				
 			},
 			watch: {
@@ -111,7 +114,7 @@
 							}
 						}
 
-						WPAPI.getPlaceWeather(oid).then((weather) => {
+						WPAPI.getPlaceWeather(oid, this.settingWeatherRange).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
 							if (localStorage) {
 								localStorage.setItem(oid, JSON.stringify(weather));

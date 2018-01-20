@@ -13,10 +13,10 @@ export default new Vuex.Store({
 			globalMessages: [],
 			topBarTitle: '',
 			settings: {
-				dateFormat: '',// @todo: set this
 				windUnit: '',
 				timeFormat: '',
 				temperatureUnit: '',
+				weatherRange: '', // how many days of weather to download
 			}
 		},
 		user: {
@@ -121,9 +121,6 @@ export default new Vuex.Store({
 		'GLOBAL_SET_TITLE' (state, title) {
 			state.globalApp.topBarTitle = title;
 		},
-		'GLOBAL_SET_DATEFORMAT' (state, value) {
-			state.globalApp.settings.dateFormat = value;
-		},
 		'GLOBAL_SET_WINDUNIT' (state, value) {
 			state.globalApp.settings.windUnit = value;
 		},
@@ -133,7 +130,9 @@ export default new Vuex.Store({
 		'GLOBAL_SET_TEMPERATURE_UNIT' (state, value) {
 			state.globalApp.settings.temperatureUnit = value;
 		},
-		
+		'GLOBAL_SET_WEATHER_RANGE' (state, value) {
+			state.globalApp.settings.weatherRange = value;
+		},
 	},
 	actions: {
 		'PLACE_UPDATE_LIMITS_SETTINGS' (state, val) {

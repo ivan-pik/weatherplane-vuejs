@@ -9,8 +9,15 @@
 			<h3 class="uiGroup__title">
 				Change Units
 			</h3>
-			<setting-units 
-			/>
+			<setting-units />
+			
+		</div>
+
+		<div class="uiGroup">
+			<h3 class="uiGroup__title">
+				Weather Settings
+			</h3>
+			<setting-weather />
 			
 		</div>
 
@@ -20,8 +27,7 @@
 			<h3 class="uiGroup__title">
 				Change Password
 			</h3>
-			<setting-password 
-			/>
+			<setting-password />
 			
 		</div>
 
@@ -30,8 +36,7 @@
 			<h3 class="uiGroup__title">
 				Change Email
 			</h3>
-			<setting-email 
-			/>
+			<setting-email />
 		</div>
 
 
@@ -49,6 +54,7 @@
 	import settingUnits from './settingUnits.vue';
 	import settingPassword from './settingPassword.vue';
 	import settingEmail from './settingEmail.vue';
+	import settingWeather from './settingWeather.vue';
 
 	export default {
 		name: 'SettingsView',
@@ -56,6 +62,7 @@
 			'setting-units' : settingUnits,
 			'setting-password' : settingPassword,
 			'setting-email' : settingEmail,
+			'setting-weather' : settingWeather,
 		},
 		computed: {
 			loggedIn() {

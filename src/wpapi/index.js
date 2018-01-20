@@ -224,9 +224,10 @@ var api = {
 		});
 	},
 	// Get Place Weather
-	getPlaceWeather(oid) {
+	getPlaceWeather(oid, range) {
+		// range - days
 		return new Promise(function(resolve, reject) {
-			HTTP.get('weather/' + oid)
+			HTTP.get('weather/' + oid + '/' + range)
 			.then(function (response) {
 				resolve(response.data.data);
 			})

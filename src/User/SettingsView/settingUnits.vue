@@ -141,27 +141,6 @@
 					});
 				}
 			},
-			updateDateFormatSetting (value) {
-				this.$store.commit('GLOBAL_SET_DATEFORMAT', value.value );
-
-				if (this.loggedIn) {
-					WPAPI.updateDateFormat(
-						{dateFormat: value.value}
-					).then((user) => {
-						this.$store.commit('GLOBAL_ADD_MESSAGE', {
-							text: 'Date format updated',
-							type: 'success',
-							dismiss: 'auto'
-						});
-					})
-					.catch((error) => {
-						this.$store.commit('GLOBAL_ADD_MESSAGE', {
-							text: 'Ooops, something went wrong',
-							type: 'error',
-						});
-					});
-				}
-			}
 		},
 		data () {
 			return {

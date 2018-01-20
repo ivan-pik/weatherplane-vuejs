@@ -73,6 +73,7 @@ export default {
 			this.$store.commit('GLOBAL_SET_WINDUNIT', "meters-per-second" );
 			this.$store.commit('GLOBAL_SET_TIMEFORMAT', "24-hours" );
 			this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', "c" );
+			this.$store.commit('GLOBAL_SET_WEATHER_RANGE', 3 );
 		}
 	},
 	components: {
