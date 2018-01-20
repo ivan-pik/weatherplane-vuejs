@@ -2,7 +2,9 @@
 	<g :class="role">
 		<defs>
 			<mask :id="uid">
-				<rect x="10" y="2" 
+				<rect 
+					:x="(this.role=='windInstrument') ? 0 : this.CHART_OFFSET_X" 
+					y="2" 
 					width="100%"
 					height="8"
 					fill="black"
@@ -11,7 +13,8 @@
 
 				<rect
 					class="svgBar__windSpeedMask"
-					x="10" y="2" 
+					:x="(this.role=='windInstrument') ? 0 : this.CHART_OFFSET_X" 
+					y="2" 
 					:width="windSpeedPixels"
 					height="8"
 					fill="white"
@@ -19,7 +22,8 @@
 				/>
 				<line
 					class="svgBar__windGust"
-					x1="14" y1="6" 
+					:x1="(this.role=='windInstrument') ? 4 : this.CHART_OFFSET_X+4" 
+					y1="6" 
 					:x2="windGustPixels-4" 
 					y2="6"
 					
@@ -86,7 +90,10 @@
 				return this.speedToPixels(this.windSpeed);
 			},
 			circleCX () {
-				return parseFloat(this.windSpeedPixels) + this.chartOffsetX;
+				let offset = (this.role=='windInstrument') ? 0 : this.CHART_OFFSET_X;
+				return parseFloat(this.windSpeedPixels) + offset;
+
+				 
 			},
 			windGustPixels () {
 				return this.speedToPixels(this.windGust);
@@ -103,7 +110,7 @@
 		},
 		data () {
 			return {
-				chartOffsetX: 10
+				CHART_OFFSET_X: 10
 			}
 		}
 	}

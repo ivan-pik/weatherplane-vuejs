@@ -11,15 +11,29 @@
 			v-on:chartSpaceDummyUpdated="chartWidthHandler"
 		/>
 
+		<chart-cursor
+			:width="Math.max(chartWidth - CHART_OFFSET_X, 0)"
+			:left="chartLeftPos + CHART_OFFSET_X"
+			:top="cursorScreenY"
+			:chartX="chartX"
+			:viewportHeight="viewPortHeight"
+			:cursorPositionEdges="cursorPositionEdges"
+			:chartHeight="chartHeight"
+			:isTouch="isTouch"
+			:pixelTreshold="pixelTreshold"
+		/>
+
 		<chart v-if="displayChart" 
 			:weather="weather"
 			:maxSpeedToDisplay="maxWindSpeed"
 			:maxSpeedTreshold="settingsMaxWindSpeed"
 			:cursorY="cursorY"
 			:cursorX="cursorX"
-			:isTouch="isTouch"
 			:chartWidth="chartWidth"
 			:chartLeftPos="chartLeftPos"
+			v-on:chart-x-update="setChartX"
+			v-on:cursorMove="cursorMoveHandler"
+			v-on:treshold-pixel-change="setPixelTreshold"
 		/>
 		
 	</div>	
@@ -30,6 +44,7 @@
 	import Hour from '../hour/index.vue';
 	import Date from './date/index.vue';
 	import Chart from '../../components/chart.vue';
+	import ChartCursor from '../../components/chartCursor.vue';
 
 	// @todo: Floating date labels in the hour chart
 	
@@ -45,6 +60,9 @@
 			cursorY: {
 				type: Number
 			},
+			cursorScreenY: {
+				type: Number
+			},
 			cursorX: {
 				type: Number
 			},
@@ -53,6 +71,9 @@
 			},
 			scrollPosition: {
 				type: Number
+			},
+			chartHeight: {
+				type: Number
 			}
 			
 			
@@ -60,13 +81,17 @@
 		components: {
 			'hour' : Hour,
 			'date' : Date,
-			'chart' : Chart
+			'chart' : Chart,
+			'chart-cursor' : ChartCursor
 		},
-
-		
+		mounted () {
+			this.viewPortHeight = window.innerHeight;
+			window.addEventListener('resize', this.resizeHandler);
+		},
+		beforeDestroy () {
+			window.removeEventListener('resize', this.resizeHandler);
+		},
 		computed: {
-			
-			
 			settingsMaxWindSpeed () {
 				return this.$store.state.existingPlaceView.place.placeSettings.maxWindSpeed;
 			},
@@ -74,28 +99,40 @@
 				return this.$store.getters.maxWindSpeed;
 			},
 			displayChart () {
-				// @todo: I forgot WTF is this for?
-				let i = 0;
-				this.weather.forEach(function(hour) {
-					i++;
-				});
-
-				if (i>1 && this.chartWidth !== false)
-
-				return (i>1);
+				if (this.weather.length > 0) {
+					return true;
+				}
 			}
 		},
 		methods: {
+			cursorMoveHandler (position) {
+				this.cursorPositionEdges = position;
+			},
+			resizeHandler (ev) {
+				// @todo: debounce
+				this.viewPortHeight = window.innerHeight;
+			},
 			chartWidthHandler (val) {
 				this.chartWidth = val.width;
-				this.chartLeftPos = val.left - this.chartOffsetX;
+				this.chartLeftPos = val.left;
 			},
+			setChartX (val) {
+				this.chartX = val;
+			},
+			setPixelTreshold (val) {
+				this.pixelTreshold = parseFloat(val);
+			}
 		},
 		data () {
 		  return {
-			  chartWidth: false,
+			  chartWidth: 0,
 			  chartLeftPos: 10,
-			  chartOffsetX: 10
+			  CHART_OFFSET_X: 10,
+			  chartX: 0,
+			  viewPortHeight: 0,
+			  cursorPositionEdges: '',
+			  pixelTreshold: 0,
+			  
 		  }
 		}
 

@@ -3,6 +3,7 @@
 		v-on:mousemove="chartPointer"
 		v-on:scroll="chartScroll"
 		v-on:touchstart="touchStart"
+		v-on:touchend="touchEnd"
 		
 		ref="chartScroller"
 	>
@@ -13,6 +14,8 @@
 			:cursorX="cursorX"
 			:isTouch="isTouch"
 			:scrollPosition="lastScrollPosition"
+			:cursorScreenY="cursorScreenY"
+			:chartHeight="chartHeight"
 		/>
 
 		<div class="scroller__spacer"
@@ -39,7 +42,7 @@
 		mounted () {
 			this.attachSunTimesToHours();
 			this.fillSpace();
-			
+			this.chartHeight = this.$refs.chartScroller.offsetHeight;
 		},
 		props: {
 			weather: {
@@ -48,13 +51,23 @@
 		},
 		computed: {
 			cursorDayIndex () {
+				let offset = 25; // @todo Magic number
+				if (this.isTouch) {
+					offset = 0;
+				}
 				let maxCursorPosition = this.weather.hourly.length - 2;
-				let cursorPos = Math.max(Math.floor((this.cursorY - 25) / 50),0);
+				let cursorPos = Math.max(Math.floor((this.cursorY - offset) / 50),0);
 				return Math.min(cursorPos,maxCursorPosition);
 			},
 			cursorDayProgress () {
-				let beginning = ( this.cursorDayIndex * 50 ) + 25;
-				return  Math.max((this.cursorY - beginning) / 50, 0);
+				let beginning = 0;
+				if (this.isTouch) {
+					beginning = this.cursorDayIndex * 50;
+				} else {
+					beginning = ( this.cursorDayIndex * 50 ) + 25; // @todo: magic number
+				}
+				
+				return  Math.min( Math.max((this.cursorY - beginning) / 50, 0), 1);
 			},
 		},
 		watch: {
@@ -66,6 +79,11 @@
 			},
 			weather () {
 				this.attachSunTimesToHours();
+			},
+			isTouch (isTouch) {
+				if (isTouch) {
+					this.fillSpace();
+				}
 			}
 		},
 
@@ -90,13 +108,16 @@
 				});
 			},
 			fillSpace () {
-				let height = this.$refs.chartScroller.offsetHeight - 50;
+				let height = this.chartHeight - 50; // @todo: magic number
 				this.fillSpaceHeight = "height: " + height + "px";
 				return;
 			},
 			
-			touchStart (e) {
+			touchStart () {
 				this.isTouch = true;
+			},
+			touchEnd() {
+				// this.isTouch = false;
 			},
 			chartPointer (e) {
 				if(!this.isTouch) {
@@ -106,6 +127,7 @@
 					if (!this.cursorTicking) {
 						window.requestAnimationFrame(() => {
 							this.calcFinalCursor();
+							this.calcAbsoluteCursor(e.pageY);
 							this.cursorTicking = false;
 						});
 						this.cursorTicking = true;
@@ -126,6 +148,9 @@
 			},
 			calcFinalCursor () {
 				this.cursorY = this.lastScrollPosition + this.lastCursorPosition;
+			},
+			calcAbsoluteCursor (y) {
+				this.cursorScreenY = y;
 			}
 		
 		},
@@ -140,7 +165,9 @@
 				cursorTicking: false,
 				isTouch: false,
 				fillSpaceHeight: "",
-				sunTimes: []
+				sunTimes: [],
+				cursorScreenY: 0,
+				chartHeight: 0
 			}
 		}
 

@@ -1,22 +1,21 @@
 <template>
 	<div class="hour"
-		v-bind:class="{
-			'hour--night' : (sunProgress == -1),
-			'hour--sunRising' : (sunProgress > -1 && sunProgress < 0),
-			'hour--day' : (sunProgress == 0),
-			'hour--sunSetting' : (sunProgress > 0 && sunProgress < 1),
-		}"
+		v-bind:class="'hour--'+progressKeyWord"
 	>
 		<date-label 
 			 v-if="displayLabel"
 			 :date="dateDisplay"
 			 :scrollPosition="scrollPosition"
 		/>
-		
 
 		<status :status="totalStatus" />
 
 		<hour-time :time="weather.time" />
+
+		<sun-time
+			v-if="displaySunTime"
+			:time="sunTime"
+		 />
 
 		<div v-if="order==0" class="hour__spaceDummy" ref="hourSpaceDummy"></div>
 
@@ -54,13 +53,7 @@
 		/>
 
 		<div class="sunTimeIndicator"
-			v-bind:class="{
-				'sunTimeIndicator--night' : (sunProgress == -1),
-				'sunTimeIndicator--sunRising' : (sunProgress > -1 && sunProgress < 0),
-				'sunTimeIndicator--day' : (sunProgress == 0),
-				'sunTimeIndicator--sunSetting' : (sunProgress > 0 && sunProgress < 1),
-			}"
-			
+			v-bind:class="'sunTimeIndicator--'+progressKeyWord"
 		>
 			<div class="sunTimeIndicator__progress"
 				:style="heightStyle"
@@ -76,6 +69,7 @@
 	import dateLabel from '../../components/dateLabel.vue';
 	import Status from '../../components/status.vue';
 	import hourTime from '../../components/hourTime.vue';
+	import sunTime from '../../components/sunTime.vue';
 	import windSpeed from '../../components/windSpeed.vue';
 	import windBearing from '../../components/windBearing.vue';
 	import weatherIcon from '../../components/weatherIcon.vue';
@@ -111,6 +105,7 @@
 			'date-label' : dateLabel,
 			'status' : Status,
 			'hour-time': hourTime,
+			'sun-time': sunTime,
 			'wind-speed' : windSpeed,
 			'weather-icon' : weatherIcon,
 			'wind-bearing' : windBearing,
@@ -123,7 +118,34 @@
 			
 		},
 		computed: {
-		
+			displaySunTime () {
+				if (this.progressKeyWord == 'sunRising' || this.progressKeyWord == 'sunSetting') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			progressKeyWord () {
+				if (this.sunProgress == -1) return 'night';
+				if (this.sunProgress > -1 && this.sunProgress < 0) return 'sunRising';
+				if (this.sunProgress == 0) return 'day';
+				if (this.sunProgress > 0 && this.sunProgress < 1) return 'sunSetting';
+			},
+			sunTime () {
+				if (this.progressKeyWord == 'sunRising') {
+					return {
+						sunRise: this.sunTimes.sunriseTime,
+						sunSet: ''
+					};
+				} else if (this.progressKeyWord == 'sunSetting') {
+					return {
+						sunRise: '',
+						sunSet: this.sunTimes.sunsetTime
+					};
+				} else {
+					return {};
+				}
+			},
 			displayLabel () {
 				if (this.order === 0) {
 					return false;

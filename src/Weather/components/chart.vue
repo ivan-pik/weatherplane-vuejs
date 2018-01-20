@@ -16,23 +16,11 @@
 				<stop stop-color="#DF4410" offset="100%"></stop>
 			</linearGradient>
 			<mask id="pathMask">
-
-				<circle
-					class="windSpeedChart_cursorDotMask"
-					:cx="positionX" 
-					:cy="positionY"
-					r="10"
-				/>
-
 				<path class="windSpeedChart__windSpeed" 
-					
 					:d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"
 					ref="windSpeedPath"
 				>
 				</path>
-
-				
-				
 			</mask>
 		</defs>
 
@@ -66,45 +54,13 @@
 		</g>
 
 
-		<g class="windSpeedChart_cursor">
-			
-			<rect  
-				width="100%" 
-				fill="#DF4410"
-				x="10" 
-				:y="positionY-1"
-				height="2"
-			/>
-			
-			<rect  
-				:width="windSpeedThresholdPixels" 
-				fill="url(#linearGradient-1)"
-				x="10" 
-				:y="positionY-1"
-				height="2"
-			/>
-
-			<circle
-				class="windSpeedChart_cursorDot"
-				:cx="positionX" 
-				:cy="positionY"
-				r="5"
-			/>
-
-			
-		</g>
+		
 					
 
 	</svg>
 </template>
 
 <script>
-	/* @todo: the cursor position is lagging in Y axis when used on 
-	a touch device, potentially even on slow computers while scrolling 
-	idea: Separate the cursor into it's own SVG which would be positioned or translated via CSS in it's own layer, this should be way faster
-	The cursor will need it's own gradient with mask for the dot to change colour
-	*/
-
 
 	import Vue from 'vue';
 	import windSpeedBar from './windSpeedBar.vue';
@@ -114,26 +70,17 @@
 	
 	export default {
 		name: 'chart',
-		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold','cursorY','cursorX','is-touch','chartWidth','chartLeftPos'],
+		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold','cursorY','is-touch','chartWidth','chartLeftPos'],
 		components: {
 			'wind-speed-bar' : windSpeedBar
 		},
 	
 		computed: {
-			pathMaskId () {
-				return "mask"+this.uid(this.weather[0].time);
-			},
 			chartHeight () {
 				return (this.weather.length) * 50;
 			},
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
-			},
-			position () {
-				return {
-					x: this.cursorX,
-					y: this.cursorY
-				}
 			},
 			chartStyle () {
 				return "width:" + this.chartWidth + "px; left:" + this.chartLeftPos + "px;";
@@ -142,15 +89,18 @@
 
 		watch: {
 			cursorY (val) {
-				this.cursor(this.position);
+				this.cursor(this.cursorY);
 			},
-			cursorX (val) {
-				this.cursor(this.position);
+			positionX (val) {
+				this.$emit('chart-x-update', val);
+			},
+			windSpeedThresholdPixels (windSpeedThresholdPixels) {
+				this.$emit('treshold-pixel-change', windSpeedThresholdPixels);
 			}
 		},
 
 		mounted () {
-			this.cursor(this.position);
+			this.cursor(this.cursorY);
 		},
 	 
 		methods: {
@@ -165,25 +115,18 @@
 				
 
 				// Stop at the beginning of the curve path
-				if (position.y < 25) {
+				if (position < 25) {
 					y = 25;
+					this.$emit('cursorMove', 'reached-the-top');
 				// Stop at the end of the curve path					
-				} else if (position.y > (this.chartHeight - 25)) {
+				} else if (position > (this.chartHeight - 25)) {
 					y = this.chartHeight-25;
+					this.$emit('cursorMove', 'reached-the-bottom');
 				// Cursor is withing the curve path	
 				} else {
-					y = position.y;
+					y = position;
+					this.$emit('cursorMove', 'in-the-middle');
 				}
-
-				if (this.isTouch) {
-					if (position.y < 25) {
-						y += position.y;	
-					} else {
-						y += 25;
-					}
-					
-				}
-
 				
 				let beginning = y;
 
@@ -214,9 +157,7 @@
 				this.positionY = y;
 				
 			},
-			pathMaskIdUrl () {
-				return ('url(#' + this.pathMaskId + ')');
-			},
+		
 		
 			curvePoints (type) {
 				let i = 0;
@@ -231,7 +172,7 @@
 						return false;
 					}
 					points.push([
-						parseFloat(this.speedToPixels(speed)) + this.chartOffsetX,
+						parseFloat(this.speedToPixels(speed)) + this.CHART_OFFSET_X,
 						50*i+25
 					]);
 					i++;
@@ -256,7 +197,7 @@
 		  return {
 			positionX: 0,
 			positionY: 0,
-			chartOffsetX: 10,
+			CHART_OFFSET_X: 10,
 		  }
 		}
 
