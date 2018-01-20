@@ -13,18 +13,16 @@
 		export default {
 			name: 'mapWidget',
 			props: {
+				// Pass either Google Place Obj. or coordinates to display on the map
 				place: {
-					type: Object
+					type: Object // Google Place Object
 				},
-				coordinates: {
+				coordinates: { // [lat,lng]
 					type: Array 
 				},
-				disableControls: {
+				disableControls: { // Remove Google Maps Controls
 					type: Boolean
 				},
-				lockMarker: {
-					type: Boolean
-				}
 			},
 			created () {
 
@@ -51,18 +49,37 @@
 					// place marker on click
 					google.maps.event.addListener(this.mapWidget, 'click', (event) => {
 						 this.placeMarker(event.latLng);
+
+						let coordinates = {
+							lat: event.latLng.lat(),
+							lng: event.latLng.lng()
+						}
+						this.emitLocation(coordinates);
 					 });
 
-					this.updateMap();
-
+					// Map can display position of Google Place object or Coordinates
+					if (this.place) {
+						this.getLocationOfGooglePlaceObject(this.place);
+					} else if (this.coordinates) {
+						this.updateMap({
+							lat: this.coordinates[0],
+							lng: this.coordinates[1]
+						});
+					}
 				}.bind(this), function(error) {
 					console.error("Failed!", error);
 				});
 			},
-
 			watch: {
-				place () {
-					this.updateMap();
+				place (place) {
+					this.getLocationOfGooglePlaceObject(place);
+				},
+				coordinates (coordinates) {
+					console.log("oops");
+					this.updateMap({
+						lat: coordinates[0],
+						lng: coordinates[1]
+					});
 				},
 				disableControls (val) {
 					if (val) {
@@ -73,11 +90,6 @@
 						this.mapWidget.set('mapTypeControl', true);
 					}
 				},
-				lockMarker (lockMarker) {
-					if (lockMarker) {
-
-					}
-				}
 			},
 
 			methods: {
@@ -101,20 +113,11 @@
 							lng: marker.getPosition().lng()
 						}
 						this.emitLocation(coordinates);
-					 });
-
-					let coordinates = {
-						lat: marker.getPosition().lat(),
-						lng: marker.getPosition().lng()
-					}
-
-					this.emitLocation(coordinates);
+					});
 
 					this.markersArray.push(marker);
 
 					this.mapWidget.setCenter(location);
-
-					this.emitLocation(coordinates);
 
 				},
 
@@ -124,15 +127,16 @@
 					})
 				},
 
-				updateMap () {
+				getLocationOfGooglePlaceObject (place) {
 					var geocoder = new this.googleApi.Geocoder;
 					geocoder.geocode({'placeId': this.place.place_id}, (results, status) => {
 						if (status === 'OK') {
 							if (results[0]) {
-									this.mapWidget.setZoom(16);
-									this.mapWidget.setCenter(results[0].geometry.location);
+									// this.mapWidget.setZoom(16);
+									// this.mapWidget.setCenter(results[0].geometry.location);
+									// this.placeMarker(results[0].geometry.location);
 
-									this.placeMarker(results[0].geometry.location);
+									this.updateMap(results[0].geometry.location);
 									
 							} else {
 									// @todo: No results found
@@ -141,6 +145,12 @@
 							console.error('Geocoder failed due to: ' + status);
 						}
 					});
+				},
+
+				updateMap (location) {
+					this.mapWidget.setZoom(16);
+					this.mapWidget.setCenter(location);
+					this.placeMarker(location);
 				}
 			},
 			data() {

@@ -116,6 +116,9 @@
 				},
 
 				computed: {
+					rotation () {
+						return this.value - 90;
+					},
 					rotationStyle () {
 						return `rotate(${this.rotation} 150 150)`;
 					},
@@ -177,35 +180,22 @@
 					mousemoveHandler (event) {
 						if (this.isDragging) {
 
-							var dialTop = (this.$refs.dial.getBoundingClientRect()).top;
-
-							var dialLeft = (this.$refs.dial.getBoundingClientRect()).left;
-
-							var dialHeight = (this.$refs.dial.getBoundingClientRect()).height;
-
-							var dialWidth = (this.$refs.dial.getBoundingClientRect()).width;
+							var dial = this.$refs.dial.getBoundingClientRect();
 							
-							var top = event.pageY;
-
-							var left = event.pageX;
+							var cursorTop = event.pageY;
+							var cursorLeft = event.pageX;
 							
-							var relTop = Math.min(Math.max(-1 + (top - dialTop) / (dialHeight * 0.5), -1),1);
+							var relTop = Math.min(Math.max(-1 + (cursorTop - dial.top) / (dial.height * 0.5), -1),1);
 
-							var relLeft = Math.min(Math.max(-1 + (left - dialLeft) / (dialWidth * 0.5), -1),1);
+							var relLeft = Math.min(Math.max(-1 + (cursorLeft - dial.left) / (dial.width * 0.5), -1),1);
 
 							var angleRad = Math.atan2(relTop, relLeft);
-
 							var angleDeg = angleRad * 180 / Math.PI;
 							
-							this.rotation = angleDeg - 90;
+							
 
-							var newBearing = angleDeg;
-
-							if (angleDeg < 0) {
-								newBearing = 360 + angleDeg;
-							}
-
-							this.bearing = Math.floor(newBearing);
+							// Set new bearing
+							this.bearing = Math.floor((angleDeg < 0) ? 360 + angleDeg : angleDeg);
 
 							this.$emit('input', this.bearing);
 						}
@@ -213,8 +203,8 @@
 				},
 				data () {
 					return {
-						rotation: 0,
 						isDragging: false,
+						bearing: 0
 					}
 				}
 		}

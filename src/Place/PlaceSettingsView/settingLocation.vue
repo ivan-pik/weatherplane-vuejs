@@ -1,7 +1,13 @@
 <template>
 	<div class="placeSetting placeSetting--name">
 		@todo: validate for correct number
-		@todo: MapView
+		
+		<button
+			@click="openMap"
+		>
+			Open map
+		</button>
+
 		<div class="uiTextInputGroup">
 			<label class="uiLabel" for="username">Lat</label>
 			<input
@@ -54,11 +60,14 @@
 
 		<div class="uiButtonGroup">
 			<button v-if="locationValueChanged || bearingValueChanged" @click="saveSetting" class="uiButton">Save</button>
-			<button v-if="locationValueChanged || bearingValueChanged" @click="reset" class="uiButton">Reset</button>
+			<button v-if="locationValueChanged || bearingValueChanged" @click="resetMapAndBearing" class="uiButton">Reset</button>
 		</div>
 
 
-		<overlay-panel>
+		<overlay-panel
+			:open="mapOpen"
+			v-on:close="closeMap"
+		>
 			<div class="" slot="content">
 
 				<ui-tabs
@@ -74,11 +83,10 @@
 					<bearing-selector
 						:active="this.tabs[0].active"
 						v-show="placeChosen"
-						v-model="bearing"
+						v-model="newBearingValue"
 					/>
 				</div>
-				<button @click="choosePlace">Choose this place</button>
-				<button @click="setBearing">Set Bearing</button>
+				<button @click="resetMapAndBearing">Reset</button>
 			</div>
 		</overlay-panel>
 
@@ -134,13 +142,25 @@
 			}
 		},
 		methods: {
+			openMap () {
+				this.mapOpen = true;
+			},
+			closeMap () {
+				this.mapOpen = false;
+			},
 			updateLocation (val) {
-				console.log(val);
+				this.newLocationValue = [val.lat, val.lng];
 			},
 	
-			choosePlace () {
+			updateLocationAndBearingFromMap () {
 
 			},
+
+			resetMapAndBearing () {
+				this.newLocationValue = this.deep_copy(this.location);
+				this.newBearingValue = this.deep_copy(this.bearing);
+			},
+
 			setBearing () {
 
 			},
@@ -148,9 +168,7 @@
 				// @todo: make object spread operator working with babel/webpack
 				return JSON.parse(JSON.stringify(obj));
 			},
-			reset() {
-				this.newLocationValue = ['' + this.value[0], '' + this.value[1]];
-			},
+		
 			saveSetting () {
 				if (this.locationValueChanged) {
 					this.$emit('updateLocation', 
@@ -179,14 +197,15 @@
 				tabs: [
 					{
 						label: 'Set Bearing',
-						active: true,
+						active: false,
 					},
 					{
 						label: 'Adjust map',
-						active: false
+						active: true
 					}
 				],
-				placeChosen: true
+				placeChosen: true,
+				mapOpen: false
 			}
 		}
 	}
