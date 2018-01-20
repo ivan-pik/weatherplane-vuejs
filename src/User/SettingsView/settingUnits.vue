@@ -1,35 +1,25 @@
 <template>
 	<div class="userSetting userSetting--units">
-		<!-- @todo: date format options -->
-		<ui-radio
-			v-if="false"
-			:radios="dateFormatOptions"
-			v-on:change="updateDateFormatSetting"
-		>
-		<label slot="label">Date Format</label>
-		</ui-radio>
-
 		<ui-radio
 			:radios="windUnitOptions"
 			v-on:change="updateWindUnitSetting"
 		>
-		<label slot="label">Wind Unit</label>
+			<label slot="label">Wind Unit</label>
 		</ui-radio>
 
 		<ui-radio
 			:radios="timeFormatOptions"
 			v-on:change="updateTimeFormatSetting"
 		>
-		<label slot="label">Time Format</label>
+			<label slot="label">Time Format</label>
 		</ui-radio>
 
 		<ui-radio
 			:radios="temperatureOptions"
 			v-on:change="updateTemperatureSetting"
 		>
-		<label slot="label">Temperature Unit</label>
+			<label slot="label">Temperature Unit</label>
 		</ui-radio>
-
 		
 	</div>
 </template>
@@ -41,9 +31,6 @@
 
 	export default {
 		name: 'settingUnits',
-		props: {
-			
-		},
 		components: {
 			'ui-radio' : uiRadio
 		},
@@ -79,13 +66,11 @@
 			},
 		},
 		methods: {
-
 			setDefaults () {
 				this.setActiveOption(this.temperatureOptions, this.temperatureUnit);
 				this.setActiveOption(this.timeFormatOptions, this.timeFormat);
 				this.setActiveOption(this.windUnitOptions, this.windUnit);
 			},
-
 			setActiveOption (radios,activeValue) {
 				radios.forEach(radio => {
 					if (radio.value == activeValue) {
@@ -93,22 +78,18 @@
 					}
 				});
 			},
-
 			updateTemperatureSetting (value) {
 				this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', value.value );
 
 				if (this.loggedIn) {
 					WPAPI.updateTemperatureUnit(
-						{
-							temperatureUnit: value.value}
+						{temperatureUnit: value.value}
 					).then((user) => {
-
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
 							text: 'Temperature unit updated',
 							type: 'success',
 							dismiss: 'auto'
 						});
-						this.valueChanged = false;
 					})
 					.catch((error) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
@@ -117,24 +98,19 @@
 						});
 					});
 				}
-
-			
 			},
 			updateTimeFormatSetting (value) {
 				this.$store.commit('GLOBAL_SET_TIMEFORMAT', value.value );
 
 				if (this.loggedIn) {
 					WPAPI.updateTimeFormat(
-					{
-						timeFormat: value.value,
-					}
+						{timeFormat: value.value}
 					).then((user) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
 							text: 'Time Format updated',
 							type: 'success',
 							dismiss: 'auto'
 						});
-						this.valueChanged = false;
 					})
 					.catch((error) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
@@ -143,24 +119,19 @@
 						});
 					});
 				}
-
-				
 			},
 			updateWindUnitSetting (value) {
 				this.$store.commit('GLOBAL_SET_WINDUNIT', value.value );
 
 				if (this.loggedIn) {
 					WPAPI.updateWindUnit(
-					{
-						windUnit: value.value,
-					}
+						{windUnit: value.value}
 					).then((user) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
 							text: 'Wind unit updated',
 							type: 'success',
 							dismiss: 'auto'
 						});
-						this.valueChanged = false;
 					})
 					.catch((error) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
@@ -175,16 +146,13 @@
 
 				if (this.loggedIn) {
 					WPAPI.updateDateFormat(
-					{
-						dateFormat: value.value,
-					}
+						{dateFormat: value.value}
 					).then((user) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
 							text: 'Date format updated',
 							type: 'success',
 							dismiss: 'auto'
 						});
-						this.valueChanged = false;
 					})
 					.catch((error) => {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
@@ -238,27 +206,7 @@
 						active: false
 					}
 				],
-				// @todo: make a list of sensible date formats
-				dateFormatOptions: [
-					{
-						label: '03-25 Wed',
-						value: 'meters-per-second',
-						active: false
-					},
-					{
-						label: '03/25 Wed',
-						value: 'meters-per-second',
-						active: false
-					},
-					{
-						label: 'March 25 Wed',
-						value: 'meters-per-second',
-						active: false
-					},
-				]
 			}
 		}
 	}
-
-
 </script>
