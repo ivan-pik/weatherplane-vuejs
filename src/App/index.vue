@@ -47,10 +47,10 @@ export default {
 
 						WPAPI.getPublicSettings(response.data.data.username)
 						.then(settings => {
-							this.$store.commit('GLOBAL_SET_DATEFORMAT', settings.dateFormat );
 							this.$store.commit('GLOBAL_SET_WINDUNIT', settings.windUnit );
 							this.$store.commit('GLOBAL_SET_TIMEFORMAT', settings.timeFormat );
 							this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', settings.temperatureUnit );
+							this.$store.commit('GLOBAL_SET_WEATHER_RANGE', settings.weatherRange );
 						});
 
 					} else {
@@ -70,7 +70,6 @@ export default {
 
 			// return awesomeDate.toLocaleTimeString(navigator.language, {hour: 'numeric'});
 
-			this.$store.commit('GLOBAL_SET_DATEFORMAT', "meh" );
 			this.$store.commit('GLOBAL_SET_WINDUNIT', "meters-per-second" );
 			this.$store.commit('GLOBAL_SET_TIMEFORMAT', "24-hours" );
 			this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', "c" );
