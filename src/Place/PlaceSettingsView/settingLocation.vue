@@ -1,6 +1,5 @@
 <template>
 	<div class="placeSetting placeSetting--name">
-		@todo: validate for correct number
 		
 		<button
 			@click="openMap"
@@ -23,7 +22,9 @@
 				v-show="validationErrors.has('placeName')"
 				class="help is-danger">{{ validationErrors.first('placeName') }}
 			</span>
+		</div>
 
+		<div class="uiTextInputGroup">
 			<label class="uiLabel" for="username">Lng</label>
 			<input
 				class="uiTextInput"

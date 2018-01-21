@@ -1,11 +1,11 @@
 <template>
-	<div id="app">
+	<div id="app" class="app">
 		<div class="globalMessages"
 			v-if="globalMessages.length > 0"
 		>
 			<global-message
 				v-for="(message, index) in globalMessages"
-				key="index"
+				:key="index"
 				:text="message.text"
 				:type="message.type"
 				:dismiss="message.dismiss"
@@ -15,9 +15,9 @@
 
 		<navigation-toggle />
 
-		<keep-alive v-bind:exclude="notAliveViews">
+		<transition name="routerTransition">
 			<router-view></router-view>
-		</keep-alive>
+		</transition>
 	</div>
 
 </template>
@@ -99,4 +99,29 @@ export default {
 }
 
 </script>
-<style src="../styles/main.scss" lang="scss"></style>
+<style src="" lang="scss">
+	@import '~globalVars';
+	@import '../styles/main.scss';
+
+
+.routerTransition-enter-active, .routerTransition-leave-active {
+	transition-property: opacity;
+  	transition-duration: .4s;
+
+
+}
+
+.routerTransition-enter-active {
+	 transition-delay: .4s;
+
+
+}
+
+.routerTransition-enter, .routerTransition-leave-active {
+	 opacity: 0;
+
+
+}
+
+</style>
+

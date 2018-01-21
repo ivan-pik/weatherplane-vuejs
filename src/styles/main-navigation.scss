@@ -1,39 +1,4 @@
-.main-navigation {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 3001;
-}
 
-.main-navigation__toggler {
-	display: block;
-	width: 40px;
-	height: 40px;
-	background: red;
-	position: relative;
-	z-index: 3001;
-}
-
-.main-navigation__panel {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	background: #fff;
-	z-index: 0;
-	z-index: 3000;
-	width: 100vw;
-	height: 100vh;
-	overflow: auto;
-
-}
-
-.userBar {
-	height: 40px;
-	padding: 0 0 0 50px;
-	line-height: 40px; 
-}
 
 .placesList {
 	

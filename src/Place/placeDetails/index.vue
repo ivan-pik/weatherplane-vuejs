@@ -41,17 +41,16 @@
 	
 
 		export default {
-				name: 'placeDetails',
-				created: function () {
-					
-				},
-				components: {
-					'weather-details-data' : weatherDetailsData,
-					'hourly-view' : hourlyView,
-					'load-screen' : loadScreen,
-					
-				},
-
+			name: 'placeDetails',
+			components: {
+				'weather-details-data' : weatherDetailsData,
+				'hourly-view' : hourlyView,
+				'load-screen' : loadScreen,
+				
+			},
+			mounted () {
+				this.fetchWeather();
+			},
 			props: {
 				activeLocation: {
 					type: Object
@@ -73,10 +72,15 @@
 			watch: {
 				activeLocation () {
 					this.fetchWeather();
+				},
+				settingWeatherRange (val) {
+					if (val) {
+						this.fetchWeather();
+					}
 				}
 			},
 			created: function () {
-				this.fetchWeather();
+				
 			},
 			methods: {
 				goToSaveRoute () {
@@ -113,7 +117,6 @@
 								}
 							}
 						}
-
 						WPAPI.getPlaceWeather(oid, this.settingWeatherRange).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
 							if (localStorage) {
@@ -127,6 +130,7 @@
 					}
 
 					if (this.placeViewType === 'temporary') {
+						
 						let coordinates = {
 							lat: this.activeLocation.placeLat,
 							lng: this.activeLocation.placeLng
@@ -149,8 +153,8 @@
 								}
 							}
 						}
-
-						WPAPI.getTempPlaceWeather(coordinates).then((weather) => {
+						
+						WPAPI.getTempPlaceWeather(coordinates, this.settingWeatherRange).then((weather) => {
 							this.$store.commit('PLACE_SAVE_WEATHER_DATA', weather);
 							this.weatherIsLoading = false;
 

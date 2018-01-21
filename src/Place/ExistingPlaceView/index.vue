@@ -37,6 +37,20 @@
 		mounted () {
 			this.placeLoader();
 		},
+		computed: {
+			authenticated () {
+				return this.$store.state.user.authenticated;
+			},
+			bearing () {
+				return this.$store.state.placeSearch.bearing;
+			},
+			place () {
+				return this.$store.state.existingPlaceView.place;
+			},
+			searchedPlace () {
+				return this.$store.state.placeSearch.selectedLocation.coordinates;
+			},
+		},
 		methods: {
 
 			placeLoader () {
@@ -50,24 +64,22 @@
 			},
 			loadTemporaryPlace () {
 				let tempPlace;
-
 				// Get a place from a search view
-				if (this.searchedPlace && this.searchedPlace.active) {
+				if (this.searchedPlace && this.searchedPlace.lat) {
 					this.$store.commit('PLACE_VIEW_TYPE', 'temporary');
-
 					tempPlace = {
-						"placeName": this.searchedPlace.structured_formatting.main_text,
-						"placeLat": this.selectedLocation.lat,
-						"placeLng": this.selectedLocation.lng,
+						"placeName": 'Temporary Place',
+						"placeLat": this.searchedPlace.lat,
+						"placeLng": this.searchedPlace.lng,
 						"placeSettings": {
 							"runwayOrientation": this.bearing,
 							"public": false,
-							"maxWindSpeed": 30,
-							"maxCrossWindSpeed": 19,
-							"minTemperature": "0",
-							"maxTemperature": 45,
+							"maxWindSpeed": 14,
+							"maxCrossWindSpeed": 8,
+							"minTemperature": 6,
+							"maxTemperature": 30,
 							"maxPrecipProbability": 10,
-							"maxWindBearingToRWY": 60
+							"maxWindBearingToRWY": 70
 						}
 					}
 
@@ -131,23 +143,6 @@
 						}
 					}
 				});
-			}
-		},
-		computed: {
-			authenticated () {
-				return this.$store.state.user.authenticated;
-			},
-			bearing () {
-				return this.$store.state.placeSearch.bearing;
-			},
-			place () {
-				return this.$store.state.existingPlaceView.place;
-			},
-			searchedPlace () {
-				return this.$store.state.placeSearch.place;
-			},
-			selectedLocation () {
-				return this.$store.state.placeSearch.selectedLocation.coordinates;
 			}
 		},
 		watch: {

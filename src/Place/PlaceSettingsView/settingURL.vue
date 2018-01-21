@@ -1,6 +1,6 @@
 <template>
 	<div class="placeSetting placeSetting--url">
-	@todo: validate field for correct slug
+	
 		<div class="uiTextInputGroup">
 			<label class="uiLabel" for="placeSlug">Location URL
 			<span v-if="valueChanged" class="availability">
@@ -33,7 +33,7 @@
 
 <script>
 	import Vue from 'vue';
-	
+	// @todo: validate field for correct slug
 	export default {
 		name: 'placeSettingURL',
 		props: {

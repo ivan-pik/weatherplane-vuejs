@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="nameAvailable"  @click="saveSetting" class="uiButton">Save</button>
+			<button v-if="nameAvailable"  @click="saveSetting" class="uiButton uiButton--primary">Save</button>
 			<button  @click="reset" class="uiButton">Reset</button>
 		</div>
 

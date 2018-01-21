@@ -57,3 +57,29 @@
 
 </script>
 
+<style lang="scss">
+	@import '~globalVars';
+
+	.uiTabs {
+		height: $uiInputHeight;
+		display: flex;
+		border-top: 1px solid $uiFrame;
+	}
+
+	.uiTabs__tab {
+		flex: 1 1 auto;
+		height: $uiInputHeight;
+		line-height: $uiInputHeight;
+		text-align: center;
+		border-bottom: 2px solid $uiFrame;
+		color: $uiInputInactive;
+		font-size: $fontSizeButton;
+		text-transform: uppercase;
+	}
+
+	.uiTabs__tab--active {
+		color: $uiInputActive;
+		border-bottom: 2px solid $uiInputActive;
+	}
+
+</style>

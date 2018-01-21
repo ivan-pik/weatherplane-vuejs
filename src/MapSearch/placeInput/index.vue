@@ -1,24 +1,30 @@
 <template>
-		<div class="">
+		<div class="placeInput">
 		
-			<form v-on:submit.prevent="onSubmit">
+			<form class="placeInput__form" v-on:submit.prevent="onSubmit">
 				<input
+					class="uiTextInput"
 					id="placeSearch"
 					type="text"
 					v-model="place"
 					@input="autocompleteRequest(place)"
-					placeholder="Search for a place"
+					placeholder="Search for near a city or landmark"
 					autocomplete="off"
+					@click="searching"
 				>
 				
 
-				<suggestions-list
+				
+
+				
+			</form>
+
+			<suggestions-list
 					:suggestions="suggestionsList"
 					v-on:suggestionHighlighted="suggestionHighlighted"
 				/>
 
 				<div class="error" v-if="noResults">No results found</div>
-			</form>
 		</div>
 
 </template>
@@ -52,6 +58,9 @@
 				},
 			
 				methods: {
+					searching () {
+						this.$emit('searching');
+					},
 					suggestionHighlighted (key) {
 						this.place = this.suggestions[key].description;
 						this.$emit('suggestionHighlighted', this.suggestions[key]);
@@ -93,11 +102,18 @@
 
 
 </script>
-<style scoped>
-#placeSearch {
-	display: block;
+<style lang="scss">
+
+@import '~globalVars';
+
+.placeInput {
+	
 }
-.suggestions.active {
-	background-color: red;
+
+.placeInput__form {
+	margin: 0 $widthGridLargerSpace;
 }
+
+
+
 </style>

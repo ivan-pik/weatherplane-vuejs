@@ -3,11 +3,12 @@
 
 @import 'reset';
 
-@import 'theme';
+
 @import 'global';
+@import 'animations';
 @import 'main-navigation';
 @import 'weather/hourly-view';
 @import 'weather/status';
 @import 'weather/weatherDetails';
-@import 'place/bearingSelector';
+
 @import 'places';

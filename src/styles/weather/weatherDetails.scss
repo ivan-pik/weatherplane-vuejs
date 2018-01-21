@@ -121,6 +121,8 @@
 	align-items: center;
 	color: $textLabelColour;
 	padding: 0 0 0 $widthGridSpace;
+	z-index: 1;
+	position: relative;
 }
 
 .limitSettingsOverview__button {

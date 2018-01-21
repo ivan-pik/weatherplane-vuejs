@@ -1,12 +1,41 @@
+body, html {
+	height: 100vh;
+	overflow: hidden;
+}
 
 body {
-   color: $textBaseColour;
-   font-family: 'Inter UI', sans-serif;
+	color: $textBaseColour;
+	font-family: 'Inter UI', sans-serif;
 }
 
-#app {
-	padding-top: 40px;
+.app {
 }
+
+// @todo: rework to CSS grids for better control for responsive design 
+.viewWrapper {
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	padding: 40px 0 0 0;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.viewWrapper__scroller {
+	flex: 1 1 auto;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.viewWrapper__bottom {
+	
+}
+
+
+
 
 .uiClose {
 	width: 40px;
@@ -27,11 +56,11 @@ body {
 }
 
 .uiButtonGroup {
-	// position: fixed;
-	// bottom: 0;
-	// left: 0;
-	// right: 0;
 	display: flex;
+}
+
+.uiButtonGroup--gutter {
+	padding: $widthGridLargerSpace;
 }
 
 
@@ -116,43 +145,6 @@ body {
 
 
 
-.viewTitle {
-	height: 40px;
-	line-height: 40px;
-	text-align: center;
-	position: fixed;
-	top: 0;
-	left: 40px;
-	right: 40px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.uiTabs {
-	height: 40px;
-	display: flex;
-}
-
-.uiTabs__tab {
-	flex: 1 1 auto;
-	height: 40px;
-	line-height: 40px;
-	text-align: center;
-	border-bottom: 2px solid silver;
-}
-
-.uiTabs__tab--active {
-	border-bottom: 2px solid green;
-}
-
-
-// @todo: sort out
-
-.mapSearchView_wrapper {
-	position: relative;
-	height: calc(100vh - 120px);
-}
 
 
 .googleMap {
@@ -174,37 +166,47 @@ body {
 
 .uiTextInputGroup {
 	display: block;
-	margin: 1em;
-
-	.help {
-		font-size: 12px;
-		display: block;
-		margin: 1em 0;
-	}
+	margin: 0 0 1em 0;
+	position: relative;
 }
 
 .uiLabel {
-	font-size: 12px;
+	font-size: 0.7rem;
+	display: block;
 }
 
 .uiTextInput {
 	display: block;
-	border-bottom: 2px solid green;
+	height: $uiInputHeight;
+	border-bottom: 1px solid $uiInputBorderColor;
+	padding: 0 0;
 	width: 100%;
-	padding: 1em 0;
 
-	&.is-invalid {
+	&:focus {
+		border-bottom-color: $uiInputBorderColor--active;
+		border-width: 2px;
+	}
+
+	&.is-invalid:not(.is-untouched) {
 		border-bottom-color: red;
-		background: pink;
+		background: #fdebee;
+		color: #c70000;
 	}
 }
 
 .uiButton {
 	display: block;
 	width: 100%;
-	background: green;
-	padding: 1em;
+	background: #444;
+	padding: 0 1em;
+	height: 40px;
 	color: #fff;
+	font-size: $fontSizeButton;
+	text-transform: uppercase;
+}
+
+.uiButton--primary {
+	background-color: $uiButtonPrimary;
 }
 
 .uiCheckBox {
@@ -217,30 +219,45 @@ body {
 	}
 }
 
+.uiHelp {
+	display: block;
+	font-size: 0.7rem;
+	padding: 1em 0 0 0;
+	color: #c70000;
+}
 
 
 .uiGroup {
+	border-radius: 2px;
 	display: block;
-	border: 1px solid red;
-	padding: 1em;
-	margin: 1em;
+	border: 1px solid $uiFrame;
+	padding: $widthGridLargerSpace * 1.5 $widthGridLargerSpace 1px $widthGridLargerSpace;
+	margin: $widthGridLargerSpace;
+	position: relative;
+
+	.uiButtonGroup > * {
+		margin-bottom: $widthGridLargerSpace;
+	}
 }
 
 .uiGroup__title {
-	border-bottom: 1px solid #ddd;
-	display: block;
-	width: 100%;
+	display: inline-block;
+	padding: 0 0.5em;
+	font-size: 0.7rem;
+	margin: 0 0 $widthGridLargerSpace -0.5em;
+	position: absolute;
+	top: -0.6em;
+	left: $widthGridLargerSpace;
+	background: #fff;
+	color: #888;
 }
 
-.uiModal {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	overflow: auto;
-	background: #fff;
-	z-index: 11000;
+
+
+.uiLink {
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	padding: 0;
+	font-size: $fontSizeButton;
 }

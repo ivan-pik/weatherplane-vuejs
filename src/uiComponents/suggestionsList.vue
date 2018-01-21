@@ -1,12 +1,12 @@
 <template>
-	<ul class="suggestions" v-if="visible">
+	<ul class="uiSuggestions" v-if="visible">
 		<li
-			class="suggestions_item"
+			class="uiSuggestions__item"
 			v-for="(suggestion, key) in suggestions" 
 			:key="key"
 		>
 			<a 
-				class="suggestion_link"
+				class="uiSuggestions__link"
 				v-bind:class="{active : checkIfActive(key)}" 
 				@click.stop="clickSelection(key)">
 				{{suggestion}}
@@ -97,22 +97,28 @@
 </script>
 
 <style lang="scss">
-	.suggestions {
-		background: rgb(202, 202, 202);
+	@import '~globalVars';
+
+	.uiSuggestions {
 		display: block;
 		position: absolute;
 		z-index: 1;
+		background: #fff;
+		font-size: 0.8rem;
 		width: 100%;
 	}
-	.suggestions_item {
+
+	.uiSuggestions__item {
 		display: block;
-		
 	}
-	.suggestion_link {
-		padding: 1em;
+
+	.uiSuggestions__link {
 		display: block;
-		&.active {
-			background-color: red;
+		line-height: 1.4;
+		padding: 1em $widthGridLargerSpace;
+
+		&.active, &:hover {
+			// background-color: red;
 		}
 	}
 </style>

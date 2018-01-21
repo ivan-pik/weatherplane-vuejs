@@ -1,7 +1,37 @@
+// Layers
+$layer-navigation: 10;
+
+// Global Colours
+$brandMainColour: #FF4800;
+$brandAccentColour: #00AE3C;
+$colorAppBackground: #fff;
+$colorSubtleBorder: #e6e6e6;
+
+// Navigation
+$background-burger: $colorAppBackground;
+$color-burger: rgb(95, 95, 95);
+
+$background-popup-overlay: rgba(#333, 0.5);
+
+// UI elements
+$uiInputBorderColor: #8F9DA8;
+$uiInputBorderColor--active: $brandAccentColour;
+$uiInputActive: $brandAccentColour;
+$uiInputActiveFront: #fff;
+$uiButtonPrimary: $brandAccentColour;
+$uiButtonPrimaryFront: #fff;
+$uiInputInactive: $uiInputBorderColor;
+$uiFrame: $colorSubtleBorder;
+$uiInputHeight: 40px;
+
 // @todo: some nice naming convention
+
+$fontSizeButton: 0.7rem;
+
 
 $widthStatusBar: 4px;
 $widthGridSpace: 2vw;
+$widthGridLargerSpace: 4vw;
 
 $windSpeedBarHeight: 8px;
 

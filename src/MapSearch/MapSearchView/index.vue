@@ -1,8 +1,18 @@
 <template>
-		<div class="">
+	<div class="viewWrapper">
+		<navigation-header />
+
+		<div class="viewWrapper__scroller">
+
+			<transition name="dissapear">
+				<weatherplane-intro v-if="!searching" />
+			</transition>
+		
+
 			<place-input 
 				v-if="!placeChosen" 
 				v-on:suggestionHighlighted="suggestionHighlighted" 
+				v-on:searching="searching=true"
 			/>
 
 			<ui-tabs
@@ -23,10 +33,17 @@
 					v-model="bearing"
 				/>
 			</div>
-			<button @click="choosePlace" v-if="place">Choose this place</button>
-			<button @click="setBearing" v-if="placeChosen">Set Bearing</button>
-
+			
 		</div>
+
+		<div class="viewWrapper__bottom">
+			<div class="uiButtonGroup">
+				<button class="uiButton uiButton--primary" @click="choosePlace" v-if="place && !placeChosen">Confirm location</button>
+				<button class="uiButton uiButton--primary" @click="setBearing" v-if="placeChosen">Continue</button>
+			</div>
+		</div>
+		
+	</div>
 
 </template>
 <script>
@@ -35,7 +52,8 @@
 		import map from '../map/index.vue';
 		import bearingSelector from '../bearingSelector.vue';
 		import uiTabs from '../../uiComponents/tabs.vue';
-		
+		import navigationHeader from 'Navigation/navigationHeader.vue'
+		import weatherPlaneIntro from 'Content/intro.vue'
 
 		export default {
 				name: 'MapSearchView',
@@ -44,9 +62,9 @@
 					'location-map' : map,
 					'bearing-selector' : bearingSelector,
 					'ui-tabs' : uiTabs,
-					
+					'navigation-header' : navigationHeader,
+					'weatherplane-intro' : weatherPlaneIntro
 				},
-		
 				computed: {
 						place() {
 							return this.$store.state.placeSearch.place;
@@ -80,14 +98,15 @@
 						bearing: 90,
 						tabs: [
 							{
-								label: 'Set Bearing',
+								label: 'Runway Bearing',
 								active: true,
 							},
 							{
-								label: 'Adjust map',
+								label: 'Move map',
 								active: false
 							}
-						]
+						],
+						searching: false,
 					}
 				}
 		}
@@ -95,6 +114,14 @@
 
 
 </script>
-<style scoped>
+<style lang="scss">
+	.appLogo {
+		width: 160px;
+	}
 
+	.mapSearchView_wrapper {
+		flex: 1 1 auto;
+		position: relative;
+		
+	}
 </style>

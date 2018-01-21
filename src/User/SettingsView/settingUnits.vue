@@ -4,21 +4,21 @@
 			:radios="windUnitOptions"
 			v-on:change="updateWindUnitSetting"
 		>
-			<label slot="label">Wind Unit</label>
+			<label class="uiLabel" slot="label">Wind Unit</label>
 		</ui-radio>
 
 		<ui-radio
 			:radios="timeFormatOptions"
 			v-on:change="updateTimeFormatSetting"
 		>
-			<label slot="label">Time Format</label>
+			<label class="uiLabel" slot="label">Time Format</label>
 		</ui-radio>
 
 		<ui-radio
 			:radios="temperatureOptions"
 			v-on:change="updateTemperatureSetting"
 		>
-			<label slot="label">Temperature Unit</label>
+			<label class="uiLabel" slot="label">Temperature Unit</label>
 		</ui-radio>
 		
 	</div>

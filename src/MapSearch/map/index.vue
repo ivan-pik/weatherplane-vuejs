@@ -138,6 +138,14 @@
 
 									this.updateMap(results[0].geometry.location);
 									
+									let coordinates = {
+										lat: results[0].geometry.location.lat(),
+										lng: results[0].geometry.location.lng()
+									}
+									this.emitLocation(coordinates);
+									
+
+									
 							} else {
 									// @todo: No results found
 							}
@@ -148,6 +156,9 @@
 				},
 
 				updateMap (location) {
+					
+
+					this.displayMap = true;
 					this.mapWidget.setZoom(16);
 					this.mapWidget.setCenter(location);
 					this.placeMarker(location);
@@ -155,7 +166,8 @@
 			},
 			data() {
 				return {
-					markersArray: []
+					markersArray: [],
+					firstRun: true
 				}
 			}
 		}

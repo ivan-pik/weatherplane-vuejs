@@ -49,7 +49,7 @@
 
 		
 
-			<button type="submit" class="uiButton">Save</button>
+			<button type="submit" v-if="nameAvailable" class="uiButton">Save</button>
 		</form>
 	</div>
 

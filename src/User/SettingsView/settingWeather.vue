@@ -4,7 +4,7 @@
 			:radios="weatherRangeRadios"
 			v-on:change="updateWeatherRange"
 		>
-			<label slot="label">Days ahead</label>
+			<label class="uiLabel" slot="label">Days ahead</label>
 		</ui-radio>
 
 		

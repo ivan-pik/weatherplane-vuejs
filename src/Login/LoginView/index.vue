@@ -1,45 +1,63 @@
 <template>
-	<div>
-		<div class="viewTitle viewTitle--logIn">
-			<h1 class="viewTitle__text">Log-in</h1>
-		</div>
+	<div class="viewWrapper">
+		<navigation-header />
 
-		<div v-if="message" class="loginMessage">{{message}}</div>
+		<div class="viewWrapper__scroller">
+			<ui-modal
+				:overlay="false"
+				:show="!loginSuccessfulState"
+				v-on:closed="modalClosedHandler"
+			>
+				<login-form  slot="content"
+					v-on:loginSuccessful="loginSuccessful"
+				/>
+			</ui-modal>
 
-		<component v-bind:is="currentView">
-		</component>
-		<div>
-			<a @click="currentView = 'lost-password-input'" v-if="currentView != 'lost-password-input'">Forgot your password?</a>
-			<a @click="currentView = 'lost-username-input'" v-if="currentView != 'lost-username-input'">Forgot your username?</a>
 		</div>
+		
 	</div>
 </template>
 <script>
-	import bus from '../../bus'
-	import Vue from 'vue'
 
+	import navigationHeader from 'Navigation/navigationHeader.vue'
 	import LoginInput from '../LoginInput/index.vue'
-	import LostPasswordInput from '../LostPasswordInput/index.vue'
-	import LostUsernameInput from '../LostUsernameInput/index.vue'
+	import UiModal from 'uiComponents/modal.vue'
+
 
 	export default {
 		name: 'LoginView',
 		components: {
-			'login-input': LoginInput,
-			'lost-password-input': LostPasswordInput,
-			'lost-username-input': LostUsernameInput
+			'navigation-header' : navigationHeader,
+			'login-form': LoginInput,
+			'ui-modal': UiModal,
 		},
 		props: {
 			message: {
 				type: String
 			}
 		},
+		watch: {
+		
+		},
+		methods: {
+			modalClosedHandler () {
+				if (this.loginSuccessfulState) {
+					this.$router.push(this.userID);
+
+				}
+			},
+			loginSuccessful (payload) {
+				this.loginSuccessfulState = true;
+				this.userID = payload;
+			},
+		},
 		data() {
 			return {
-				currentView: 'login-input'
+				loginSuccessfulState: false,
+				modalClosed: false,
+				userID: '',
 			}
 		}
 	}
 
 </script>
-<style scoped src="./style.css"></style>

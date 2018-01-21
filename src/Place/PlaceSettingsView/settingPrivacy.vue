@@ -2,21 +2,18 @@
 	<div class="placeSetting placeSetting--name">
 
 		<div class="uiTextInputGroup">
-			
-			<input
-				class="uiCheckBox"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placePrivacy') }"
-				name="placePrivacy"
-				v-model="newValue"
-				type="checkbox"
-			>
-			<label class="uiLabel" for="placePrivacy">Public</label>
 
+			<ui-radio
+				:radios="privacyOptions"
+				v-on:change="updateHandler"
+			>
+				<label slot="label">Wind Unit</label>
+			</ui-radio>
+			
 		</div>
 
 		<div class="uiButtonGroup">
-			<button v-if="valueChanged" @click="saveSetting" class="uiButton">Save</button>
+			<button v-if="valueChanged" @click="saveSetting" class="uiButton uiButton--primary">Save</button>
 			<button v-if="valueChanged" @click="reset" class="uiButton">Reset</button>
 		</div>
 
@@ -24,10 +21,14 @@
 </template>
 
 <script>
-	import Vue from 'vue';
+	import uiRadio from 'uiComponents/buttonRadio.vue';
+
 	
 	export default {
 		name: 'placeSettingPrivacy',
+		components: {
+			'ui-radio' : uiRadio,
+		},
 		props: {
 			value: {
 				type: Boolean
@@ -35,6 +36,7 @@
 		},
 		mounted () {
 			this.copyOriginalSetting(this.value);
+			this.setActiveOption(this.privacyOptions, this.newValue);
 		},
 		watch: {
 			newValue (newValue) {
@@ -46,6 +48,18 @@
 			}
 		},
 		methods: {
+			updateHandler (publicPlace) {
+				this.newValue = publicPlace.value;
+			},
+			setActiveOption (radios,activeValue) {
+				radios.forEach(radio => {
+					if (radio.value == activeValue) {
+						radio.active = true;
+					} else {
+						radio.active = false;
+					}
+				});
+			},
 			copyOriginalSetting (value) {
 				this.newValue = this.deep_copy(value);
 			},
@@ -55,6 +69,7 @@
 			},
 			reset() {
 				this.newValue = this.value;
+				this.setActiveOption(this.privacyOptions, this.newValue);
 			},
 			saveSetting () {
 				this.valueChanged = false;
@@ -65,7 +80,19 @@
 			return {
 				newValue: '',
 				valueChanged: false,
-				nameAvailable: false
+				nameAvailable: false,
+				privacyOptions: [
+					{
+						label: 'Private',
+						value: false,
+						active: false
+					},
+					{
+						label: 'Public',
+						value: true,
+						active: false
+					},
+				],
 			}
 		}
 	}

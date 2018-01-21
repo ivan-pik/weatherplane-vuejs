@@ -17,7 +17,6 @@ var api = {
 		return new Promise(function(resolve, reject) {
 			HTTP.post('/authenticate', credentials)
 			.then(function (response) {
-
 				if (response.data.success) {
 					// @todo: fix this!
 					HTTP.interceptors.request.use(
@@ -31,12 +30,16 @@ var api = {
 					resolve(response.data.token);
 
 				} else {
-					reject();
+					reject(response);
 				}
 				
 			})
 			.catch(function (error) {
-				resolve(error);
+				if (error.response && error.response.data.errors) {
+					reject(error.response.data.errors);
+				} else {
+					reject(error);
+				}
 			});	
 		});
 		
@@ -237,13 +240,13 @@ var api = {
 		});
 	},
 	// Get Temporary Place Weather
-	// @todo: make the API work
-	getTempPlaceWeather(coordinates) {
+	getTempPlaceWeather(coordinates, range) {
 		return new Promise(function(resolve, reject) {
 			HTTP.get('temporaryWeather/', {
 				params: {
 					lat: coordinates.lat,
-					lng: coordinates.lng
+					lng: coordinates.lng,
+					range: range
 				}
 			})
 			.then(function (response) {
