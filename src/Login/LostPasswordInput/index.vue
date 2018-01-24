@@ -1,7 +1,7 @@
 <template>
 	<div class="modal">
 
-		<div v-if="wrongUsername">
+		<div class="message message--error" v-if="wrongUsername">
 			This user doesn't exist
 		</div>
 
@@ -9,32 +9,30 @@
 			Check your mail for new password
 		</div>
 
-		<transition name="fade">
-
-			<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
-
-				<label class="label" for="username">Username</label>
-				<br>
+		<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
+			<div class="uiTextInputGroup">
+				<label class="uiLabel" for="username">Username</label>
 				<input
-						v-validate="{ rules: { required: true, alpha_dash: true } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('username') }"
-						name="username"
-						v-model="username"
-						type="text"
-						placeholder="Enter your username here"
-						autofocus
+					class="uiTextInput"
+					v-validate="{ rules: { required: true, alpha_dash: true } }"
+					:class="{'input': true, 'is-danger': validationErrors.has('username') }"
+					name="username"
+					v-model="username"
+					type="text"
+					placeholder="Enter your username here"
+					autofocus
 				>
-				<br>
 				<span
-						v-show="validationErrors.has('username')"
-						class="help is-danger">{{ validationErrors.first('username') }}
-	</span>
+					v-show="validationErrors.has('username')"
+					class="uiHelp uiHelp--danger">
+					{{ validationErrors.first('username') }}
+				</span>
+			</div>
+			<button class="uiButton uiButton--primary" type="submit">Continue</button>
+		</form>
 
-				<br>
-				<button type="submit">Continue</button>
-			</form>
+		<button class="uiLink" @click="cancel">Back to login</button>
 
-		</transition>
 	</div>
 </template>
 <script>
@@ -54,7 +52,7 @@
 						if (response.response.data.success) {
 							this.passwordResetSent = true;
 							this.wrongUsername = false;
-						} else if(err.body.errors) {
+						} else if(response.response.data.errors) {
 							this.wrongUsername = true;
 						}
 					}).catch(err => {
@@ -64,6 +62,9 @@
 				}).catch(() => {
 					// when form is invalid
 				});
+			},
+			cancel () {
+				this.$emit('cancel');
 			}
 		},
 		data() {

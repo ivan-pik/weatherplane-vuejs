@@ -2,8 +2,12 @@
 	<div class="">
 		<place-not-found v-if="place404" />
 
-		<login-view :message="message" v-if="needToLogin" />
-
+		<login-form
+			v-if="needToLogin"
+			:message="'You need to log-in to see this place'"
+		>
+			
+		</login-form>
 
 		<div v-else-if="place" class="">
 			<place-details :activeLocation='place' />
@@ -13,7 +17,6 @@
 			<load-screen text="Loading place" />
 		</div>
 
-
 	</div>
 </template>
 <script>
@@ -21,7 +24,7 @@
 	import {HTTP} from '../../http-common';
 	import WPAPI from '../../wpapi/index';
 	import placeNotFound from '../placeNotFound/index.vue';
-	import loginView from '../../Login/LoginView/index.vue';
+	import loginForm from 'Login/loginForm.vue';
 	import placeDetails from '../placeDetails/index.vue';
 	import loadScreen from '../../uiComponents/loadScreen.vue';
 
@@ -30,7 +33,7 @@
 		components: {
 			'load-screen' : loadScreen,
 			'place-not-found' : placeNotFound,
-			'login-view' : loginView,
+			'login-form' : loginForm,
 			'place-details': placeDetails
 		},
 		

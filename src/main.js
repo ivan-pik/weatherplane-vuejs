@@ -7,6 +7,7 @@ import App from './App/index.vue'
 
 // import {checkAuth, getLocalToken} from './auth/index.js'
 
+import WelcomeView from 'WelcomeView/index.vue'
 import MapSearchView from './MapSearch/MapSearchView/index.vue'
 import LoginView from './Login/LoginView/index.vue'
 import RegisterView from './Register/RegisterView/index.vue'
@@ -19,7 +20,8 @@ import SaveLocationView from './Place/SaveLocationView/index.vue'
 
 
 const routes = [
-    { path: '/', name: 'home', component: MapSearchView},
+    { path: '/', name: 'home', component: WelcomeView},
+    { path: '/search', name: 'search', component: MapSearchView},
     { path: '/login', name: 'login', component: LoginView },
     { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/reset-password', name: 'resetPassword', component: ResetPassword },

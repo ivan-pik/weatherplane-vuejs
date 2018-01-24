@@ -3,18 +3,11 @@
 		<navigation-header />
 
 		<div class="viewWrapper__scroller">
-			<ui-modal
+			<login-form 
+				v-on:logged-in="loggedInHandler"
 				:overlay="false"
-				:show="!loginSuccessfulState"
-				v-on:closed="modalClosedHandler"
-			>
-				<login-form  slot="content"
-					v-on:loginSuccessful="loginSuccessful"
-				/>
-			</ui-modal>
-
+			/>
 		</div>
-		
 	</div>
 </template>
 <script>
@@ -22,40 +15,29 @@
 	import navigationHeader from 'Navigation/navigationHeader.vue'
 	import LoginInput from '../LoginInput/index.vue'
 	import UiModal from 'uiComponents/modal.vue'
-
+	import LoginForm from 'Login/loginForm.vue'
 
 	export default {
 		name: 'LoginView',
 		components: {
 			'navigation-header' : navigationHeader,
-			'login-form': LoginInput,
+			'login-form': LoginForm,
 			'ui-modal': UiModal,
 		},
 		props: {
-			message: {
-				type: String
-			}
+		
 		},
 		watch: {
 		
 		},
 		methods: {
-			modalClosedHandler () {
-				if (this.loginSuccessfulState) {
-					this.$router.push(this.userID);
-
-				}
-			},
-			loginSuccessful (payload) {
-				this.loginSuccessfulState = true;
-				this.userID = payload;
-			},
+			loggedInHandler () {
+				this.$router.push('/');
+			}
 		},
 		data() {
 			return {
-				loginSuccessfulState: false,
-				modalClosed: false,
-				userID: '',
+				
 			}
 		}
 	}

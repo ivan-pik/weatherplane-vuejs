@@ -1,38 +1,39 @@
 <template>
 	<div class="modal">
 
-		<div v-if="wrongUsername">
+		<div class="message message--error" v-if="wrongUsername">
 			This email address is not registered
 		</div>
 
-		<div v-if="passwordResetSent">
+		<div class="message message--success" v-if="passwordResetSent">
 			Email with your username was sent
 		</div>
 
-		<transition name="fade">
 
-			<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
+		<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
 
-				<label class="label" for="email">Please enter the email address you used for registration</label>
+			<div class="uiTextInputGroup">
+				<label class="uiLabel" for="email">Please enter the email address you used for registration</label>
 				<br>
 				<input
-						v-validate="{ rules: { required: true, email: true } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('email') }"
-						type="email"
-						name="email"
-						v-model="email"
-						placeholder="Enter your email here"
-						data-vv-delay="1000"
+					class="uiTextInput"
+					v-validate="{ rules: { required: true, email: true } }"
+					:class="{'input': true, 'is-danger': validationErrors.has('email') }"
+					type="email"
+					name="email"
+					v-model="email"
+					placeholder="Enter your email here"
+					data-vv-delay="1000"
 
 				/>
-				<span v-show="validationErrors.has('email')" class="help is-danger">{{ validationErrors.first('email') }}</span>
-				<br>
+				<span v-show="validationErrors.has('email')" class="uiHelp uiHelp--danger">{{ validationErrors.first('email') }}</span>
+			</div>
 
-				<br>
-				<button type="submit">Continue</button>
-			</form>
+			<button class="uiButton uiButton--primary" type="submit">Continue</button>
+		</form>
 
-		</transition>
+		<button class="uiLink" @click="cancel">Back to login</button>
+
 	</div>
 </template>
 <script>
@@ -63,6 +64,9 @@
 				}).catch(() => {
 					// when form is invalid
 				});
+			},
+			cancel () {
+				this.$emit('cancel');
 			}
 		},
 		data() {

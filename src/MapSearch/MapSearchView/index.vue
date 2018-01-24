@@ -4,11 +4,6 @@
 
 		<div class="viewWrapper__scroller">
 
-			<transition name="dissapear">
-				<weatherplane-intro v-if="!searching" />
-			</transition>
-		
-
 			<place-input 
 				v-if="!placeChosen" 
 				v-on:suggestionHighlighted="suggestionHighlighted" 
