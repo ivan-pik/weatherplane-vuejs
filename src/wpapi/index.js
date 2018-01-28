@@ -12,6 +12,35 @@ const HTTP = axios.create({
 var api = {
 	// User Accounts
 
+	// Register
+
+	// {
+	//    userID 
+	//    password
+	//    email
+	// }
+
+	register(newUser) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/register', newUser)
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data);
+				} else {
+					reject(response);
+				}
+			})
+			.catch(function (error) {
+				if (error.response.data && error.response.data.errors) {
+					reject(error.response.data.errors);
+				} else {
+					reject(error);
+				}
+			});	
+		});
+		
+	},
+
 	// Authenticate
 	authenticate(credentials) {
 		return new Promise(function(resolve, reject) {
@@ -230,6 +259,10 @@ var api = {
 	getPlaceWeather(oid, range) {
 		// range - days
 		return new Promise(function(resolve, reject) {
+			if (range == "") {
+				reject();
+			}
+
 			HTTP.get('weather/' + oid + '/' + range)
 			.then(function (response) {
 				resolve(response.data.data);

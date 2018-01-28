@@ -1,35 +1,54 @@
 <template>
-<div class="">
-	<div v-if="weatherData && !weatherIsLoading">
-		<div class="viewTitle viewTitle--placeDetails">
-			<h1 class="viewTitle__text">{{activeLocation.placeName}}</h1>
-		</div>
+	<transition name="fade">
+		<div v-if="weatherData && !weatherIsLoading">
+			<div class="placeContextMenu">
+				<button
+					class="uiLink placeContextMenu__toggler"
+					v-if="placeViewType=='saved'" 
+					@click="placeSettingsModal=true"
+				>
+					Settings
+				</button>
+				<button
+					class="uiLink uiLink--primary" v-if="placeViewType=='temporary'"
+					@click="saveLocationModal=true"
+					>Save location
+				</button>
+			</div>
 
-		<div class="placeContextMenu">
-			<button class="placeContextMenu__toggler"
-			@click="contextMenuOpen=!contextMenuOpen">
-			C
-			</button>
-			<ul class="placeContextMenu__list" v-if="contextMenuOpen">
-				<li class="placeContextMenu__list-item" v-if="placeViewType=='temporary'"
-				@click="goToSaveRoute"
-				>Save location</li>
-				<li class="placeContextMenu__list-item" v-if="placeViewType=='saved'" 
-				@click="openPlaceSettings">Place Settings</li>
-				<li class="placeContextMenu__list-item" v-if="placeViewType=='saved'" 
-				@click="openLimitsSettings">Weather Limits Settings</li>
-			</ul>
-		</div>
-		
-		<weather-details-data :weather="weatherData.hourly" />
-		<hourly-view :weather="weatherData" />
-		
-	</div>
+			<ui-modal
+				v-if="placeViewType=='saved'"
+				:show="placeSettingsModal"
+				:closeButton="true"
+				
+				@close-button-clicked="placeSettingsModal=false"
+			>
+				<place-settings slot="content" />
+			</ui-modal>
 
-	<div v-else>
-		<load-screen text="Loading Weather" />
-	</div>
-</div>
+			<ui-modal
+				v-if="placeViewType=='temporary'"
+				:show="saveLocationModal"
+				:closeButton="true"
+				:popup="true"
+				@close-button-clicked="saveLocationModal=false"
+			>
+				<save-place
+					slot="content"
+					@place-saved="placeSavedHandler"
+				/>
+			</ui-modal>
+			
+			<weather-details-data :weather="weatherData.hourly" />
+			<hourly-view :weather="weatherData" />
+		</div>
+		<load-screen
+			v-else
+			text="Loading Weather"
+		/>
+
+	</transition>
+
 
 </template>
 <script>
@@ -38,6 +57,8 @@
 		import hourlyView from '../../Weather/hourlyView/index.vue';
 		import weatherDetailsData from './weatherDetailsData.vue';
 		import loadScreen from '../../uiComponents/loadScreen.vue';
+		import savePlace from 'Place/saveLocation.vue'
+		import placeSettings from 'Place/PlaceSettingsView/index.vue'
 	
 
 		export default {
@@ -46,6 +67,8 @@
 				'weather-details-data' : weatherDetailsData,
 				'hourly-view' : hourlyView,
 				'load-screen' : loadScreen,
+				'save-place' : savePlace,
+				'place-settings' : placeSettings,
 				
 			},
 			mounted () {
@@ -83,18 +106,17 @@
 				
 			},
 			methods: {
-				goToSaveRoute () {
-					this.contextMenuOpen = false;
-					this.$router.push('save-place');
+			
+
+				placeSavedHandler (url) {
+					this.saveLocationModal = false;
+					setTimeout(() => {
+						this.$router.push(url);
+					}, this.MODEL_OFF_TIMEOUT);
+					
 				},
 
-				openLimitsSettings () {
-
-				},
-
-				openPlaceSettings () {
-					this.$router.push({ path: `/${this.activeLocation._userID}/${this.activeLocation.placeSlug}/settings` });
-				},
+				
 		
 				fetchWeather () {
 					this.weatherIsLoading = true;
@@ -175,13 +197,25 @@
 					placeName: '',
 					placeIsPublic: false,
 					weatherIsLoading: true,
-					contextMenuOpen: false
+					saveLocationModal: false,
+					placeSettingsModal: false,
+					MODEL_OFF_TIMEOUT: 800
 				}
 			}
 		}
 
 
 </script>
-<style scoped>
+<style lang="scss">
+
+	@import '~globalVars';
+
+	.placeContextMenu {
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 1;
+		padding: 0 0.5em;
+	}
 
 </style>

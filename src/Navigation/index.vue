@@ -13,15 +13,28 @@
 		<transition name="slideNav">
 			<div 
 				v-if="navOpened"
-				@click="navClickHandler"
-				class="mainNavigation__panel">
+				class="mainNavigation__panel"
+			>
+				<button
+					class="mainNavigation__toggler mainNavigation__toggler--inPanel"
+					:class="navOpened ? 'is-open' : 'is-closed'"
+					@click="navOpened=!navOpened">
+					<span class="mainNavigation__burger mainNavigation__burger--1"></span>
+					<span class="mainNavigation__burger mainNavigation__burger--2"></span>
+					<span class="mainNavigation__burger mainNavigation__burger--2B"></span>
+					<span class="mainNavigation__burger mainNavigation__burger--3"></span>
+				</button>
 
 				<user-bar />
-				
-				<places-list
-					:role="'navigation'"
-					:userName="username"
-				/>
+
+				<div class="mainNavigation__panelScroller">
+					<places-list
+						:role="'navigation'"
+						:userName="username"
+					/>
+				</div>
+
+				<router-link class="addNewPlace uiButton uiButton--primary" to="/search">Search for an airfield</router-link>
 			</div>
 		</transition>
 		<transition name="fade">
@@ -68,16 +81,11 @@
 			},
 		},
 		methods: {
-			escKeyHandler () {
-				this.navOpened = false;
-			},
-			
-			navClickHandler () {
-				// @todo: this seems silly
-				if (event.target._prevClass == "router-link-active" || event.target.className == "router-link-active" || event.target.parentElement.className == "router-link-active") {
+			escKeyHandler (e) {
+				if(e.keyCode == 27) {
 					this.navOpened = false;
 				}
-			}
+			},
 		},
 	   data() {
 		return {
@@ -104,11 +112,15 @@
 	display: block;
 	width: 40px;
 	height: 40px;
-	// background: $background-burger;
 	position: relative;
-	z-index: 2;
 	cursor: pointer;
 	
+}
+
+.mainNavigation__toggler--inPanel {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .mainNavigation__burger {
@@ -196,6 +208,16 @@
 	background: rgb(255, 255, 255);
 	height: 100vh;
 	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	max-width: 360px;
+}
+
+.mainNavigation__panelScroller {
+	flex: 1 1 auto;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
 }
 
 

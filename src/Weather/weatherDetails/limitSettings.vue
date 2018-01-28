@@ -1,16 +1,9 @@
 <template>
-	<div class="limitSettings uiOverlayPanel uiOverlayPanel--hasButtons">
-		<button class="uiClose"
-			@click="closePanel"
-		>X</button>
-		
-		<form  v-on:submit.prevent="onSubmit">
-
-			<div
-				class="limitSettings__control"
-			>
+	<div class="limitSettings">
+		<div class="limitSettings__content">
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.windSpeed.label}}: {{reactiveControls.windSpeed.currentValue}} {{windSpeedUnitDisplay}}
+					{{reactiveControls.windSpeed.label}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.windSpeed.minValue"
@@ -22,11 +15,9 @@
 				/>
 			</div>
 
-			<div
-				class="limitSettings__control"
-			>
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.crossWindSpeed.label}}: {{reactiveControls.crossWindSpeed.currentValue}} {{windSpeedUnitDisplay}}
+					{{reactiveControls.crossWindSpeed.label}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.crossWindSpeed.minValue || 0"
@@ -38,11 +29,9 @@
 				/>
 			</div>
 
-			<div
-				class="limitSettings__control"
-			>
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.bearing.label}}: {{reactiveControls.bearing.currentValue}} °
+					{{reactiveControls.bearing.label}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.bearing.minValue || 0"
@@ -54,11 +43,9 @@
 				/>
 			</div>
 
-			<div
-				class="limitSettings__control"
-			>
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.minTemperature.label}}: {{reactiveControls.minTemperature.currentValue}} {{temperatureUnitDisplay}}
+					{{reactiveControls.minTemperature.label}}
 				</label>
 				<ui-slider
 					:minValue="this.convertTemperatureUnit(-20,'c', this.temperatureUnit)"
@@ -70,11 +57,9 @@
 				/>
 			</div>
 
-			<div
-				class="limitSettings__control"
-			>
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.maxTemperature.label}}: {{reactiveControls.maxTemperature.currentValue}} {{temperatureUnitDisplay}}
+					{{reactiveControls.maxTemperature.label}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.minTemperature.currentValue + 1"
@@ -86,11 +71,9 @@
 				/>
 			</div>
 
-			<div
-				class="limitSettings__control"
-			>
+			<div class="limitSettings__group">
 				<label class="uiLabel">
-					{{reactiveControls.precipitation.label}}: {{reactiveControls.precipitation.currentValue}} %
+					{{reactiveControls.precipitation.label}}
 				</label>
 				<ui-slider
 					:minValue="reactiveControls.precipitation.minValue || 0"
@@ -101,14 +84,13 @@
 					:unit="'%'"
 				/>
 			</div>
-
-			
-		</form>
+		</div>
+		
 		<div
 			v-if="settingsTweaked"
 			class="uiButtonGroup uiButtonGroup--limitSettings">
 			<button
-				class="uiButton"
+				class="uiButton uiButton--primary"
 				@click="saveSettings"
 			>Save</button>
 			<button
@@ -116,6 +98,7 @@
 				@click="resetControls"
 			>Reset</button>
 		</div>
+		
 	</div>
 </template>
 
@@ -138,10 +121,7 @@
 			this.originalControls = this.deep_copy(this.controls);
 			this.recalcUnits();
 
-			document.addEventListener('keyup', this.escKeyHandler);
-		},
-		beforeDestroy () {
-			document.removeEventListener('keyup', this.escKeyHandler);
+			
 		},
 		computed: {
 			settingsTweaked () {
@@ -223,14 +203,8 @@
 			resetKnobs () {
 				
 			},
-			escKeyHandler (e) {
-				if(e.keyCode == 27) {
-					this.closePanel();
-				}
-			},
-			closePanel() {
-				this.$emit('closePanel');
-			},
+		
+		
 			saveSettings () {
 				var controls = this.normaliseUnits(this.deep_copy(this.reactiveControls));
 				this.originalControls = this.deep_copy(this.reactiveControls);
@@ -338,3 +312,22 @@
 	}
 </script>
 
+<style lang="scss">
+.limitSettings {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	.uiLabel {
+		text-align: center;
+	}
+}
+.limitSettings__content {
+	flex: 1 1 auto;
+}
+.limitSettings__group {
+	margin: 0 0.5em 1.5em;
+	.uiLabel {
+		margin: 0 10px;
+	}
+}
+</style>

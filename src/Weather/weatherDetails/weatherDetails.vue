@@ -16,7 +16,12 @@
 					Wind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{windSpeedDisplay}} {{windSpeedUnitDisplay}}
+					<span class="weatherDetails__valueAmount">
+						{{windSpeedDisplay}} 
+					</span>
+					<span class="weatherDetails__valueUnit">
+						{{windSpeedUnitDisplay}}
+					</span>
 				</p>
 				<status :status="statusWindSpeed" />
 			</div>
@@ -25,7 +30,12 @@
 					Gusting To
 				</h3>
 				<p class="weatherDetails__value">
-					{{windGustDisplay}} {{windSpeedUnitDisplay}}
+					<span class="weatherDetails__valueAmount">
+						{{windGustDisplay}}
+					</span>
+					<span class="weatherDetails__valueUnit">
+						{{windSpeedUnitDisplay}}
+					</span>
 				</p>
 				<status :status="statusGustSpeed" />
 			</div>
@@ -34,7 +44,12 @@
 					Temperature
 				</h3>
 				<p class="weatherDetails__value">
-					{{temperatureDisplay}} &deg;{{temperatureUnitDisplay}}
+					<span class="weatherDetails__valueAmount">
+						{{temperatureDisplay}}
+					</span>
+					<span class="weatherDetails__valueUnit">
+						&deg;{{temperatureUnitDisplay}}
+					</span>
 				</p>
 				<status :status="statusTemperature" />
 			</div>
@@ -46,7 +61,12 @@
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueNote">Rel To RWY</span>
-					{{windBearingRelToRWY.toFixed(0)}} &deg;
+					<span class="weatherDetails__valueAmount">
+						{{windBearingRelToRWY.toFixed(0)}}
+					</span>
+					<span class="weatherDetails__valueUnit">
+						&deg;
+					</span>
 				</p>
 				<status :status="statusWindDirection" />
 			</div>
@@ -55,7 +75,12 @@
 					Crosswind Speed
 				</h3>
 				<p class="weatherDetails__value">
-					{{crossWindComponentDisplay}} {{windSpeedUnitDisplay}}
+					<span class="weatherDetails__valueAmount">
+						{{crossWindComponentDisplay}}
+					</span>
+					<span class="weatherDetails__valueUnit">
+						{{windSpeedUnitDisplay}}
+					</span>
 				</p>
 				<status :status="statusCrossWindComponent" />
 			</div>
@@ -64,7 +89,12 @@
 					Chance of rain
 				</h3>
 				<p class="weatherDetails__value">
-					{{(precipProbability*100).toFixed(0)}} %
+					<span class="weatherDetails__valueAmount">
+						{{(precipProbability*100).toFixed(0)}}
+					</span>
+					<span class="weatherDetails__valueUnit">
+						%
+					</span>
 				</p>
 				<status :status="statusPrecipProbability" />
 			</div>
@@ -276,3 +306,127 @@
 
 
 </script>
+
+<style lang="scss">
+
+@import '~globalVars';
+
+.weatherDetails {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 195px;
+	border-color: $colorPanel;
+	border-style: solid;
+	border-width: 0 $widthStatusBar;
+	margin-top: 5px;
+}
+
+
+.weatherDetails__cursorAt {
+	position: absolute;
+	top: -2px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+
+	.status {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		display: inline-block;
+		vertical-align: middle;
+		position: relative;
+		top: -1px;
+		margin-right: 0.2em;
+		
+	}
+}
+
+.weatherDetails__cursorTime {
+	display: inline-block;
+	min-width: 3em;
+}
+
+.weatherDetails__hour,
+.weatherDetails__minutes {
+	display: inline-block;
+	min-width: 1.3em;
+}
+
+.weatherDetails__cursorDate {
+	display: inline-block;
+	min-width: 11em;
+}
+
+.weatherDetails__col {
+	display: flex;
+	flex-direction: column;
+}
+
+.weatherDetails__col--1 {
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+}
+
+.weatherDetails__col--2 {
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	text-align: right;
+}
+
+.weatherDetails__display {
+	margin: 0 0 18px 0;
+	position: relative;
+	&:nth-child(3) {
+		margin-top: auto;
+		margin-bottom: 32px;
+	}
+	.weatherDetails__col--1 & {
+		padding-left: $widthGridSpace;
+	}
+	.weatherDetails__col--2 & {
+		padding-right: $widthGridSpace;
+	}
+	.status {
+		position: absolute;
+		top: 0;
+		height: 100%;
+		
+		.weatherDetails__col--1 & {
+			left: -$widthStatusBar;
+		}
+		.weatherDetails__col--2 & {
+			right: -$widthStatusBar;
+		}
+	}
+}
+
+.weatherDetails__label {
+	font-size: 9px;
+	text-transform: uppercase;
+	display: block;
+	margin: 0 0 0.2em 0;
+}
+
+.weatherDetails__value {
+	font-size: 15px;
+	display: block;
+}
+
+.weatherDetails__valueUnit {
+	font-size: 11px;
+	color: $textLabelColour;
+
+}
+
+.weatherDetails__valueNote {
+	font-size: 7px;
+	text-transform: uppercase;
+	position: absolute;
+	right: 6em;
+	bottom: 0.2em;
+	color: $textLabelColour;
+}
+</style>

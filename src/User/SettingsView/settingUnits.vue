@@ -8,17 +8,17 @@
 		</ui-radio>
 
 		<ui-radio
-			:radios="timeFormatOptions"
-			v-on:change="updateTimeFormatSetting"
-		>
-			<label class="uiLabel" slot="label">Time Format</label>
-		</ui-radio>
-
-		<ui-radio
 			:radios="temperatureOptions"
 			v-on:change="updateTemperatureSetting"
 		>
 			<label class="uiLabel" slot="label">Temperature Unit</label>
+		</ui-radio>
+
+		<ui-radio
+			:radios="timeFormatOptions"
+			v-on:change="updateTimeFormatSetting"
+		>
+			<label class="uiLabel" slot="label">Time Format</label>
 		</ui-radio>
 		
 	</div>

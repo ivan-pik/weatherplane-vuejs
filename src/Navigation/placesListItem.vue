@@ -7,28 +7,31 @@
 			v-bind:style="[itemDraggedStyle,itemMovedStyle]"
 		>
 			
-			<router-link :to="'/' + activeUserName + '/' + place.placeSlug">
+			<router-link class="placesList__itemLink" :to="'/' + activeUserName + '/' + place.placeSlug">
 				<span class="placesList__name">
 					{{place.placeName}}
 				</span>
 			</router-link>
 			<button class="placesList__contextMenuToggler"
 				@click.stop="contextMenu"
+				v-if="!arranging"
 			>
-				...
+				<svg width="3px" height="13px" viewBox="0 0 3 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M1.5,3 C0.671572875,3 0,2.32842712 0,1.5 C0,0.671572875 0.671572875,0 1.5,0 C2.32842712,0 3,0.671572875 3,1.5 C3,2.32842712 2.32842712,3 1.5,3 Z M1.5,13 C0.671572875,13 0,12.3284271 0,11.5 C0,10.6715729 0.671572875,10 1.5,10 C2.32842712,10 3,10.6715729 3,11.5 C3,12.3284271 2.32842712,13 1.5,13 Z M1.5,8 C0.671572875,8 0,7.32842712 0,6.5 C0,5.67157288 0.671572875,5 1.5,5 C2.32842712,5 3,5.67157288 3,6.5 C3,7.32842712 2.32842712,8 1.5,8 Z" id="path-1"></path></svg>
 			</button>
 			<div
 				v-if="contextMenuOpen"
 				class="placesList__contextMenu">
 				<button 
-					class="placesList__contextLink placesList__contextLink--settings"
+					class="uiLink"
 					@click="openPlaceSettings"
 				>
-					Place Settings
+					Settings
 				</button>
-				<button class="placesList__contextLink placesList__contextLink--move"
+				<button class="uiLink"
 					@click="moooveIt"
-				>move</button>
+				>
+					Reorder
+				</button>
 			</div>
 		
 			<button
@@ -37,6 +40,15 @@
 				ref="dragger"
 				v-if="arranging"
 			>
+				<svg viewBox="0 0 40 40" version="1.1" 
+					width="40" height="40"
+				>
+					<polygon class="" points="15 19 20 13 25 19"
+					></polygon>
+					<polygon class="" points="15 21 20 27 25 21"
+					></polygon>
+					
+				</svg>
 			</button>
 		</div>
 	</li>

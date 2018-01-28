@@ -7,9 +7,14 @@
 				:radios="privacyOptions"
 				v-on:change="updateHandler"
 			>
-				<label slot="label">Wind Unit</label>
+				<label class="uiLabel" slot="label">Who can access this place URL?</label>
 			</ui-radio>
-			
+			<ui-note v-if="!newValue">
+				You have to log-in to visit www.weatherplane.com/{{username}}/{{placeSlug}}
+			</ui-note>
+			<ui-note v-if="newValue">
+				Anyone can visit www.weatherplane.com/{{username}}/{{placeSlug}}
+			</ui-note>
 		</div>
 
 		<div class="uiButtonGroup">
@@ -32,6 +37,12 @@
 		props: {
 			value: {
 				type: Boolean
+			},
+			username: {
+				type: String
+			},
+			placeSlug: {
+				type: String
 			}
 		},
 		mounted () {
@@ -83,12 +94,12 @@
 				nameAvailable: false,
 				privacyOptions: [
 					{
-						label: 'Private',
+						label: 'Only me',
 						value: false,
 						active: false
 					},
 					{
-						label: 'Public',
+						label: 'Anyone',
 						value: true,
 						active: false
 					},

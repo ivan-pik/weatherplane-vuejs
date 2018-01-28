@@ -1,6 +1,10 @@
 <template>
-	<div class="uiSlider" ref="slider"
-	:class="{'disabled' : disabled}"
+	<div class="uiSlider"
+		ref="slider"
+		:class="{
+			'disabled' : disabled,
+			'is-dragging' : isKnob,
+			}"
 	>
 		<div class="uiSlider__trackValue"
 			v-bind:style="{
@@ -9,9 +13,11 @@
 				}"
 		></div>
 		<div class="uiSlider__track"
+			
 			@click="trackClickHandler"
 		></div>
 		<div class="uiSlider__knob"
+			v-bind:class="{'is-dragging' : this.isKnob}"
 			ref="knob"
 			v-on:touchstart="touchStart"
 			v-on:touchend="touchEnd"
@@ -19,7 +25,11 @@
 				'left': this.left + 'px',
 				'transition' : `all ${this.transitionTime}ms ease-in-out`
 				}"
-		></div>
+		>
+			<div class="uiSlider__knobValue">
+				{{knobValue}}
+			</div>
+		</div>
 		<div class="uiSlider__values">
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
 				{{minValue}} {{unit}}
@@ -82,20 +92,21 @@
 			document.addEventListener('touchmove', this.moveHandler);
 		},
 		mounted () {
-			this.posLeft = (this.$refs.knob.getBoundingClientRect()).left;
-			this.posRight = (this.$refs.slider.getBoundingClientRect()).right;
-			this.moveKnobToValue(this.currentValue);
 			this.knobValue = this.currentValue;
-			
+			this.sliderWidth = this.$refs.slider.offsetWidth - 40;
+			this.posLeft = this.$refs.slider.offsetLeft;
+			this.posRight = this.posLeft + this.$refs.slider.offsetWidth;
+			setTimeout(() => {
+				this.moveKnobToValue(this.currentValue);
+				this.init = false;
+			},1000);
 		},
 		computed: {
 			currentValue () {
 				return this.modelValue;
 			},
 			
-			sliderWidth () {
-				return this.posRight - this.posLeft - 40;
-			},
+		
 			range () {
 				let range = this.maxValue - this.minValue;
 				if (range == 0) {
@@ -165,6 +176,7 @@
 
 			moveKnobToValue (val) {
 				var absoluteVal = val - (this.minValue);
+				
 				let newLeft = absoluteVal * this.stepSize;
 				this.moveKnob(newLeft);
 			},
@@ -172,8 +184,12 @@
 				if(this.left != distance) {
 					
 					let knobOffset = Math.abs(this.left - distance);
+					let transitionMultiplier = 400;
+					if (this.init) {
+						transitionMultiplier = 1200;
+					}
 
-					let transitionTime = (knobOffset / this.sliderWidth) * 400;
+					let transitionTime = (knobOffset / this.sliderWidth) * transitionMultiplier;
 
 					this.transitionTime = transitionTime;
 					
@@ -214,16 +230,15 @@
 				
 			},
 			moveHandler () {
-				
 				if (this.isKnob) {
 					var pointerX = this.isTouch ? event.touches[0].clientX : event.clientX;
 					if (this.first) {
 						this.offset = pointerX - this.left;
 						this.first = false;
 					}
-					let movement = Math.min(Math.max(pointerX - this.offset, 0), this.posRight - 40);
+					let movement = Math.min(Math.max(pointerX - this.offset, 0),   this.posRight - this.posLeft - 40);
 					this.left =+ movement;
-					this.knobProgress = this.left / this.sliderWidth;
+					this.knobProgress = Math.min(this.left / this.sliderWidth, 1);
 					this.knobValue = this.alignValueToStep(this.getValueFromProgress(this.knobProgress));
 				}
 			},
@@ -235,8 +250,8 @@
 			return {
 				disabled: false,
 				left: 0,
-				posLeft: 0,
 				posRight: 0,
+				posLeft: 0,
 				isKnob: false,
 				first: true,
 				offset: 0,
@@ -244,13 +259,18 @@
 				transitionTime: 0,
 				knobProgress: 0,
 				knobValue: 0,
-				isTouch: false
+				isTouch: false,
+				sliderWidth: 0,
+				init: true
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+
+	@import '~globalVars';
+
 	.uiSlider {
 		position: relative;
 		min-height: 40px;
@@ -270,7 +290,7 @@
 			width: 100%;
 			position: absolute;
 			top: 19px;
-			background-color: #000;
+			background-color: $uiInputInactive;
 		}
 	}
 	.uiSlider__trackValue {
@@ -281,11 +301,11 @@
 		&::after {
 			content: '';
 			display: block;
-			height: 4px;
+			height: 2px;
 			width: 100%;
 			position: absolute;
-			top: 18px;
-			background-color: rgb(0, 175, 23);
+			top: 19px;
+			background-color: $uiInputActive;
 		}
 	}
 	.uiSlider__knob {
@@ -305,15 +325,73 @@
 			width: 20px;
 			height: 20px;
 			border-radius: 50%;
-			background-color: black;
+			background-color: $uiInputActive;
+		}
+
+		&::before {
+			position: absolute;
+			top: 14px;
+			left: 14px;
+			content: '';
+			display: block;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background-color: #fff;
+			z-index: 1;
+			opacity: 0;
+			transition: all 200ms ease-in-out;
 		}
 	}
 
 	.uiSlider__values {
-		margin: 5px 10px 0;
+		font-size: 9px;
+		margin: 0 10px 0;
 		display: flex;
 		justify-content: space-between;
+		color: $uiInputInactiveFront;
+		position: relative;
+		top: -3px;
 		
+	}
+	.uiSlider__currentValue {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		text-align: center;
+		font-weight: bold;
+		color: $textBaseColour;
+		font-size: 12px;
+	}
+
+	.uiSlider__knobValue {
+		font-size: 0.7rem;
+		display: inline-block;
+		pointer-events: none;
+		background-color: $uiInputActive;
+		position: absolute;
+		padding: 0.5em;
+		bottom: 100%;
+		width: 40px;
+		text-align: center;
+		border-radius: 3px;
+		color: $uiInputActiveFront;
+		opacity: 0;
+		transform: translate(0,30px);
+		transition: all 200ms ease-in-out;
+	}
+
+	.uiSlider__knob.is-dragging {
+
+		.uiSlider__knobValue {
+			opacity: 1;
+			transform: translate(0,0);
+		}
+
+		&::before {
+			opacity: 1;
+		}
 	}
 
 </style>

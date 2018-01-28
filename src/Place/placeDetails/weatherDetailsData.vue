@@ -30,16 +30,23 @@
 		></weather-details>
 
 		<weather-settings-overview
-			v-on:buttonClicked="openWeatherLimitsSettings"
+			v-on:buttonClicked="limitsSettingsPanelOpen=true"
 		/>
 
-		<weather-limit-settings
-			:controls="limitSettingsControls"
-			v-if="limitsSettingsPanelOpen"
-			v-on:closePanel="openWeatherLimitsSettings"
-			v-on:saveSettings="saveSettings"
-			:settings="limitSettingsControls"
-		/>
+		<ui-modal
+			:show="limitsSettingsPanelOpen"
+			:closeButton="true"
+			@close-button-clicked="limitsSettingsPanelOpen=false"
+		>
+			<weather-limit-settings
+				slot="content"
+				:controls="limitSettingsControls"
+				v-on:saveSettings="saveSettings"
+				:settings="limitSettingsControls"
+			/>
+		</ui-modal>
+
+		
 	</div>
 </template>
 <script>
@@ -68,14 +75,14 @@
 				let controls = {
 					windSpeed: {
 						name: 'windSpeed',
-						label: 'Maximum Wind Speed',
+						label: 'Maximal Wind Speed',
 						minValue: 0,
 						maxValue: 50, //ms
 						currentValue: this.settingsMaxWindSpeed
 					},
 					crossWindSpeed: {
 						name: 'crossWindSpeed',
-						label: 'Maximum Cross-Wind Speed',
+						label: 'Maximal Cross-Wind Speed',
 						minValue: 0,
 						maxValue: this.settingsMaxWindSpeed,
 						currentValue: this.settingsMaxCrossWindSpeed
@@ -103,7 +110,7 @@
 					},
 					precipitation: {
 						name: 'precipitation',
-						label: 'Maximum Chance of Rain',
+						label: 'Maximal Chance of Rain',
 						minValue: 0,
 						maxValue: 100,
 						currentValue: this.settingsMaxPrecipProbability
@@ -111,9 +118,7 @@
 				};
 				return controls;
 			},
-			limitsSettingsPanelOpen () {
-				return this.$store.state.existingPlaceView.view.limitsSettings.panelOpen;
-			},
+		
 			statusWindSpeed () {
 				return this.toStatus(this.windSpeed > this.settingsMaxWindSpeed);
 			},
@@ -313,17 +318,6 @@
 
 				this.$store.dispatch('PLACE_UPDATE_LIMITS_SETTINGS', newSettings);
 			},
-			openWeatherLimitsSettings (val) {
-				let toggle;
-				if (val !== undefined) {
-					toggle = val;
-				} else if (this.limitsSettingsPanelOpen) {
-					toggle = false;
-				} else {
-					toggle = true;
-				}
-				this.$store.commit('PLACE_VIEW_LIMITS_SETTINGS', toggle);
-			},
 			toStatus (val) {
 				if (val == true) {
 					return "no";
@@ -344,7 +338,8 @@
 		  return {
 			leftSide: true,
 			rightSide: false,
-			activeSide : "none"
+			activeSide : "none",
+			limitsSettingsPanelOpen: false
 		  }
 		}
 

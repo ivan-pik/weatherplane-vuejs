@@ -91,41 +91,42 @@
 			cursorY (val) {
 				this.cursor(this.cursorY);
 			},
-			positionX (val) {
-				this.$emit('chart-x-update', val);
-			},
+			
 			windSpeedThresholdPixels (windSpeedThresholdPixels) {
 				this.$emit('treshold-pixel-change', windSpeedThresholdPixels);
 			}
 		},
 
 		mounted () {
-			this.cursor(this.cursorY);
+			this.$nextTick(function () {
+				this.cursor(0);
+			});
 		},
 	 
 		methods: {
 			cursor (position) {
-
+				
 				let y, pos, target;
 		
 				let pathEl = this.$refs.windSpeedPath;
 				let pathLength = pathEl.getTotalLength();
 				let end = pathLength;
-
+				let endPoint = "";
 				
 
 				// Stop at the beginning of the curve path
 				if (position < 25) {
 					y = 25;
-					this.$emit('cursorMove', 'reached-the-top');
+					endPoint = 'reached-the-top';
+					
 				// Stop at the end of the curve path					
 				} else if (position > (this.chartHeight - 25)) {
 					y = this.chartHeight-25;
-					this.$emit('cursorMove', 'reached-the-bottom');
+					endPoint = 'reached-the-bottom';
 				// Cursor is withing the curve path	
 				} else {
 					y = position;
-					this.$emit('cursorMove', 'in-the-middle');
+					endPoint = 'in-the-middle';
 				}
 				
 				let beginning = y;
@@ -152,7 +153,10 @@
 						break;
 					}
 				}
-
+				this.$emit('chart-x-update', {
+					x: pos.x,
+					endPoint: endPoint
+				});
 				this.positionX = pos.x;
 				this.positionY = y;
 				

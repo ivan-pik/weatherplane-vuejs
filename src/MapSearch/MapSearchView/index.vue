@@ -49,6 +49,7 @@
 		import uiTabs from '../../uiComponents/tabs.vue';
 		import navigationHeader from 'Navigation/navigationHeader.vue'
 		import weatherPlaneIntro from 'Content/intro.vue'
+		import UiModal from 'uiComponents/modal.vue'
 
 		export default {
 				name: 'MapSearchView',
@@ -58,7 +59,8 @@
 					'bearing-selector' : bearingSelector,
 					'ui-tabs' : uiTabs,
 					'navigation-header' : navigationHeader,
-					'weatherplane-intro' : weatherPlaneIntro
+					'weatherplane-intro' : weatherPlaneIntro,
+					'ui-modal': UiModal,
 				},
 				computed: {
 						place() {

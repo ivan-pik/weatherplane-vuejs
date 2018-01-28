@@ -46,6 +46,7 @@
 }
 
 .navigationHeader__title {
+	font-size: 0.9rem;
 	height: 40px;
 	line-height: 40px;
 	text-align: center;

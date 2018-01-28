@@ -1,29 +1,49 @@
 <template>
 	<div class="placeSetting placeSetting--delete">
-		<button @click="modal=true" class="uiButton">DELETE</button>
+		<button @click="modal=true" class="uiButton uiButton--danger">DELETE THIS PLACE</button>
 
-		<div class="uiModal" v-if="modal">
-			<p>Are you sure you want to delete this place?</p>
+		<ui-modal
+			:show="modal"
+			:popup="true"
+			v-on:closed="modalClosedHandler"
+		>	
+			<div slot="content">
+					
+					<div class="uiTitle">
+						Are you sure you want to delete "{{placeName}}" ?
+					</div>
+					<div class="uiButtonGroup">
+						<button class="uiButton uiButton--danger"
+							@click="saveSetting"
+						>
+							DELETE
+						</button>
+						<button class="uiButton uiButton--primary"
+							@click="modal=false"
+						>
+							Keep it
+						</button>
+					</div>
+			</div>
+		</ui-modal>
 
-			<button class="uiButton"
-				@click="saveSetting"
-			>
-				DELETE
-			</button>
-			<button class="uiButton"
-				@click="modal=false"
-			>
-				Leave it
-			</button>
-		</div>
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue';
+	import UiModal from 'uiComponents/modal.vue'
 	
 	export default {
 		name: 'placeSettingDelete',
+		components: {
+			'ui-modal': UiModal,
+		},
+		props: {
+			placeName: {
+				type: String
+			}
+		},
 		mounted () {
 		},
 		watch: {
@@ -35,6 +55,9 @@
 			saveSetting () {
 				this.modal = false;
 				this.$emit('deletePlace');
+			},
+			modalClosedHandler () {
+
 			}
 		},
 		data () {
@@ -45,3 +68,9 @@
 	}
 
 </script>
+
+<style lang="scss">
+	.placeSetting--delete {
+		margin-bottom: 1em;
+	}
+</style>

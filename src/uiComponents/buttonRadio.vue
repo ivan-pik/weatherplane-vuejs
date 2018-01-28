@@ -83,6 +83,8 @@
 	}
 
 	.uiButtonRadio__item {
+		color: $uiInputInactiveFront;
+		
 		text-align: center;
 		min-width: 40px;
 		border: 1px solid $uiFrame;

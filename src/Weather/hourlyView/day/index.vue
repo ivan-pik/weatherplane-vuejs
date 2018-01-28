@@ -32,7 +32,6 @@
 			:chartWidth="chartWidth"
 			:chartLeftPos="chartLeftPos"
 			v-on:chart-x-update="setChartX"
-			v-on:cursorMove="cursorMoveHandler"
 			v-on:treshold-pixel-change="setPixelTreshold"
 		/>
 		
@@ -105,9 +104,7 @@
 			}
 		},
 		methods: {
-			cursorMoveHandler (position) {
-				this.cursorPositionEdges = position;
-			},
+		
 			resizeHandler (ev) {
 				// @todo: debounce
 				this.viewPortHeight = window.innerHeight;
@@ -117,7 +114,8 @@
 				this.chartLeftPos = val.left;
 			},
 			setChartX (val) {
-				this.chartX = val;
+				this.chartX = val.x;
+				this.cursorPositionEdges = val.endPoint;
 			},
 			setPixelTreshold (val) {
 				this.pixelTreshold = parseFloat(val);

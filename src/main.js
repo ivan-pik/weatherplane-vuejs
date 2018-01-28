@@ -18,24 +18,49 @@ import UserPlacesView from './Place/UserPlacesView/index.vue'
 import PlaceSettingsView from './Place/PlaceSettingsView/index.vue'
 import SaveLocationView from './Place/SaveLocationView/index.vue'
 
+import uiNote from 'uiComponents/uiNote.vue'
+import uiModal from 'uiComponents/modal.vue'
+import uiRadio from 'uiComponents/buttonRadio.vue'
+import navigationHeader from 'Navigation/navigationHeader.vue'
+
+
+Vue.component(
+	'ui-note', uiNote
+);
+
+
+Vue.component(
+	'ui-modal', uiModal
+);
+
+Vue.component(
+	'navigation-header', navigationHeader
+);
+
+Vue.component(
+	'ui-radio', uiRadio
+);
+
+
+
 
 const routes = [
-    { path: '/', name: 'home', component: WelcomeView},
-    { path: '/search', name: 'search', component: MapSearchView},
-    { path: '/login', name: 'login', component: LoginView },
-    { path: '/settings', name: 'settings', component: SettingsView },
-    { path: '/reset-password', name: 'resetPassword', component: ResetPassword },
-    { path: '/signup', name: 'signup', component: RegisterView },
-    { path: '/place', name: 'place', component: ExistingPlaceView },
-    { path: '/save-place', name: 'saveplace', component: SaveLocationView },
-    { path: '/:username/', component: UserPlacesView },
+		{ path: '/', name: 'home', component: WelcomeView},
+		{ path: '/search', name: 'search', component: MapSearchView},
+		{ path: '/login', name: 'login', component: LoginView },
+		{ path: '/settings', name: 'settings', component: SettingsView },
+		{ path: '/reset-password', name: 'resetPassword', component: ResetPassword },
+		{ path: '/signup', name: 'signup', component: RegisterView },
+		{ path: '/place', name: 'place', component: ExistingPlaceView },
+		{ path: '/save-place', name: 'saveplace', component: SaveLocationView },
+		{ path: '/:username/', component: UserPlacesView },
 		{ path: '/:username/:place', component: ExistingPlaceView },
-    { path: '/:username/:place/settings', name: 'placeSettings', component: PlaceSettingsView }
+		{ path: '/:username/:place/settings', name: 'placeSettings', component: PlaceSettingsView }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  routes
+	mode: 'history',
+	routes
 })
 
 Vue.use(VueRouter);
@@ -45,21 +70,21 @@ Vue.use(VueResource);
 // Vue.http.options.root = '//localhost:4000';
 
 const veeConfig = {
-  errorBagName: 'validationErrors', // change if property conflicts.
-  fieldsBagName: 'fields',
-  delay: 0,
-  locale: 'en',
-  dictionary: null,
-  strict: true,
-  enableAutoClasses: true,
-  classNames: {
-    touched: 'is-touched', // the control has been blurred
-    untouched: 'is-untouched', // the control hasn't been blurred
-    valid: 'is-valid', // model is valid
-    invalid: 'is-invalid', // model is invalid
-    pristine: 'is-pristine', // control has not been interacted with
-    dirty: 'is-dirty' // control has been interacted with
-  }
+	errorBagName: 'validationErrors', // change if property conflicts.
+	fieldsBagName: 'fields',
+	delay: 0,
+	locale: 'en',
+	dictionary: null,
+	strict: true,
+	enableAutoClasses: true,
+	classNames: {
+		touched: 'is-touched', // the control has been blurred
+		untouched: 'is-untouched', // the control hasn't been blurred
+		valid: 'is-valid', // model is valid
+		invalid: 'is-invalid', // model is invalid
+		pristine: 'is-pristine', // control has not been interacted with
+		dirty: 'is-dirty' // control has been interacted with
+	}
 };
 
 Vue.use(VeeValidate, veeConfig);
@@ -70,8 +95,8 @@ Vue.use(VeeValidate, veeConfig);
 
 
 const app = new Vue({
-  el : '#app',
-  store,
-  router,
-  render: h => h(App)
+	el : '#app',
+	store,
+	router,
+	render: h => h(App)
 })

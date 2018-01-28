@@ -215,9 +215,9 @@
 @import '~globalVars';
 
 .bearingSelector {
-	position: fixed;
-	top: 80px;
-	bottom: 40px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
 	width: 100%;
 	background: rgba(#000,0.6);
 	transition: all 200ms ease-in-out;

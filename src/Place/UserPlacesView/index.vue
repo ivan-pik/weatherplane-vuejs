@@ -1,14 +1,15 @@
 <template>
-	<div class="">
-		<div class="mainNav">
-			<h1 class="mainNav__title">My places</h1>
-		</div>
+	<div class="viewWrapper">
+		<navigation-header>
+			My Places
+		</navigation-header>	
 
-		<places-list
-			:role="'userList'"
-			:userName="userName"
-		 />
-		
+		<div class="viewWrapper__scroller">
+			<places-list
+				:role="'userList'"
+				:userName="userName"
+			/>
+		</div>
 	</div>
 </template>
 <script>

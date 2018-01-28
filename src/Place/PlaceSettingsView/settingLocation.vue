@@ -2,6 +2,7 @@
 	<div class="placeSetting placeSetting--name">
 		
 		<button
+			class="uiLink"
 			@click="openMap"
 		>
 			Open map
@@ -60,17 +61,18 @@
 		</div>
 
 		<div class="uiButtonGroup">
-			<button v-if="locationValueChanged || bearingValueChanged" @click="saveSetting" class="uiButton">Save</button>
+			<button v-if="locationValueChanged || bearingValueChanged" @click="saveSetting" class="uiButton uiButton--primary">Save</button>
 			<button v-if="locationValueChanged || bearingValueChanged" @click="resetMapAndBearing" class="uiButton">Reset</button>
 		</div>
 
 
-		<overlay-panel
-			:open="mapOpen"
-			v-on:close="closeMap"
-		>
-			<div class="" slot="content">
-
+		<ui-modal
+			:show="mapOpen"
+			v-on:closed="closeMap"
+			v-on:close-button-clicked="mapOpen=false"
+			:closeButton="true"
+		>	
+			<div slot="content" class="mapWrapper">
 				<ui-tabs
 					:tabs="tabs"
 				/>
@@ -87,9 +89,13 @@
 						v-model="newBearingValue"
 					/>
 				</div>
-				<button @click="resetMapAndBearing">Reset</button>
+				<div class="uiButtonGroup"  >
+					<button class="uiButton uiButton--primary" @click="mapOpen=false">Close Map</button>
+					<button class="uiButton" v-if="locationValueChanged || bearingValueChanged" @click="resetMapAndBearing">Reset</button>
+				</div>
+				
 			</div>
-		</overlay-panel>
+		</ui-modal>
 
 	</div>
 </template>
@@ -198,11 +204,11 @@
 				tabs: [
 					{
 						label: 'Set Bearing',
-						active: false,
+						active: true,
 					},
 					{
 						label: 'Adjust map',
-						active: true
+						active: false
 					}
 				],
 				placeChosen: true,
@@ -212,3 +218,12 @@
 	}
 
 </script>
+
+<style lang="scss">
+.mapWrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+</style>

@@ -1,24 +1,29 @@
 <template>
-	<div class="">
-		<place-not-found v-if="place404" />
+	<div class="viewWrapper">
+		<navigation-header>
+			<span slot="title" v-if="place">{{place.placeName}}</span>
+		</navigation-header>
 
-		<login-form
-			v-if="needToLogin"
-			:message="'You need to log-in to see this place'"
-		>
+		<div class="viewWrapper__scroller">
+			<place-not-found v-if="place404" />
+
+			<login-form
+				v-if="needToLogin"
+				:message="'You need to log-in to see this place'"
+			/>
+
+			<transition v-else name="fade">
+				<load-screen
+					v-if="!place"
+					text="Loading Place"
+				/>
+				<place-details v-else  :activeLocation='place' />
+			</transition>
 			
-		</login-form>
-
-		<div v-else-if="place" class="">
-			<place-details :activeLocation='place' />
 		</div>
-
-		<div v-else>
-			<load-screen text="Loading place" />
-		</div>
-
 	</div>
 </template>
+
 <script>
 	import Vue from 'vue'
 	import {HTTP} from '../../http-common';
@@ -27,6 +32,7 @@
 	import loginForm from 'Login/loginForm.vue';
 	import placeDetails from '../placeDetails/index.vue';
 	import loadScreen from '../../uiComponents/loadScreen.vue';
+	import navigationHeader from 'Navigation/navigationHeader.vue'
 
 	export default {
 		name: 'ExistingPlaceView',
@@ -34,7 +40,8 @@
 			'load-screen' : loadScreen,
 			'place-not-found' : placeNotFound,
 			'login-form' : loginForm,
-			'place-details': placeDetails
+			'place-details': placeDetails,
+			'navigation-header' : navigationHeader,
 		},
 		
 		mounted () {

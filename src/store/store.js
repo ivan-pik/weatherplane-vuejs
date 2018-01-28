@@ -66,7 +66,6 @@ export default new Vuex.Store({
 			state.user.authenticationRequired = true;
 		},
 		'USER_AUTHENTICATED' (state) {
-
 			state.user.authenticated = true;
 		},
 		'USER_SAVE_PLACES' (state, newPlaces) {

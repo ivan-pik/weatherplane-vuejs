@@ -21,10 +21,15 @@
 				v-show="validationErrors.has('placeSlug')"
 				class="help is-danger">{{ validationErrors.first('placeSlug') }}
 			</span>
+			
 		</div>
 
+		<ui-note>
+			www.weatherplane.com/{{username}}/{{newValue}}
+		</ui-note>
+
 		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton">Save</button>
+			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton uiButton--primary">Save</button>
 			<button  @click="reset" class="uiButton">Reset</button>
 		</div>
 
@@ -38,6 +43,9 @@
 		name: 'placeSettingURL',
 		props: {
 			value: {
+				type: String
+			},
+			username: {
 				type: String
 			}
 		},

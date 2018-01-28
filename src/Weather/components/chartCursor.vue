@@ -1,23 +1,23 @@
 <template>
 	<div class="chartCursor"
 		v-bind:style="{
-			'width': width + 'px',
-			'left': left + 'px',
+			'width': 100 + '%',
+			'left': 0 + 'px',
 			'top': chartTopStyle + 'px'
 		}"
 	>
 	
 
 		<svg
-			:width="width"
+			width="100%"
 			height="50"
 		>
 			<defs>
 				<mask id="cursorMask">
 					<rect
-						width="100%" 
+						:width="width" 
 						fill="#666"
-						x="0" 
+						:x="left" 
 						y="5"
 						height="40"
 						rx="20"
@@ -25,12 +25,12 @@
 					<rect
 						:width="chartXstyle" 
 						fill="#fff"
-						x="0" 
+						:x="left" 
 						y="23"
 						height="4"
 					/>
 					<circle
-						:cx="chartXstyle" 
+						:cx="chartXstyle+left" 
 						cy="25" 
 						r="10"
 						fill="white"
@@ -42,12 +42,13 @@
 			</defs>
 
 			
+	
 
 			<g mask="url(#cursorMask)">
 				<rect
-					width="100%" 
+					:width="width" 
 					fill="#DF4410"
-					x="0" 
+					:x="left" 
 					y="0"
 					height="50"
 				/>
@@ -62,12 +63,13 @@
 			</g>
 
 			<circle
-				:cx="chartXstyle" 
+				:cx="chartXstyle + left" 
 				cy="25" 
 				r="6"
 				fill="white"
 			/>
-	
+
+			
 		</svg>
 	   
 	</div>
@@ -114,7 +116,7 @@
 			},
 			chartTopStyle () {
 				if (this.top == 0) {
-					return this.viewportHeight - this.chartHeight + 25 - 10; // @todo: magic numbers
+					return this.viewportHeight - this.chartHeight; // @todo: magic numbers
 				}
 
 
@@ -130,7 +132,7 @@
 						return this.top - this.CURSOR_Y_OFFSET;
 					}
 				} else {
-					return this.viewportHeight - this.chartHeight + 25 - this.CURSOR_Y_OFFSET; // @todo: magic numbers
+					return this.viewportHeight - this.chartHeight + 0 - this.CURSOR_Y_OFFSET; // @todo: magic numbers
 				}
 				
 			}

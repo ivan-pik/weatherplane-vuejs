@@ -34,7 +34,9 @@ body {
 	
 }
 
-
+.uiSection {
+	margin: 1em;
+}
 
 
 .uiClose {
@@ -54,9 +56,17 @@ body {
 .uiOverlayPanel--hasButtons {
 	padding-bottom: 60px;
 }
+.uiTitle {
+	font-size: 0.8rem;
+	margin: 0 0 1em 0;
+	text-align: center;
+}
 
 .uiButtonGroup {
 	display: flex;
+	.uiButton:not(:last-child) {
+		margin-right: 1px;
+	}
 }
 
 .uiButtonGroup--gutter {
@@ -130,17 +140,6 @@ body {
 	background: orange;
 }
 
-.uiLoadScreen {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: #fff;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
 
 
@@ -168,6 +167,8 @@ body {
 	display: block;
 	margin: 0 0 1em 0;
 	position: relative;
+
+
 }
 
 .uiLabel {
@@ -203,10 +204,16 @@ body {
 	color: #fff;
 	font-size: $fontSizeButton;
 	text-transform: uppercase;
+	text-align: center;
+	line-height: 40px;
 }
 
 .uiButton--primary {
 	background-color: $uiButtonPrimary;
+}
+
+.uiButton--danger {
+	background-color: red;
 }
 
 .uiCheckBox {
@@ -231,12 +238,16 @@ body {
 	border-radius: 2px;
 	display: block;
 	border: 1px solid $uiFrame;
-	padding: $widthGridLargerSpace * 1.5 $widthGridLargerSpace 1px $widthGridLargerSpace;
+	padding: $widthGridLargerSpace * 1.5 $widthGridLargerSpace $widthGridLargerSpace $widthGridLargerSpace;
 	margin: $widthGridLargerSpace;
 	position: relative;
 
-	.uiButtonGroup > * {
+	& > .uiButtonGroup > * {
 		margin-bottom: $widthGridLargerSpace;
+	}
+
+	& > *:last-child {
+		margin-bottom: 0;
 	}
 }
 
@@ -260,6 +271,11 @@ body {
 	line-height: 40px;
 	padding: 0;
 	font-size: $fontSizeButton;
+}
+
+.uiLink--primary {
+	color: $uiInputActive;
+	font-weight: bold;
 }
 
 

@@ -1,78 +1,45 @@
 <template>
-	<div class="viewWrapper">
-
-		<navigation-header>
-			<span slot="title" v-if="place">
-				Place Settings - {{place.placeName}}
-			</span>
-		</navigation-header>	
-
-		<div class="viewWrapper__scroller" v-if="place">
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Place Name
-				</h3>
-				<setting-name 
-					:value="place.placeName"
-					v-on:updateSetting="updatePlaceName"
-				/>
-			</div>
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Place URL
-				</h3>
-				<setting-url
-					:value="place.placeSlug"
-					v-on:updateSetting="updatePlaceSlug"
-				/>
-			</div>
-
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Privacy
-				</h3>
-				<setting-privacy
-					:value="place.placeSettings.public"
-					v-on:updateSetting="updatePrivacy"
-				/>
-			</div>
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Location
-				</h3>
-				<setting-location
-					:location="[place.placeLat, place.placeLng]"
-					:bearing="place.placeSettings.runwayOrientation"
-					v-on:updateLocation="updateCoordinates"
-					v-on:updateBearing="updateBearing"
-				/>
-			</div>
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Runway Bearing
-				</h3>
-				<setting-bearing
-					:value="place.placeSettings.runwayOrientation"
-					v-on:updateSetting="updateBearing"
-				/>
-			</div>
-
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Delete this Place
-				</h3>
-				<setting-delete
-					v-on:deletePlace="deletePlace"
-				/>
-			</div>
-
+	<div class="">
+		<div class="uiSection">
+			<setting-name 
+				:value="place.placeName"
+				v-on:updateSetting="updatePlaceName"
+			/>
 		</div>
 
+		<div class="uiSection">
+			<setting-url
+				:value="place.placeSlug"
+				:username="username"
+				v-on:updateSetting="updatePlaceSlug"
+			/>
+		</div>
+
+
+		<div class="uiSection">
+			<setting-privacy
+				:value="place.placeSettings.public"
+				:placeSlug="place.placeSlug"
+				:username="username"
+				v-on:updateSetting="updatePrivacy"
+			/>
+		</div>
+
+		<div class="uiSection">
+			<setting-location
+				:location="[place.placeLat, place.placeLng]"
+				:bearing="place.placeSettings.runwayOrientation"
+				v-on:updateLocation="updateCoordinates"
+				v-on:updateBearing="updateBearing"
+			/>
+		</div>
+
+		<div class="uiSection">
+			<setting-delete
+				v-on:deletePlace="deletePlace"
+				:placeName="place.placeName"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -106,7 +73,10 @@
 		computed: {
 			place () {
 				return this.$store.state.existingPlaceView.place;
-			}
+			},
+			username() {
+				return this.$store.state.user.name;
+			},
 		},
 		mounted () {
 			this.loadPlaceData();

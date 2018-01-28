@@ -1,37 +1,33 @@
 <template>
-	<div ref="placesList">
-		<div v-if="places">
-			<ul class="placesList"
-				:class="'placesList--' + role + arrangeClass"
-			>
-				<places-list-item
-					v-for="(place, index) in places"
-					key="place._id"
-					v-on:contextMenuTriggered="contextMenuHandler(index)"
-					v-on:arrangeItems="arrangeItems(index)"
-					v-on:itemDrag="dragHandler"
-					v-on:itemDrop="dropHandler"
-					:contextMenuClose="activeIndex"
-					:index="index"
-					:place="place"
-					:arranging="arranging"
-					:makeSpace="movePlease"
-					:dragging="dragging"
-					:listDimensions="listDimensions"
-				/>
-			</ul>
-		</div>
+	<div class="placesList" ref="placesList">
+		<ul v-if="places" class="placesList__items"
+			:class="'placesList--' + role + arrangeClass"
+		>
+			<places-list-item
+				v-for="(place, index) in places"
+				:key="place._id"
+				v-on:contextMenuTriggered="contextMenuHandler(index)"
+				v-on:arrangeItems="arrangeItems(index)"
+				v-on:itemDrag="dragHandler"
+				v-on:itemDrop="dropHandler"
+				:contextMenuClose="activeIndex"
+				:index="index"
+				:place="place"
+				:arranging="arranging"
+				:makeSpace="movePlease"
+				:dragging="dragging"
+				:listDimensions="listDimensions"
+			/>
+		</ul>
 
 
-		<div v-if="arranging" class="">
-			<button @click="cancelSorting">I am done</button>
-		</div>
+		<button  v-if="arranging" class="placesList__exitSorting uiButton uiButton--primary" @click="cancelSorting">Exit Sorting</button>
 
 		<div v-if="places.length == 0" class="emptyState emptyState--placesList">
 			Oh, nothing in here!
 		</div>
 		<div v-if="!loggedIn">@todo: log in to see private places or save new ones</div>
-		<router-link v-if="!arranging"  to="/">Add new place</router-link>
+		
 	</div>
 </template>
 
@@ -180,3 +176,118 @@
 		}
 	}
 </script>
+
+<style lang="scss">
+
+	@import '~globalVars';
+
+	.placesList {
+		position: relative;
+		display: block;
+		padding-bottom: 1px;
+		border-top: 1px solid #ddd;
+	}
+
+	.placesList__items.arranging {
+		display: block;
+		margin-bottom: 40px;
+	}
+
+	.placesList__exitSorting {
+		position: absolute;
+		bottom: 0;
+	}
+
+	.placesList__itemWrapper {
+		display: block;
+		height: 40px;
+		border-bottom: 1px solid #ddd;
+	
+	}
+
+	.placesList__itemPlaceHolder {
+		display: block;
+		height: 40px;
+	}
+
+	.placesList__item {
+		height: 40px;
+		line-height: 40px;
+		width: 100%;
+		display: flex;
+		position: relative;
+		top: 0;
+		
+		
+		justify-content: space-between;
+		
+		font-size: 0.9rem;
+
+		&.can-transition {
+			transition: all 0.2s ease-in-out;
+		}
+
+		&.is-dragging {
+			position: absolute;
+			left: 0;
+			z-index: 1;
+		}
+	}
+
+	.placesList__itemLink {
+		flex: 1 1 auto;
+	}
+
+	
+
+	.placesList__name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		padding: 0 0 0 $widthGridLargerSpace;
+		width: 100%;
+	}
+
+	.placesList__contextMenuToggler {
+		position: absolute;
+		right: 0;
+		top: 0;
+		display: block;
+		width: 40px;
+		height: 40px;
+		svg {
+			fill: $uiButtonPrimary;
+		}
+	}
+
+	.placesList__contextMenu {
+		position: absolute;
+		background: #fff;
+		right: 40px;
+		top: 0;
+		height: 39px;
+
+		.uiLink {
+			margin-left: 1em; 
+			line-height: 38px;
+			height: 38px;
+		}
+	}
+
+	.placesList__sortingDragger {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 100%;
+		height: 40px;
+		text-align: right;
+		&.is-dragging {
+			background: rgba(#000, 0.2);
+		}
+
+		svg {
+			pointer-events: none;
+			fill: $uiInputActive;
+		}
+	}
+</style>
