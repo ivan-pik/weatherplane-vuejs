@@ -89,7 +89,7 @@
 			document.removeEventListener('mousedown', this.mousedownHandler);
 			document.removeEventListener('mouseup', this.mouseupHandler);
 			document.removeEventListener('mousemove', this.moveHandler);
-			document.addEventListener('touchmove', this.moveHandler);
+			document.removeEventListener('touchmove', this.moveHandler);
 		},
 		mounted () {
 			this.knobValue = this.currentValue;
