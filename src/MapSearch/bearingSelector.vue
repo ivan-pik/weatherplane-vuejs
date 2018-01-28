@@ -97,11 +97,13 @@
 					document.addEventListener('mousedown', this.mousedownHandler);
 					document.addEventListener('mouseup', this.mouseupHandler);
 					document.addEventListener('mousemove', this.mousemoveHandler);
+					document.addEventListener('touchmove', this.touchmoveHandler);
 				},
 				beforeDestroy () {
 					document.removeEventListener('mousedown', this.mousedownHandler);
 					document.removeEventListener('mouseup', this.mouseupHandler);
 					document.removeEventListener('mousemove', this.mousemoveHandler);
+					document.removeEventListener('touchmove', this.touchmoveHandler);
 				},
 
 				props: {
@@ -176,13 +178,31 @@
 					mouseupHandler () {
 						this.isDragging = false;
 					},
+					touchmoveHandler(event) {
+						if (event.target == this.$refs.knob ||
+							event.target.parentElement == this.$refs.knob
+						) {
+							this.isDragging = true;
+							this.isTouch = true;
+							this.mousemoveHandler(event);
+							this.isDragging = false;
+						}
+					},
 					mousemoveHandler (event) {
 						if (this.isDragging) {
 
 							var dial = this.$refs.dial.getBoundingClientRect();
 							
-							var cursorTop = event.pageY;
-							var cursorLeft = event.pageX;
+							if (this.isTouch) {
+								var cursorTop = event.changedTouches[0].pageY;
+								var cursorLeft = event.changedTouches[0].pageX;
+								
+							} else {
+								var cursorTop = event.pageY;
+								var cursorLeft = event.pageX;
+							}
+							this.isTouch = false;
+							
 							
 							var relTop = Math.min(Math.max(-1 + (cursorTop - dial.top) / (dial.height * 0.5), -1),1);
 
@@ -203,7 +223,8 @@
 				data () {
 					return {
 						isDragging: false,
-						bearing: 0
+						bearing: 0,
+						isTouch: false,
 					}
 				}
 		}
