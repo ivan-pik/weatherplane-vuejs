@@ -75,6 +75,9 @@
 				return this.$store.state.existingPlaceView.view.chart.row.height;
 			},
 			shift () {
+				if (this.role == 'windInstrument') {
+					return "translate(0, 19)";
+				}
 				let amount = this.order * this.rowHeight + (this.rowHeight * 0.5 - 6);
 				return "translate(0," + amount + ")";
 			},
