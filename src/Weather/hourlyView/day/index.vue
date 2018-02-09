@@ -19,7 +19,6 @@
 			:viewportHeight="viewPortHeight"
 			:cursorPositionEdges="cursorPositionEdges"
 			:chartHeight="chartHeight"
-			:isTouch="isTouch"
 			:pixelTreshold="pixelTreshold"
 		/>
 
@@ -28,7 +27,6 @@
 			:maxSpeedToDisplay="maxWindSpeed"
 			:maxSpeedTreshold="settingsMaxWindSpeed"
 			:cursorY="cursorY"
-			:cursorX="cursorX"
 			:chartWidth="chartWidth"
 			:chartLeftPos="chartLeftPos"
 			v-on:chart-x-update="setChartX"
@@ -62,12 +60,8 @@
 			cursorScreenY: {
 				type: Number
 			},
-			cursorX: {
-				type: Number
-			},
-			isTouch: {
-				type: Boolean
-			},
+			
+		
 			scrollPosition: {
 				type: Number
 			},

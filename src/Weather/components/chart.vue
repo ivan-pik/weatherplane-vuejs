@@ -17,8 +17,12 @@
 			</linearGradient>
 			<mask id="pathMask">
 				<path class="windSpeedChart__windSpeed" 
-					:d="curvePoints('windSpeed')" stroke="#fff" stroke-width="3" fill="none"
+					:d="curvePoints('windSpeed')"
+					stroke="#fff"
+					stroke-width="3"
+					fill="none"
 					ref="windSpeedPath"
+					v-bind:style="style"
 				>
 				</path>
 			</mask>
@@ -70,14 +74,22 @@
 	
 	export default {
 		name: 'chart',
-		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold','cursorY','is-touch','chartWidth','chartLeftPos'],
+		props: ['weather','maxSpeedToDisplay','maxSpeedTreshold','cursorY','chartWidth','chartLeftPos'],
 		components: {
 			'wind-speed-bar' : windSpeedBar
 		},
 	
 		computed: {
+			rowHeight () {
+				return this.$store.state.existingPlaceView.view.chart.row.height;
+			},
+			style () {
+				return {
+					transform: `translate(0,${this.rowHeight * 0.5}px)`
+				}
+			},
 			chartHeight () {
-				return (this.weather.length) * 50;
+				return (this.weather.length) * this.rowHeight;
 			},
 			windSpeedThresholdPixels () {
 				return this.speedToPixels(this.maxSpeedTreshold);
@@ -111,23 +123,9 @@
 				let pathEl = this.$refs.windSpeedPath;
 				let pathLength = pathEl.getTotalLength();
 				let end = pathLength;
-				let endPoint = "";
-				
+		
 
-				// Stop at the beginning of the curve path
-				if (position < 25) {
-					y = 25;
-					endPoint = 'reached-the-top';
-					
-				// Stop at the end of the curve path					
-				} else if (position > (this.chartHeight - 25)) {
-					y = this.chartHeight-25;
-					endPoint = 'reached-the-bottom';
-				// Cursor is withing the curve path	
-				} else {
-					y = position;
-					endPoint = 'in-the-middle';
-				}
+				y = position;
 				
 				let beginning = y;
 
@@ -154,8 +152,7 @@
 					}
 				}
 				this.$emit('chart-x-update', {
-					x: pos.x,
-					endPoint: endPoint
+					x: pos.x
 				});
 				this.positionX = pos.x;
 				this.positionY = y;
@@ -163,21 +160,17 @@
 			},
 		
 		
-			curvePoints (type) {
+			curvePoints () {
 				let i = 0;
 				let points = [];
 				let speed;
 				this.weather.forEach((hour) => {
-					if(type == "windSpeed") {
-						speed = hour.windSpeed;
-					} else if (type="windGust") {
-						speed = hour.windGust;
-					} else {
-						return false;
-					}
+					
+					speed = hour.windSpeed;
+					
 					points.push([
 						parseFloat(this.speedToPixels(speed)) + this.CHART_OFFSET_X,
-						50*i+25
+						this.rowHeight*i
 					]);
 					i++;
 				});
@@ -211,3 +204,15 @@
 
 </script>
 
+<style lang="scss">
+// --------------------------------
+.windSpeedChart {
+	display: block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+}
+
+
+</style>

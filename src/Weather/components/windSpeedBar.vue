@@ -58,10 +58,6 @@
 			/>
 
 			
-
-			
-
-			
 		</g>
 		
 	</g>
@@ -75,8 +71,11 @@
 		// @todo: validate props
 		props: ['windSpeed','windGust','uid','maxSpeedToDisplay','maxSpeedTreshold','order','chartWidth','role'],
 		computed: {
+			rowHeight () {
+				return this.$store.state.existingPlaceView.view.chart.row.height;
+			},
 			shift () {
-				let amount = this.order * 50 + 19;
+				let amount = this.order * this.rowHeight + (this.rowHeight * 0.5 - 6);
 				return "translate(0," + amount + ")";
 			},
 			

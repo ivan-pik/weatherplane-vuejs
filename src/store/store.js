@@ -44,6 +44,11 @@ export default new Vuex.Store({
 				},
 				limitsSettings: {
 					panelOpen: false
+				},
+				chart: {
+					row: {
+						height: 60
+					}
 				}
 			}
 		}

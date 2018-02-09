@@ -29,6 +29,9 @@
 			this.rendered = true;
 		},
 		computed: {
+			rowHeight () {
+				return this.$store.state.existingPlaceView.view.chart.row.height;
+			},
 			dateLabelPosition () {
 				return (this.$refs.dayLabel.getBoundingClientRect()).bottom;
 			},
@@ -52,7 +55,7 @@
 				}
 
 
-				if (this.inView && (this.scrollPosition - this.initialScrollOffset > 50) ) {
+				if (this.inView && (this.scrollPosition - this.initialScrollOffset > this.rowHeight) ) {
 					return false;
 				} 
 				return true;
@@ -77,12 +80,15 @@
 <style lang="scss">
 	.dayLabel {
 		position: absolute;
-		top: -10px;
+		top: 0;
+		bottom: 0;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		left: 0;
 		right: 0;
 		z-index: 1;
-		height: 50px;
-		line-height: 50px;
 		font-size: 10px;
 		text-align: center;
 		opacity: 0;
@@ -90,7 +96,6 @@
 
 		&.is-visible {
 			opacity: 1;
-			top: 0px;
 		}
 	}
 

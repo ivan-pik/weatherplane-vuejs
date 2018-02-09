@@ -1,6 +1,7 @@
 <template>
 	<div class="hour"
 		v-bind:class="'hour--'+progressKeyWord"
+		v-bind:style="style"
 	>
 		<date-label 
 			 v-if="displayLabel"
@@ -118,6 +119,14 @@
 			
 		},
 		computed: {
+			rowHeight () {
+				return this.$store.state.existingPlaceView.view.chart.row.height;
+			},
+			style () {
+				return {
+					height: this.rowHeight + 'px'
+				}
+			},
 			displaySunTime () {
 				if (this.progressKeyWord == 'sunRising' || this.progressKeyWord == 'sunSetting') {
 					return true;
@@ -327,13 +336,14 @@
 				
 			
 			},
+
 			calcHeightStyle (progress) {
 				if (progress == -1 || progress == 0) {
 					this.heightStyle = '';
 					return;
 				} 
-				let height = Math.max(Math.abs(progress) * 100 - 10, 0); // - 20 for fade
-				this.heightStyle = `height: ${height}%;`;
+				let height = Math.round(Math.max(Math.abs(progress) * this.rowHeight - 16, 0)); // - 16 for fade
+				this.heightStyle = `height: ${height}px;`;
 			},
 			toRadians (angle) {
 				return angle * (Math.PI / 180);
