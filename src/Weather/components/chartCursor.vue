@@ -49,7 +49,7 @@
 				<rect
 					:width="pixelTreshold" 
 					fill="url(#linearGradient-1)"
-					x="0" 
+					:x="left-10" 
 					y="0"
 					:height="rowHeight"
 				/>
@@ -112,5 +112,6 @@
 	svg {
 		 display: block;
 	}
+
 }
 </style>

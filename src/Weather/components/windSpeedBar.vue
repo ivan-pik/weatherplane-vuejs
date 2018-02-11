@@ -107,7 +107,7 @@
 	 
 		methods: {
 			speedToPixels(speed) {
-				return ((this.chartWidth/this.maxSpeedToDisplay) * speed).toFixed(0);
+				return (((this.chartWidth)/this.maxSpeedToDisplay) * speed).toFixed(0);
 			}
 		},
 		data () {

@@ -57,7 +57,7 @@
 				return this.$store.state.existingPlaceView.view.chart.row.height;
 			},
 			cursorDayIndex () {
-				let offset = this.rowHeight * 0.5; // @todo Magic number
+				let offset = this.rowHeight * 0.5;
 				let maxCursorPosition = this.weather.hourly.length - 2;
 				let cursorPos = Math.max(Math.floor((this.cursorY - offset) / this.rowHeight),0);
 				return Math.min(cursorPos,maxCursorPosition);
@@ -77,6 +77,9 @@
 				return (this.cursorScreenY > (this.chartHeight + this.positioning.chartTop - (this.rowHeight * 0.5)));
 			},
 			topOverflow () {
+				if (this.isTouch) {
+					return false;
+				}
 				return (this.cursorY < ((this.rowHeight * 0.5) + this.lastScrollPosition ))
 			},
 			cursorScreenYlimited () {
@@ -133,8 +136,10 @@
 			chartCursorY (val) {
 				this.lastChartCursorY = val;
 			},
-			cursorY () {
-				
+			cursorY (cursorY) {
+				if(cursorY < 0) {
+					this.stopScroll();
+				}
 
 				if (!this.edgeScrolling) {
 					if (this.topOverflow || this.bottomOverflow || this.endOfChart) {
@@ -180,7 +185,6 @@
 			scroll (direction) {
 				this.edgeScrolling = true;
 				this.timer = setInterval(() => {
-				
 					this.$refs.chartScroller.scrollTop = this.$refs.chartScroller.scrollTop + this.step;
 				},40);
 				
@@ -207,7 +211,6 @@
 			
 			},
 			attachSunTimesToHours () {
-				console.log('attachSunTimesToHours');
 				this.weather.daily.forEach(day => {
 					let sunTimesDayDate = (new Date(day.time)).getDate();
 					let hour = this.weather.hourly.forEach(hour =>{
@@ -223,16 +226,19 @@
 				});
 			},
 			chartPointer (e) {
-				console.log(e || e.type);
-				if (e.sourceCapabilities.firesTouchEvents || this.isTouch) {
+				if (e.sourceCapabilities.firesTouchEvents) {
 					this.isTouch = true;
+				}
+
+				if (this.isTouch) {
+					return false;
 				}
 
 				let pos = e.pageY - this.positioning.chartTop;
 				this.lastCursorPosition = pos;
 				if (!this.cursorTicking) {
 					window.requestAnimationFrame(() => {
-						this.calcFinalCursor();
+						this.calcFinalCursor('pointer');
 						this.calcAbsoluteCursor(e.pageY);
 						this.cursorTicking = false;
 					});
@@ -240,18 +246,23 @@
 				}
 			},
 			chartScroll (e) {
-				console.log(e || e.type);
 				this.lastScrollPosition = this.$refs.chartScroller.scrollTop;
 				if (!this.scrollTicking) {
 					window.requestAnimationFrame(() => {
-						this.calcFinalCursor();
+						this.calcFinalCursor('scroll');
 						this.scrollTicking = false;
 					});
 					this.scrollTicking = true;
 				}
 			},
-			calcFinalCursor () {
-				this.cursorY = this.lastScrollPosition + this.lastCursorPosition;
+			calcFinalCursor (type) {
+				console.log(type);
+				if (this.isTouch) {
+					this.cursorY = this.lastScrollPosition + (this.rowHeight * 0.5);
+					console.log(this.cursorY);
+				} else {
+					this.cursorY = this.lastScrollPosition + this.lastCursorPosition;
+				}
 				if (this.endOfChart) {
 					this.lastY = ( this.weather.hourly.length * this.rowHeight ) - this.lastScrollPosition + this.positioning.chartTop - (this.rowHeight * 0.5);
 				}

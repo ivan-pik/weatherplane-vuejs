@@ -49,11 +49,15 @@
 		<g mask="url(#pathMask)">
 			<rect  
 				width="100%" 
-				class="svgBar__overThreshold" x="0" y="0" :height="chartHeight"
+				class="svgBar__overThreshold" x="10" y="0" :height="chartHeight"
 			/>
 			<rect  
 				:width="windSpeedThresholdPixels" 
-				class="svgBar__windSpeed" fill="url(#linearGradient-1)" x="0" y="0" :height="chartHeight"
+				class="svgBar__windSpeed"
+				fill="url(#linearGradient-1)" 
+				:x="0"
+				y="0"
+				:height="chartHeight"
 			/>
 		</g>
 

@@ -177,14 +177,17 @@
 				return this.$store.state.existingPlaceView.view.chartCursorPosition.index;
 			},
 			cursorHours () {
-				var awesomeDate = new Date(this.weather[this.index].time);   
-				return awesomeDate.toLocaleTimeString(navigator.language, {hour: 'numeric'});
+				var awesomeDate = new Date(this.weather[this.index].time);
+				return awesomeDate.getHours() + this.lastHourOffset;
 			},
 			cursorMinutes () {
 				let minutes = (this.interpolateLinear(0,60)).toFixed(0);
 				if (minutes < 10) {
 					minutes = "0" + minutes;
 				}
+				if (minutes === "60") {
+					return "00";
+				} 
 				return minutes;
 			},
 			cursorDate () {
@@ -282,7 +285,16 @@
 				this.activeSide = activeSide;
 				return relBearing;
 			},
+			lastHourOffset () {
+				if (this.progress === 1) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
 		},
+
+	
 	 
 		methods: {
 			saveSettings (value) {

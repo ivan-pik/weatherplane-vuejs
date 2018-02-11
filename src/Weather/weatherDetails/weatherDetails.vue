@@ -177,10 +177,10 @@
 				type: Number
 			},
 			cursorHours: {
-				type: String
+				type: Number
 			},
 			cursorMinutes: {
-				type: String
+				type: String // Expect Number, convert to string 01 - 09 here
 			},
 			cursorDate: {
 				type: String
@@ -230,6 +230,7 @@
 				return this.$store.state.globalApp.settings.timeFormat;
 			},
 			displayHour () {
+				// @todo: OMG refactor this
 				if (this.timeFormat == '24-hours') {
 					this.ampm = false;
 					return this.cursorHours;
@@ -238,11 +239,17 @@
 					var time = this.cursorHours - 12;
 					if (time < 10) {
 						return '0' + time;
+					} else {
+						return time;
 					}
-
 				} else {
 					this.ampm = 'AM';
-					return this.cursorHours;
+					if (this.cursorHours < 10) {
+						return 0 + this.cursorHours.toString();
+					} else {
+						return this.cursorHours.toString();
+					}
+					
 				}
 			},
 			temperatureUnit () {
