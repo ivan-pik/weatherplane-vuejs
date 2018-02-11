@@ -305,28 +305,7 @@ $hourGustSpeed__size: 1.4em;
 
 
 // --------------------------------
-.weatherIcon {
-	width: 30px;
-	height: 30px;
-	margin: 0 0 0 $widthGridSpace;
-	text-align: center;
-}
 
-.weatherIcon__image {
-	&.yes {
-		fill: $statusYes;
-	}
-	&.no {
-		fill: $statusNo;
-	}
-}
-
-.weatherIcon__NA {
-	line-height: 30px;
-	font-size: 8px;
-	font-weight: bold;
-	color: $textLabelColour;
-}
 
 // --------------------------------
 .hourTemperature {

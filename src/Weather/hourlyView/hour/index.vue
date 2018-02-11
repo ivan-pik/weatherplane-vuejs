@@ -40,8 +40,7 @@
 			:statusCrossWindComponent="statusCrossWindComponent"
 		/>
 
-		<weather-icon
-			:icon="weather.icon" 
+		<rain-icon
 			:precipProbability="weather.precipProbability" 
 			:precipIntensity="weather.precipIntensity"
 			:settingsMaxPrecipProbability="settingsMaxPrecipProbability"
@@ -73,7 +72,7 @@
 	import sunTime from '../../components/sunTime.vue';
 	import windSpeed from '../../components/windSpeed.vue';
 	import windBearing from '../../components/windBearing.vue';
-	import weatherIcon from '../../components/weatherIcon.vue';
+	import rainIcon from '../../components/rainIcon.vue';
 	import temperature from '../../components/temperature.vue';
 	
 	export default {
@@ -108,7 +107,7 @@
 			'hour-time': hourTime,
 			'sun-time': sunTime,
 			'wind-speed' : windSpeed,
-			'weather-icon' : weatherIcon,
+			'rain-icon' : rainIcon,
 			'wind-bearing' : windBearing,
 			'temperature' : temperature
 		},
