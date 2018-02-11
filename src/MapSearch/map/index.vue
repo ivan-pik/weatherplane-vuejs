@@ -75,7 +75,6 @@
 					this.getLocationOfGooglePlaceObject(place);
 				},
 				coordinates (coordinates) {
-					console.log("oops");
 					this.updateMap({
 						lat: coordinates[0],
 						lng: coordinates[1]

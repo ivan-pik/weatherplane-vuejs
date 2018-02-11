@@ -184,7 +184,6 @@
 
 						}).catch((error) => {
 							// @todo: Handle error
-							console.log('omg',error);
 						});
 					}
 				},

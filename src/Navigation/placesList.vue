@@ -101,7 +101,6 @@
 
 				newIndex = Math.max(Math.min(newIndex,this.nOfItems - 1) , 0);
 
-				console.log('newIndex',newIndex);
 
 				return newIndex;
 			},
@@ -112,7 +111,6 @@
 			},
 			dropHandler (val) {
 				let newIndex = this.getIndex(val.top);
-				console.log("move",val.index, newIndex);
 				if (val.index != newIndex) {
 					
 

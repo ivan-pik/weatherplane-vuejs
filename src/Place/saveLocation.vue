@@ -89,9 +89,6 @@
 							return "www.weatherplane.com/" + this.userName + '/' + this.placeNameURL;
 						}
 				},
-				created () {
-					console.log("created");
-				},
 				mounted () {
 					if (!this.placeSelected) {
 						this.$router.push('/');	
@@ -150,11 +147,9 @@
 						});
 					},
 					getListOfExistingPlaces () {
-						console.log("Going to load places");
 						WPAPI.getUserPlaces(this.userName)
 						.then(places => {
 							this.placesList = places;
-							console.log('Places Loaded', places);
 						});
 					},
 					checkAvailAbility (newPlaceName) {
@@ -164,7 +159,6 @@
 							return item.placeName.toLowerCase() == newPlaceName.toLowerCase();
 						});
 
-						console.log('Filtered results',filtered.length);
 
 						if (filtered.length != 0) {
 							return false;
