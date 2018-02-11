@@ -95,12 +95,14 @@
 				},
 				created () {
 					document.addEventListener('mousedown', this.mousedownHandler);
+					document.addEventListener('touchend', this.touchendHandler);
 					document.addEventListener('mouseup', this.mouseupHandler);
 					document.addEventListener('mousemove', this.mousemoveHandler);
 					document.addEventListener('touchmove', this.touchmoveHandler);
 				},
 				beforeDestroy () {
 					document.removeEventListener('mousedown', this.mousedownHandler);
+					document.removeEventListener('touchend', this.touchendHandler);
 					document.removeEventListener('mouseup', this.mouseupHandler);
 					document.removeEventListener('mousemove', this.mousemoveHandler);
 					document.removeEventListener('touchmove', this.touchmoveHandler);
@@ -168,6 +170,9 @@
 
 			
 				methods: {
+					touchendHandler (event) {
+						this.isDragging = false;
+					},
 					mousedownHandler (event) {
 						if (event.target == this.$refs.knob ||
 							event.target.parentElement == this.$refs.knob
@@ -185,7 +190,7 @@
 							this.isDragging = true;
 							this.isTouch = true;
 							this.mousemoveHandler(event);
-							this.isDragging = false;
+							
 						}
 					},
 					mousemoveHandler (event) {
