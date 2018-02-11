@@ -79,10 +79,8 @@ var api = {
 	reorderPlaces(payload) {
 		HTTP.post('/places/reorder-places', payload)
 		.then(function (response) {
-			console.log(response);
 		})
 		.catch(function (error) {
-			console.log(error);
 		});
 	},
 
