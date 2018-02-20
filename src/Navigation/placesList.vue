@@ -1,45 +1,51 @@
 <template>
-	<div class="placesList" ref="placesList">
-		<ul v-if="places" class="placesList__items"
-			:class="'placesList--' + role + arrangeClass"
+	<ui-sort-list
+		v-if="places"
+		:arrangeList="arranging"
+		v-on:itemIsDragging="itemIsDragging"
+		v-on:dropItem="dropItemHandler"
+		v-on:wedgeDraggedItem="wedgeDraggedItem"
+		:items="places"
+		:movingItem="movingItem"
+		:itemHeight="50"
+		:itemDropped="itemDropped"
+	>
+		<ui-sort-list-item
+			v-for="(place, index) in places"
+			:index="index"
+			:key="place._id"
+			:arrangeList="arranging"
+			:itemHeight="50"
+			:moveAway="moveAway"
+			:dropItem="dropItem"
+			:itemDropped="itemDropped"
 		>
 			<places-list-item
-				v-for="(place, index) in places"
-				:key="place._id"
-				v-on:contextMenuTriggered="contextMenuHandler(index)"
-				v-on:arrangeItems="arrangeItems(index)"
-				v-on:itemDrag="dragHandler"
-				v-on:itemDrop="dropHandler"
-				:contextMenuClose="activeIndex"
-				:index="index"
+				v-on:enterArrangingMode="arranging=true"
+				:arrangeList="arranging"
+
+				class="placesList__item"
 				:place="place"
-				:arranging="arranging"
-				:makeSpace="movePlease"
-				:dragging="dragging"
-				:listDimensions="listDimensions"
 			/>
-		</ul>
 
-
-		<button  v-if="arranging" class="placesList__exitSorting uiButton uiButton--primary" @click="cancelSorting">Exit Sorting</button>
-
-		<div v-if="places.length == 0" class="emptyState emptyState--placesList">
-			Oh, nothing in here!
-		</div>
-		<div v-if="!loggedIn">@todo: log in to see private places or save new ones</div>
-		
-	</div>
+		</ui-sort-list-item>
+	</ui-sort-list>
 </template>
 
 <script>
 	import WPAPI from '../wpapi/index';
 	import placesListItem from './placesListItem.vue';
+
+	import uiSortList from 'uiComponents/sortList.vue';
+	import uiSortListItem from 'uiComponents/sortListItem.vue';
 	
 
 	export default {
 		name: 'PlacesList',
 		components: {
-			'places-list-item' : placesListItem 
+			'places-list-item' : placesListItem,
+			'ui-sort-list': uiSortList,
+			'ui-sort-list-item': uiSortListItem
 		},
 		props: {
 			userName: {
@@ -50,30 +56,15 @@
 			}
 		},
 		computed: {
-			loggedIn () {
-				return this.$store.state.user.loggedIn;
-			},
 			places () {
 				return this.$store.state.user.places;	
 			},
-			arrangeClass () {
-				if (this.arranging) {
-					return ' arranging';
-				}
-				return false;
-			},
+			
 			nOfItems () {
 				if (this.places) {
 					return this.places.length;
 				}
 			},
-			listDimensions () {
-				return {
-					top: this.listTop,
-					bottom: this.listBottom,
-					height: this.listHeight
-				}
-			}
 		},
 		mounted () {
 			this.loadPlacesData();
@@ -81,95 +72,64 @@
 			
 		},
 		methods: {
-			cancelSorting () {
-				this.arranging = false;
-			},
-			getListDimensions () {
-				this.listTop = (this.$refs.placesList.getBoundingClientRect()).top;
-				this.listBottom = (this.$refs.placesList.getBoundingClientRect()).bottom;
-				this.listHeight = (this.$refs.placesList.getBoundingClientRect()).height;
-			},
-			getIndex (top) {
-				let newIndex;
-				if (top < this.listTop) {
-					newIndex = 0;
-				} else if (top > this.listBottom) {
-					newIndex = this.nOfItems - 1;
-				} else {
-					newIndex = Math.ceil((top - this.listTop) / 40) - 1;
+			dropItemHandler (payload) {
+				this.dropItem = payload;
+
+				if (payload.change === false) {
+					this.itemDropped = true;
+					return;
 				}
+			
+				const itemIndex = payload.index;
+				const newIndex = this.moveAway.takeSpaceOfIndex;
 
-				newIndex = Math.max(Math.min(newIndex,this.nOfItems - 1) , 0);
+				const directionDown = (newIndex > itemIndex);
 
-
-				return newIndex;
-			},
-			dragHandler(val) {
-				this.dragging = true;
-				let newIndex = this.getIndex(val.top);
-				this.giveMeSpace(newIndex, val.index);		
-			},
-			dropHandler (val) {
-				let newIndex = this.getIndex(val.top);
-				if (val.index != newIndex) {
-					
-
-					const directionDown = (newIndex > val.index);
-
-					let newPlaces = this.places.map((place) => {
-						
-						if (place._id == val.id) {
-							place.listOrder = newIndex;
-						} else {
-							if (directionDown && place.listOrder > val.index && place.listOrder <= newIndex) {
-								place.listOrder--
-							} else if (!directionDown && place.listOrder < val.index && place.listOrder >= newIndex) {
-								place.listOrder++
-							}
+				const newPlaces = this.places.map((place) => {
+					if (place.listOrder == itemIndex) {
+						place.listOrder = newIndex;
+					} else {
+						if (directionDown && place.listOrder > itemIndex && place.listOrder <= newIndex) {
+							place.listOrder--
+						} else if (!directionDown && place.listOrder < itemIndex && place.listOrder >= newIndex) {
+							place.listOrder++
 						}
-						return place;
-					});
+					}
+					return place;
+				});
 
-					newPlaces.sort(function(placeA, placeB) {
-						return (placeA.listOrder > placeB.listOrder)
-					});
+				newPlaces.sort(function(placeA, placeB) {
+					return (placeA.listOrder > placeB.listOrder)
+				});
 
-					this.newlyOrderedList = newPlaces;
-
-					// @todo: treshold this, prevent AJAX calls while still fiddling with the menu
+				setTimeout(() => {
+					this.itemDropped = true;
 					this.$store.dispatch('PLACE_UPDATE_LIST_ORDERS', newPlaces);
-				}
-			},
-			giveMeSpace (toIndex,fromIndex) {
+				}, this.TRANSITION_TIME);
 
-				this.movePlease = [toIndex,fromIndex];
 			},
-			contextMenuHandler (index) {
-				this.activeIndex = index;
+			wedgeDraggedItem (payload) {
+				this.moveAway = payload;
 			},
-			arrangeItems () {
-				this.arranging = true;
+			itemIsDragging (payload) {
+				this.itemDropped = false;
+				this.movingItem = payload;
 			},
 			loadPlacesData () {
 				WPAPI.getUserPlaces(this.userName)
 				.then(places => {
 					this.$store.dispatch('USER_GET_PLACES', places);
-
-					this.$nextTick(function () {
-						this.getListDimensions();
-					});
 				});
 			}
 		},
 		data() {
 			return {
-				activeIndex: -1,
+				movingItem: {},
 				arranging: false,
-				listTop: 0,
-				listBottom: 0,
-				listHeight: 0,
-				movePlease: [-1, null],
-				dragging: false
+				moveAway: {},
+				dropItem: {},
+				itemDropped: false,
+				TRANSITION_TIME: 200,
 			}
 		}
 	}
@@ -188,7 +148,7 @@
 
 	.placesList__items.arranging {
 		display: block;
-		margin-bottom: 40px;
+		margin-bottom: 50px;
 	}
 
 	.placesList__exitSorting {
@@ -198,19 +158,19 @@
 
 	.placesList__itemWrapper {
 		display: block;
-		height: 40px;
-		border-bottom: 1px solid #ddd;
+		height: 50px;
+		
 	
 	}
 
 	.placesList__itemPlaceHolder {
 		display: block;
-		height: 40px;
+		height: 50px;
 	}
 
 	.placesList__item {
-		height: 40px;
-		line-height: 40px;
+		height: 50px;
+		line-height: 50px;
 		width: 100%;
 		display: flex;
 		position: relative;
@@ -251,8 +211,8 @@
 		right: 0;
 		top: 0;
 		display: block;
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 		svg {
 			fill: $uiButtonPrimary;
 		}
@@ -261,7 +221,7 @@
 	.placesList__contextMenu {
 		position: absolute;
 		background: #fff;
-		right: 40px;
+		right: 50px;
 		top: 0;
 		height: 39px;
 
@@ -277,7 +237,7 @@
 		right: 0;
 		top: 0;
 		width: 100%;
-		height: 40px;
+		height: 50px;
 		text-align: right;
 		&.is-dragging {
 			background: rgba(#000, 0.2);
