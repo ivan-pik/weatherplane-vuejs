@@ -13,7 +13,7 @@
 		<div class="weatherDetails__col weatherDetails__col--1">
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Wind Speed
+					Wind
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueAmount">
@@ -27,7 +27,7 @@
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Gusting To
+					Gust
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueAmount">
@@ -41,7 +41,7 @@
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Temperature
+					Temp
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueAmount">
@@ -57,7 +57,7 @@
 		<div class="weatherDetails__col weatherDetails__col--2">
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Wind Direction
+					Direction
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueNote">Rel To RWY</span>
@@ -72,7 +72,7 @@
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Crosswind Speed
+					Crosswind
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueAmount">
@@ -86,7 +86,7 @@
 			</div>
 			<div class="weatherDetails__display">
 				<h3 class="weatherDetails__label">
-					Chance of rain
+					Rain
 				</h3>
 				<p class="weatherDetails__value">
 					<span class="weatherDetails__valueAmount">
@@ -364,7 +364,7 @@
 
 .weatherDetails__cursorDate {
 	display: inline-block;
-	min-width: 11em;
+	min-width: 9em;
 }
 
 .weatherDetails__col {
