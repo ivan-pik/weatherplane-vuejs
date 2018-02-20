@@ -102,7 +102,7 @@
 
 <style>
 	.hour__sunTime {
-		bottom: 0;
+		bottom: 6px;
 		font-size: 9px;
 		position: absolute;
 		z-index: 1000;
