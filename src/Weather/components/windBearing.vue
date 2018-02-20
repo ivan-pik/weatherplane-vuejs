@@ -1,7 +1,7 @@
 <template>
 	<div class="windBearing">
-		<div class="windBearing__value">
-			{{bearingRelToRWY}}&deg;
+		<div class="windBearing__value" v-if="false">
+			{{bearingRelToRWY}}&deg; // @todo: display on large screens
 		</div>
 
 		<svg  class="windBearing__chart" width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
