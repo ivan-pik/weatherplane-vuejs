@@ -192,7 +192,7 @@
 			},
 			cursorDate () {
 				var awesomeDate = new Date(this.weather[this.index].time);
-				return awesomeDate.toLocaleDateString(navigator.language, { weekday: 'long', day: 'numeric', month: 'long' });
+				return awesomeDate.toLocaleDateString(navigator.language, { weekday: 'short', day: 'numeric', month: 'long' });
 			},
 			windSpeed () {
 				return this.interpolateLinear(
