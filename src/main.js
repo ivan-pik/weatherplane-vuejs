@@ -20,9 +20,11 @@ import PlaceSettingsView from './Place/PlaceSettingsView/index.vue'
 import uiNote from 'uiComponents/uiNote.vue'
 import uiModal from 'uiComponents/modal.vue'
 import uiRadio from 'uiComponents/buttonRadio.vue'
+import uiSlider from 'uiComponents/slider.vue'
 import navigationHeader from 'Navigation/navigationHeader.vue'
 
 
+// @todo: better way of registering global components
 Vue.component(
 	'ui-note', uiNote
 );
@@ -38,6 +40,10 @@ Vue.component(
 
 Vue.component(
 	'ui-radio', uiRadio
+);
+
+Vue.component(
+	'ui-slider', uiSlider
 );
 
 
