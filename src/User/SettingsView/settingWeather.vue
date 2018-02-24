@@ -1,14 +1,22 @@
 <template>
 	<div class="userSetting userSetting--units">
-		<ui-radio
-			:radios="weatherRangeRadios"
+		<label class="uiLabel">
+			Get weather for {{newWeatherRange}} days ahead
+		</label>
+		<ui-slider
+			:minValue="1"
+			:maxValue="7"
+			v-model="newWeatherRange"
+			:step="1"
 			v-on:change="updateWeatherRange"
+			:unit="'day'"
+			:unitPlural="'days'"
+		/>
+		<ui-note
+			v-if="(newWeatherRange > 3)"
 		>
-			<label class="uiLabel" slot="label">Days ahead</label>
-		</ui-radio>
-
-		
-		
+			@todo: copy Please note, that the forecast reliability is worse 
+		</ui-note>
 	</div>
 </template>
 
@@ -43,22 +51,17 @@
 		},
 		methods: {
 			setDefaults () {
-				this.setActiveOption(this.weatherRangeRadios, this.weatherRange);
-			},
-			setActiveOption (radios,activeValue) {
-				radios.forEach(radio => {
-					if (radio.value == activeValue) {
-						radio.active = true;
-					}
-				});
+				this.newWeatherRange = this.weatherRange;
 			},
 			updateWeatherRange (value) {
-				this.$store.commit('GLOBAL_SET_WEATHER_RANGE', value.value );
+				this.newWeatherRange = value;
+
+				this.$store.commit('GLOBAL_SET_WEATHER_RANGE', value );
 
 				if (this.loggedIn) {
 					WPAPI.updateWeatherRange(
 						{
-							weatherRange: value.value,
+							weatherRange: value,
 							userID: this.userID
 						}
 					).then((user) => {
@@ -76,29 +79,10 @@
 					});
 				}
 			},
-		
-		
-	
 		},
 		data () {
 			return {
-				weatherRangeRadios: [
-					{
-						label: '1 day',
-						value: 1,
-						active: false
-					},
-					{
-						label: '2 days',
-						value: 2,
-						active: false
-					},
-					{
-						label: '3 days',
-						value: 3,
-						active: false
-					}
-				],
+				newWeatherRange: null
 			}
 		}
 	}
