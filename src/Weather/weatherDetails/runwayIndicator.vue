@@ -1,46 +1,39 @@
 <template>
 	<div class="runwaySideIndicator">
 		<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-		preserveAspectRatio="none"
-		width="100%"
-		height="40"
-		viewBox="0 0 100 40"
+			preserveAspectRatio="none"
+			width="100%"
+			height="40"
+			viewBox="0 0 100 40"
 		>
-		<defs>
-			<path id="plane" d="M5.20001285,13.2461415 L15.6986602,12.8933205 L11.8501448,18.9409876 C11.3757324,19.6864927 11.5954965,20.6754312 12.3410016,21.1498436 C13.0865067,21.6242559 14.0754452,21.4044918 14.5498576,20.6589867 L19.574534,12.7630666 L24.4537245,12.5990949 C25.3368803,12.5694153 26.0287594,11.829416 25.9990797,10.9462603 C25.9694001,10.0631046 25.2294008,9.37122546 24.3462451,9.40090508 L19.7766052,9.55447389 L14.5498576,1.34101332 C14.0754452,0.595508209 13.0865067,0.3757441 12.3410016,0.850156442 C11.5954965,1.32456878 11.3757324,2.31350728 11.8501448,3.05901238 L16.063038,9.67927325 L5.20001285,10.0443396 L5.20001285,8.6000035 C5.20001285,7.7163492 4.4836695,7.00000584 3.60001519,7.00000584 C2.71636088,7.00000584 2.00001752,7.7163492 2.00001752,8.6000035 L2.00001752,11.6904894 C1.99999418,11.6955134 1.99999414,11.7005424 2.00001752,11.7055765 L2.00001752,14.9999942 C2.00001752,15.8836485 2.71636088,16.5999918 3.60001519,16.5999918 C4.4836695,16.5999918 5.20001285,15.8836485 5.20001285,14.9999942 L5.20001285,13.2461415 Z"></path>
-		</defs>
-		<path vector-effect="non-scaling-stroke" d="M0,0 L100,0" class="runwaySideIndicator__runway"></path>
+			<defs>
+				<path id="plane" d="M20.11,38.178l-0.22,0l-0.063,-4.931l-2.228,2.088l-5.079,-0.803l0,-3.706l7.095,-1.065l-1.107,-11.484l-17.121,-2.777l0,-5.308c0,0 16.502,-1.175 16.507,-1.27c0.004,-0.095 -0.004,-1.889 -0.022,-2.654c-0.017,-0.766 0.237,-2.639 0.371,-2.977c0.556,-1.397 1.528,-1.471 1.757,-1.469c0.229,-0.002 1.201,0.072 1.757,1.469c0.134,0.338 0.388,2.211 0.371,2.977c-0.018,0.765 -0.026,2.559 -0.022,2.654c0.005,0.095 16.507,1.27 16.507,1.27l0,5.308l-17.121,2.777l-1.107,11.484l7.095,1.065l0,3.706l-5.079,0.803l-2.228,-2.088l-0.063,4.931Z" />
+			</defs>
+			<path vector-effect="non-scaling-stroke" d="M0,0 L100,0" class="runwaySideIndicator__runway"></path>
 		</svg>
 
 		<svg 
-			v-if="activeSide=='left' || activeSide=='none'"
-			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--left"
+			class="runwaySideIndicator__planePosition"
+			:class="{
+				'runwaySideIndicator__planePosition--left': (activeSide == 'left'),
+				'runwaySideIndicator__planePosition--right': (activeSide == 'right'),
+				'runwaySideIndicator__planePosition--none': (activeSide == 'none')
+			}"
+			:style="crabAngleTransform"
 			width="40"
 			height="40"
 			viewBox="0 0 40 40"
 			preserveAspectRatio
 		>
 			<use 
-				x="6"
-				y="8"
-				:transform="crabAngleTransform"
-				class="runwaySideIndicator__plane" xlink:href="#plane"></use>
+				x="0"
+				y="0"
+				width="40"
+				height="40"
+				class="runwaySideIndicator__plane" xlink:href="#plane"
+			/>
 		</svg>
-		<svg 
-			v-if="activeSide=='right' || activeSide=='none'"
-			class="runwaySideIndicator__planePosition runwaySideIndicator__planePosition--right"
-			width="40"
-			height="40"
-			viewBox="0 0 40 40"
-			preserveAspectRatio
-			transform="scale(-1,1)"
-		>
-			<use 
-				x="6"
-				y="8"
-				:transform="crabAngleTransform"
-				class="runwaySideIndicator__plane" xlink:href="#plane"></use>
-		</svg>
+		
 	</div>
 </template>
 
@@ -60,7 +53,15 @@
 		},
 		computed: {
 			crabAngleTransform () {
-				return `rotate(${this.crabAngle} 20 20)`;
+				if (this.activeSide == 'left') {
+					return {
+						transform: `rotate(${this.crabAngle + 90}deg)`
+					}
+				} else if (this.activeSide == 'right') {
+					return {
+						transform: `rotate(${- this.crabAngle + 270}deg)`
+					}
+				}
 			}
 		},
 	 
@@ -77,3 +78,47 @@
 	}
 </script>
 
+<style lang="scss">
+
+	@import '~globalVars';
+
+	.runwaySideIndicator {
+		position: absolute;
+		top: 91px;
+		left: 0;
+		width: 100%;
+		height: 27px;
+	}
+
+	.runwaySideIndicator__runway {
+		transform: translate(0,13px);
+		stroke: #859098;
+		stroke-width: 2;
+		stroke-dasharray: 0.5,8;
+		stroke-dashoffset: 2;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
+
+	.runwaySideIndicator__planePosition {
+		position: absolute;
+		top: -7px;
+		width: 40px;
+		height: 40px;
+		fill: red;
+	}
+
+	.runwaySideIndicator__planePosition--left {
+		left: $widthGridSpace*4;
+	}
+
+	.runwaySideIndicator__planePosition--right {
+		right: $widthGridSpace*4;
+		
+	}
+
+	.runwaySideIndicator__plane {
+		fill: #859098;
+	}
+
+</style>
