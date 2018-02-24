@@ -23,7 +23,7 @@
 				
 				@close-button-clicked="placeSettingsModal=false"
 			>
-				<place-settings slot="content" />
+				<place-settings-controls slot="content" />
 			</ui-modal>
 
 			<ui-modal
@@ -58,7 +58,7 @@
 		import weatherDetailsData from './weatherDetailsData.vue';
 		import loadScreen from '../../uiComponents/loadScreen.vue';
 		import savePlace from 'Place/saveLocation.vue'
-		import placeSettings from 'Place/PlaceSettingsView/index.vue'
+		import PlaceSettingsControls from 'Place/PlaceSettingsView/placeSettingsControls.vue'
 	
 
 		export default {
@@ -68,7 +68,7 @@
 				'hourly-view' : hourlyView,
 				'load-screen' : loadScreen,
 				'save-place' : savePlace,
-				'place-settings' : placeSettings,
+				'place-settings-controls' : PlaceSettingsControls
 				
 			},
 			mounted () {
