@@ -17,6 +17,7 @@
 							type="text"
 							placeholder="Location name here"
 							autofocus
+							autocomplete="off"
 						>
 						
 						<span
