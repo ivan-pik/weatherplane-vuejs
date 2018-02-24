@@ -32,13 +32,13 @@
 		</div>
 		<div class="uiSlider__values">
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
-				{{minValue}} {{unit}}
+				{{minValue}} {{minValueUnit}}
 			</div>
 			<div class="uiSlider__currentValue">
-				{{knobValue}} {{unit}}
+				{{knobValue}} {{knobValueUnit}}
 			</div>
 			<div class="uiSlider__edgeValue uiSlider__edgeValue--max">
-				{{maxValue}} {{unit}}
+				{{maxValue}} {{maxValueUnit}}
 			</div>
 		</div>
 	</div>
@@ -77,6 +77,9 @@
 			},
 			unit: {
 				type: String
+			},
+			unitPlural: {
+				type: String
 			}
 		},
 		created () {
@@ -105,8 +108,6 @@
 			currentValue () {
 				return this.modelValue;
 			},
-			
-		
 			range () {
 				let range = this.maxValue - this.minValue;
 				if (range == 0) {
@@ -131,7 +132,27 @@
 				} else {
 					return 1;
 				}
-				
+			},
+			minValueUnit () {
+				if (this.minValue === 1) {
+					return this.unit
+				} else {
+					return this.unitPlural || this.unit
+				}
+			},
+			maxValueUnit () {
+				if (this.maxValue === 1) {
+					return this.unit
+				} else {
+					return this.unitPlural || this.unit
+				}
+			} ,
+			knobValueUnit () {
+				if (this.knobValue === 1) {
+					return this.unit
+				} else {
+					return this.unitPlural || this.unit
+				}
 			} 
 		},
 		watch: {
