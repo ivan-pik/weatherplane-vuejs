@@ -104,13 +104,10 @@
 
 <script>
 	import Vue from 'vue';
-	import uiSlider from '../../uiComponents/slider.vue';
+	
 	
 	export default {
 		name: 'limitSettings',
-		components: {
-			'ui-slider' : uiSlider
-		},
 		props: {
 			controls: {
 				type: Object
