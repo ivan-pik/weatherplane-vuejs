@@ -333,6 +333,24 @@ var api = {
 			});	
 		});
 	}, 
+	// Reset Password
+	// payload = {
+	// 	userID :  this.$route.query.userID,
+	// 	password: this.password,
+	// 	token : this.$route.query.token
+	// };
+	resetPassword(payload) {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/login/reset-password', payload)
+			.then(function (response) {
+				resolve(response.data);
+			})
+			.catch(function (error) {
+				debugger;
+				resolve(error);
+			});	
+		});
+	}, 
 
 	// ----------------------------------------------------
 	// Update Email
