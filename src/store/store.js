@@ -21,7 +21,7 @@ export default new Vuex.Store({
 		},
 		user: {
 			loggedIn: false,
-			name: false,
+			name: null,
 			authenticationRequired: false,
 			authenticated: false,
 			places: []
