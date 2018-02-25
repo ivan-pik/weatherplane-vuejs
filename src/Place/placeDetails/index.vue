@@ -23,7 +23,17 @@
 				
 				@close-button-clicked="placeSettingsModal=false"
 			>
-				<place-settings-controls slot="content" />
+				<div
+					v-if="!currentUserResource"
+					class=""
+					slot="content"
+				>
+					@todo: You have to log-in as <strong>{{$route.params.username}}</strong> to tweak those!
+				</div>
+				<place-settings-controls
+					v-else
+					slot="content"
+				/>
 			</ui-modal>
 
 			<ui-modal
@@ -90,7 +100,12 @@
 				settingWeatherRange() {
 					return this.$store.state.globalApp.settings.weatherRange;
 				},
-				
+				currentUserName () {
+					return this.$store.state.user.name;
+				},
+				currentUserResource () {
+					return (this.$route.params.username == this.currentUserName);
+				}
 			},
 			watch: {
 				activeLocation () {
