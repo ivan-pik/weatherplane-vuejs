@@ -9,8 +9,8 @@
 				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
 				name="oldPassword"
 				v-model="oldPassword"
-				type="text"
-				placeholder="URL here"
+				type="password"
+				placeholder="Your current password"
 			>
 			
 			<span
@@ -28,8 +28,8 @@
 				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
 				name="newPassword"
 				v-model="newPassword"
-				type="text"
-				placeholder="URL here"
+				type="password"
+				placeholder="New password"
 			>
 			
 			<span
@@ -47,8 +47,8 @@
 				:class="{'input': true, 'is-danger': validationErrors.has('newPasswordConfirm') }"
 				name="newPasswordConfirm"
 				v-model="newPasswordConfirm"
-				type="text"
-				placeholder="URL here"
+				type="password"
+				placeholder="Repeat new password"
 			>
 			
 			<span
@@ -68,6 +68,7 @@
 <script>
 	import Vue from 'vue';
 	import WPAPI from '../../wpapi/index';
+	import {errorCodeParser} from 'libs/errorCodeParser.js';
 
 	// @todo: check if newPassword and newPasswordConfirm matches
 	// @todo: check if pass has changed
@@ -111,10 +112,27 @@
 					this.valueChanged = false;
 				})
 				.catch((error) => {
+					if (error.response && error.response.data.errors) {
+						errorCodeParser ('wrong-current-password',error.response.data.errors)
+						.then(() => {
+							this.$store.commit('GLOBAL_ADD_MESSAGE', {
+								text: 'The current password is wrong',
+								type: 'error',
+							});
+						})
+						.catch((error) => {
+							this.$store.commit('GLOBAL_ADD_MESSAGE', {
+								text: 'Ooops, something went wrong',
+								type: 'error',
+							});
+						})
+					} else {
 						this.$store.commit('GLOBAL_ADD_MESSAGE', {
 							text: 'Ooops, something went wrong',
 							type: 'error',
 						});
+					}
+					
 				});
 			},
 			errorCode (code, errors) {
