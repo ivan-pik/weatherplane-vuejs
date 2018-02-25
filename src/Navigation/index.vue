@@ -28,11 +28,14 @@
 				<user-bar />
 
 				<div class="mainNavigation__panelScroller">
-					<places-list
+					<ui-loader
 						v-if="loggedIn"
-						:role="'navigation'"
-						:userName="username"
-					/>
+						:loaded="!!places"
+						>
+						<places-list
+							:places="places"
+						/>
+					</ui-loader>
 					<div v-else>
 						@todo: login
 					</div>
@@ -56,6 +59,7 @@
 <script>
 	import placesList from './placesList.vue';
 	import userBar from 'Navigation/userBar.vue'
+	import WPAPI from 'wpapi/index';
 
 	// @todo: settings to open a panel, not a new view
 
@@ -68,6 +72,9 @@
 		created () {
 			document.addEventListener('keyup', this.escKeyHandler);
 		},
+		mounted () {
+			this.loadPlacesData();
+		},
 		beforeDestroy () {
 			document.removeEventListener('keyup', this.escKeyHandler);
 		},
@@ -77,7 +84,10 @@
 			},
 			loggedIn() {
 				return this.$store.state.user.loggedIn;
-			}
+			},
+			places () {
+				return this.$store.state.user.places;	
+			},	
 		},
 		watch: {
 			'$route': function (route) {
@@ -90,6 +100,12 @@
 					this.navOpened = false;
 				}
 			},
+			loadPlacesData () {
+				WPAPI.getUserPlaces(this.username)
+				.then(places => {
+					this.$store.dispatch('USER_GET_PLACES', places);
+				});
+			}
 		},
 	   data() {
 		return {
