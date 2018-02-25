@@ -38,7 +38,15 @@
 			:closeButton="true"
 			@close-button-clicked="limitsSettingsPanelOpen=false"
 		>
+			<div
+				v-if="!currentUserResource"
+				class=""
+				slot="content"
+			>
+				@todo: You have to log-in as <strong>{{$route.params.username}}</strong> to tweak those!
+			</div>
 			<weather-limit-settings
+				v-else
 				slot="content"
 				:controls="limitSettingsControls"
 				v-on:saveSettings="saveSettings"
@@ -71,6 +79,12 @@
 			}
 		},
 		computed: {
+			currentUserName () {
+				return this.$store.state.user.name;
+			},
+			currentUserResource () {
+				return (this.$route.params.username == this.currentUserName);
+			},
 			limitSettingsControls () {
 				let controls = {
 					windSpeed: {
