@@ -43,6 +43,14 @@
 		},
 		watch: {
 			movingItem (movingItem) {
+				if (this.firstMove) {
+					this.transitionAll = false;
+					setTimeout(() => {
+						this.transitionAll = true;
+						this.firstMove = false;
+					}, this.TRANSITION_TIME)
+				}
+
 				let cursor = movingItem.top - this.posTop;
 				let chartHeight = this.items.length * this.itemHeight;
 
@@ -55,11 +63,12 @@
 			},
 			itemDropped (itemDropped) {
 				if (itemDropped) {
-					this.fadeOutCursor = false;
+					this.transitionAll = false;
+					this.firstMove = true;
 
 					setTimeout(() => {
 						this.takeSpaceOfIndex = null;
-						this.fadeOutCursor = true;
+						this.transitionAll = true;
 					}, 200);
 				}
 			}
@@ -69,8 +78,8 @@
 				return {
 					height: this.itemHeight + 'px',
 					top: (this.takeSpaceOfIndex ? this.takeSpaceOfIndex * this.itemHeight : 0) + 'px',
-					opacity: (this.takeSpaceOfIndex !== null && this.fadeOutCursor) ? '1' : '0',
-					transition: (this.fadeOutCursor == false ? 'opacity' : 'all') + ' 200ms ease-in-out'
+					opacity: (this.takeSpaceOfIndex !== null && this.transitionAll) ? '1' : '0',
+					transition: (this.transitionAll == true ? 'all' : 'opacity') + ' 200ms ease-in-out'
 				}
 			}
 		},
@@ -83,7 +92,9 @@
 			return {
 				posTop: 0,
 				takeSpaceOfIndex: null,
-				fadeOutCursor: true,
+				transitionAll: true,
+				firstMove: true,
+				TRANSITION_TIME: 200
 			}
 		}
 	}
