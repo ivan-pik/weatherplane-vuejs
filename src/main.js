@@ -21,6 +21,8 @@ import uiNote from 'uiComponents/uiNote.vue'
 import uiModal from 'uiComponents/modal.vue'
 import uiRadio from 'uiComponents/buttonRadio.vue'
 import uiSlider from 'uiComponents/slider.vue'
+import uiLoader from 'uiComponents/uiLoader.vue'
+
 import navigationHeader from 'Navigation/navigationHeader.vue'
 
 
@@ -28,7 +30,6 @@ import navigationHeader from 'Navigation/navigationHeader.vue'
 Vue.component(
 	'ui-note', uiNote
 );
-
 
 Vue.component(
 	'ui-modal', uiModal
@@ -46,7 +47,9 @@ Vue.component(
 	'ui-slider', uiSlider
 );
 
-
+Vue.component(
+	'ui-loader', uiLoader
+);
 
 
 const routes = [
