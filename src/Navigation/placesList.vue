@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import WPAPI from '../wpapi/index';
+	
 	import placesListItem from './placesListItem.vue';
 
 	import uiSortList from 'uiComponents/sortList.vue';
@@ -48,28 +48,9 @@
 			'ui-sort-list-item': uiSortListItem
 		},
 		props: {
-			userName: {
-				type: String
-			},
-			role: {
-				type: String
+			places: {
+				type: Array
 			}
-		},
-		computed: {
-			places () {
-				return this.$store.state.user.places;	
-			},
-			
-			nOfItems () {
-				if (this.places) {
-					return this.places.length;
-				}
-			},
-		},
-		mounted () {
-			this.loadPlacesData();
-
-			
 		},
 		methods: {
 			dropItemHandler (payload) {
@@ -115,12 +96,7 @@
 				this.itemDropped = false;
 				this.movingItem = payload;
 			},
-			loadPlacesData () {
-				WPAPI.getUserPlaces(this.userName)
-				.then(places => {
-					this.$store.dispatch('USER_GET_PLACES', places);
-				});
-			}
+	
 		},
 		data() {
 			return {
