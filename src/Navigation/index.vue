@@ -29,9 +29,13 @@
 
 				<div class="mainNavigation__panelScroller">
 					<places-list
+						v-if="loggedIn"
 						:role="'navigation'"
 						:userName="username"
 					/>
+					<div v-else>
+						@todo: login
+					</div>
 				</div>
 
 				<router-link class="addNewPlace uiButton uiButton--primary" to="/search">Search for an airfield</router-link>
