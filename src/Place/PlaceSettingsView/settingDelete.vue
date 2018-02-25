@@ -9,7 +9,7 @@
 		>	
 			<div slot="content">
 					
-					<div class="uiTitle">
+					<div class="uiPromptQuestion">
 						Are you sure you want to delete "{{placeName}}" ?
 					</div>
 					<div class="uiButtonGroup">

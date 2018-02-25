@@ -56,7 +56,7 @@ body {
 .uiOverlayPanel--hasButtons {
 	padding-bottom: 60px;
 }
-.uiTitle {
+.uiPromptQuestion {
 	font-size: 0.8rem;
 	margin: 0 0 1em 0;
 	text-align: center;
@@ -282,4 +282,14 @@ body {
 .message {
 	font-size: 0.7rem;
 	margin: 0 0 1em 0;
+}
+
+
+.uiTitle {
+	text-align: center;
+	background: rgb(223, 108, 0);
+	color: #fff;
+	padding: 1em;
+	display: block;
+	font-size: 0.8rem;
 }
