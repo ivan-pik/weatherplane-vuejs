@@ -1,6 +1,7 @@
 <template>
 	<div class="limitSettingsOverview">
-		<button class="limitSettingsOverview__button"
+		<button
+			class="limitSettingsOverview__button"
 			@click="buttonClicked"
 		>
 			<svg width="3px" height="13px" viewBox="0 0 3 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
