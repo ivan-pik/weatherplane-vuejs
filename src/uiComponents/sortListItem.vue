@@ -59,11 +59,17 @@
 			document.addEventListener('mousedown', this.mousedownHandler);
 			document.addEventListener('mouseup', this.mouseupHandler);
 			document.addEventListener('mousemove', this.mousemoveHandler);
+			document.addEventListener('touchmove', this.touchmoveHandler);
+			document.addEventListener('touchstart', this.touchstartHandler);
+			document.addEventListener('touchend', this.touchendHandler);
 		},
 		beforeDestroy () {
 			document.removeEventListener('mousedown', this.mousedownHandler);
 			document.removeEventListener('mouseup', this.mouseupHandler);
 			document.removeEventListener('mousemove', this.mousemoveHandler);
+			document.removeEventListener('touchmove', this.touchmoveHandler);
+			document.removeEventListener('touchstart', this.touchstartHandler);
+			document.removeEventListener('touchend', this.touchendHandler);
 		},
 		watch: {
 			moveAway (moveAway) {
@@ -113,7 +119,10 @@
 			}
 		},
 		methods: {
-			mousedownHandler () {
+			touchstartHandler (event) {
+				this.mousedownHandler(event);
+			},
+			mousedownHandler (event) {
 				if (this.busy) {
 					return;
 				}
@@ -129,7 +138,10 @@
 					this.isDragger = false;
 				}
 			},
-			mouseupHandler () {
+			touchendHandler (event) {
+				this.mouseupHandler(event);
+			},
+			mouseupHandler (event) {
 				this.busy = true;
 
 				this.isDropped = true;
@@ -163,25 +175,33 @@
 				this.initialPageY = null;
 				this.busy = false;
 			},
+			touchmoveHandler (event) {
+				if (this.busy) {
+					return;
+				}
+				this.itemMoveHandler(event.touches[0].clientY);
+			},
 			mousemoveHandler (event) {
 				if (this.busy) {
 					return;
 				}
 
+				this.itemMoveHandler(event.pageY);
+
+			},
+			itemMoveHandler (y) {
 				if (this.isDragger && !this.isDropped) {
 					this.isDragging = true;
 
 					if (!this.initialPageY) {
-						this.initialPageY = event.pageY;
+						this.initialPageY = y;
 					}
 
-					let difference = event.pageY - this.initialPageY;
-
-					this.itemTop = difference;
+					this.itemTop = y - this.initialPageY;
 
 					this.$parent.$emit('itemIsDragging', {
 						index: this.index,
-						top: event.pageY
+						top: y
 					});
 				}
 			},
