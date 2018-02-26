@@ -1,10 +1,21 @@
 <template>
-	<div class="uiSortList" ref="list">
+	<div 
+		class="uiSortList"
+		ref="list"
+		:class="{
+			'uiSortList--arranging' : arrangeList
+		}"
+	>
 		<slot />
 		<div
 			class="uiSortList__dropCursor"
 			v-bind:style="dropCursorStyle"
 		>
+		</div>
+		<div class="uiSortList__arrangingTools">
+			<button
+				@click="stopArranging"
+			>END</button>
 		</div>
 	</div>
 </template>
@@ -33,6 +44,7 @@
 		},
 		created () {
 			window.addEventListener('resize', this.getSizes);
+			document.addEventListener('mousemove', this.mousemoveHandler);
 
 		},
 		mounted () {
@@ -40,6 +52,7 @@
 		},
 		beforeDestroy () {
 			window.removeEventListener('resize', this.getSizes);
+			document.removeEventListener('mousemove', this.mousemoveHandler);
 		},
 		watch: {
 			movingItem (movingItem) {
@@ -52,6 +65,7 @@
 				}
 
 				let cursor = movingItem.top - this.posTop;
+
 				let chartHeight = this.items.length * this.itemHeight;
 
 				this.takeSpaceOfIndex = Math.max(Math.min(Math.floor(cursor / this.itemHeight), this.items.length - 1),0)
@@ -62,6 +76,8 @@
 				});
 			},
 			itemDropped (itemDropped) {
+				clearInterval(this.scroll.timer);
+
 				if (itemDropped) {
 					this.transitionAll = false;
 					this.firstMove = true;
@@ -71,6 +87,20 @@
 						this.transitionAll = true;
 					}, 200);
 				}
+			},
+			'scroll.direction': function (direction) {
+				if (direction === 0) {
+					clearInterval(this.scroll.timer);
+					return;
+				} else {
+					this.scroll.timer = setInterval( () => {
+						this.scroll.top = Math.min(Math.max(this.scroll.top + (10 * this.scroll.speed) * direction, 0), this.listFullHeight - this.listHeight); 
+					},50);
+				}
+			},
+			'scroll.top': function (top) {
+				this.$refs.list.scrollTop = top;
+				this.$emit('listScroll', top);
 			}
 		},
 		computed: {
@@ -86,15 +116,49 @@
 		methods: {
 			getSizes() {
 				this.posTop = this.$refs.list.offsetTop;
+				this.listHeight = this.$refs.list.offsetHeight;
+				this.listFullHeight = this.$refs.list.scrollHeight;
 			},
+			stopArranging () {
+				this.$emit('stopArraning');
+			},
+			mousemoveHandler (event) {
+				if (!this.arrangeList || !this.movingItem.top) {
+					return;
+				}
+
+
+				if (event.clientY < (this.posTop + this.itemHeight)) {
+					// Scroll Up
+					this.scroll.speed = Math.round( (1 - (event.clientY - (this.posTop)) / this.itemHeight) * 10) / 10;
+					this.scroll.direction = -1;
+
+				} else if (event.clientY > (this.posTop + this.listHeight - this.itemHeight)) {
+					// Scroll Down
+					this.scroll.speed = Math.round( (1 - ((this.posTop + this.listHeight) - event.clientY) / this.itemHeight) * 10 ) / 10;	
+					// speed = Math.round( (1 - (event.clientY - (this.posTop + this.itemHeight)) / this.itemHeight) * 10) / 10;
+					this.scroll.direction = 1;
+
+				} else {
+					this.scroll.direction = 0;
+				}
+			}
 		},
 		data() {
 			return {
 				posTop: 0,
+				listHeight: null,
+				listFullHeight: null,
 				takeSpaceOfIndex: null,
 				transitionAll: true,
 				firstMove: true,
-				TRANSITION_TIME: 200
+				TRANSITION_TIME: 200,
+				scroll: {
+					speed: 0,
+					top: 0,
+					direction: 0,
+					timer: null
+				}
 			}
 		}
 	}
@@ -108,6 +172,12 @@
 		background-color: #fff;
 		border-top: 1px solid #ddd;
 		position: relative;
+		height: 400px;
+		overflow: auto;
+	}
+
+	.uiSortList--arranging {
+		overflow: hidden;
 	}
 
 	.uiSortList__dropCursor {
@@ -117,6 +187,15 @@
 		pointer-events: none;
 		opacity: 0.2;
 		transition: all 200ms ease-in-out;
+	}
+
+	.uiSortList__arrangingTools {
+		position: fixed;
+		bottom: 0;
+		background-color: red;
+		button {
+			padding: 3em;
+		}
 	}
 
 </style>

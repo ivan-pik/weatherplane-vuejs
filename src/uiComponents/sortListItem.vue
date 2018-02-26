@@ -53,6 +53,9 @@
 			},
 			itemDropped: {
 				type: Boolean
+			},
+			listScroll: {
+				type: Number
 			}
 		},
 		created () {
@@ -100,6 +103,12 @@
 					this.itemReset();
 				}
 			},
+			y (y) {
+				this.itemMoveHandler(y);
+			},
+			listScroll (top) {
+				this.itemMoveHandler(this.y);
+			}
 		},
 		computed: {
 			draggerStyle () {
@@ -179,19 +188,21 @@
 				if (this.busy) {
 					return;
 				}
-				this.itemMoveHandler(event.touches[0].clientY);
+				this.y = event.touches[0].clientY;
 			},
 			mousemoveHandler (event) {
 				if (this.busy) {
 					return;
 				}
 
-				this.itemMoveHandler(event.pageY);
+				this.y = event.pageY;
 
 			},
 			itemMoveHandler (y) {
 				if (this.isDragger && !this.isDropped) {
 					this.isDragging = true;
+
+					y = y + this.listScroll;
 
 					if (!this.initialPageY) {
 						this.initialPageY = y;
@@ -224,6 +235,7 @@
 				draggerCanTransition: false,
 				itemCanTransition: true,
 				busy: false,
+				y: 0
 			}
 		}
 	}

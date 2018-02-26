@@ -5,10 +5,13 @@
 		v-on:itemIsDragging="itemIsDragging"
 		v-on:dropItem="dropItemHandler"
 		v-on:wedgeDraggedItem="wedgeDraggedItem"
+		v-on:stopArraning="arranging=false"
+		v-on:listScroll="listScrollHandler"
 		:items="places"
 		:movingItem="movingItem"
 		:itemHeight="50"
 		:itemDropped="itemDropped"
+		
 	>
 		<ui-sort-list-item
 			v-for="(place, index) in places"
@@ -19,6 +22,7 @@
 			:moveAway="moveAway"
 			:dropItem="dropItem"
 			:itemDropped="itemDropped"
+			:listScroll="listScroll"
 		>
 			<places-list-item
 				v-on:enterArrangingMode="arranging=true"
@@ -33,7 +37,6 @@
 </template>
 
 <script>
-	
 	import placesListItem from './placesListItem.vue';
 
 	import uiSortList from 'uiComponents/sortList.vue';
@@ -55,6 +58,7 @@
 		methods: {
 			dropItemHandler (payload) {
 				this.dropItem = payload;
+				this.movingItem = {};
 
 				if (payload.change === false) {
 					this.itemDropped = true;
@@ -96,6 +100,9 @@
 				this.itemDropped = false;
 				this.movingItem = payload;
 			},
+			listScrollHandler (top) {
+				this.listScroll = top;
+			}
 	
 		},
 		data() {
@@ -106,6 +113,8 @@
 				dropItem: {},
 				itemDropped: false,
 				TRANSITION_TIME: 200,
+				listScroll: 0,
+				
 			}
 		}
 	}
