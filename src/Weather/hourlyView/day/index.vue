@@ -39,7 +39,6 @@
 <script>
 	import Vue from 'vue';
 	import Hour from '../hour/index.vue';
-	import Date from './date/index.vue';
 	import Chart from '../../components/chart.vue';
 	import ChartCursor from '../../components/chartCursor.vue';
 
@@ -73,7 +72,6 @@
 		},
 		components: {
 			'hour' : Hour,
-			'date' : Date,
 			'chart' : Chart,
 			'chart-cursor' : ChartCursor
 		},
