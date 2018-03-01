@@ -158,7 +158,6 @@
 					this.dropDragger();
 				}
 				if (this.isDragger) {
-					// this.isDragging = false; //xxx
 					this.itemTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
 					this.draggerCanTransition = true;
 				} else {
