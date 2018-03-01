@@ -1,7 +1,7 @@
 import {getLocalToken} from '../auth'
 
 import axios from 'axios';
-
+import {placeSorter} from 'libs/placeSorter.js';
 
 const HTTP = axios.create({
 	baseURL: '//localhost:4000/',
@@ -297,10 +297,9 @@ var api = {
 		return new Promise(function(resolve, reject) {
 			HTTP.get(`/places/${username}/`)
 			.then(function (response) {
+			
 				let newPlaces = response.data.data.places;
-				newPlaces.sort(function(placeA, placeB) {
-					return (placeA.listOrder > placeB.listOrder)
-				});
+				newPlaces.sort(placeSorter);
 
 				resolve(newPlaces);
 			})
