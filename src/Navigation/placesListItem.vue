@@ -46,9 +46,6 @@
 		},
 		
 		computed: {
-			activeUserName () {
-				return this.$store.state.user.name;
-			},
 			loggedIn() {
 				return this.$store.state.user.loggedIn;
 			},
@@ -56,7 +53,7 @@
 				return this.$store.state.user.name;
 			},
 			showContextMenu () {
-				return (this.loggedIn && (this.username == this.$route.params.username) && !this.arrangeList);
+				return (this.loggedIn && !this.arrangeList && (this.place._userID == this.username));
 			}
 		},
 		watch: {
