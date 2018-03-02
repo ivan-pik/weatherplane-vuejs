@@ -112,7 +112,7 @@
 			dropCursorStyle () {
 				return {
 					height: this.itemHeight + 'px',
-					top: (this.takeSpaceOfIndex ? this.takeSpaceOfIndex * this.itemHeight : 0) + 'px',
+					top: this.takeSpaceOfIndex * this.itemHeight + 'px',
 					opacity: (this.takeSpaceOfIndex !== null && this.transitionAll) ? '1' : '0',
 					transition: (this.transitionAll == true ? 'all' : 'opacity') + ' 200ms ease-in-out'
 				}
