@@ -55,6 +55,11 @@
 			document.removeEventListener('mousemove', this.mousemoveHandler);
 		},
 		watch: {
+			arrangeList (arrangeList) {
+				if (arrangeList) {
+					this.getSizes();
+				}
+			},
 			movingItem (movingItem) {
 				if (this.firstMove) {
 					this.transitionAll = false;
