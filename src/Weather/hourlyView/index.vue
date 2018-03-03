@@ -256,10 +256,8 @@
 				}
 			},
 			calcFinalCursor (type) {
-				console.log(type);
 				if (this.isTouch) {
 					this.cursorY = this.lastScrollPosition + (this.rowHeight * 0.5);
-					console.log(this.cursorY);
 				} else {
 					this.cursorY = this.lastScrollPosition + this.lastCursorPosition;
 				}

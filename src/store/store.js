@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 
 import WPAPI from '../wpapi/index';
 
+import {placeSorter} from 'libs/placeSorter.js';
+
 Vue.use(Vuex);
 
 // @todo: separate into modules
@@ -145,6 +147,8 @@ export default new Vuex.Store({
 		},
 		'PLACE_UPDATE_LIST_ORDERS' (state, val) {
 			// Update the place's order Index
+
+			val.sort(placeSorter);
 
 			// SAVE TO API
 			WPAPI.reorderPlaces(val);
