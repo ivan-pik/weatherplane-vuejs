@@ -67,6 +67,10 @@
 				}
 			},
 			movingItem (movingItem) {
+				if (!movingItem.top) {
+					return;
+				}
+
 				if (this.firstMove) {
 					this.transitionAll = false;
 					setTimeout(() => {
