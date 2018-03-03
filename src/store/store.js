@@ -148,13 +148,13 @@ export default new Vuex.Store({
 		'PLACE_UPDATE_LIST_ORDERS' (state, val) {
 			// Update the place's order Index
 
+			// Sort the places by "listOrder"
 			val.sort(placeSorter);
+
+			state.commit('PLACE_LIST_ORDERS_UPDATED', val);
 
 			// SAVE TO API
 			WPAPI.reorderPlaces(val);
-			
-		
-			state.commit('PLACE_LIST_ORDERS_UPDATED', val);
 		},
 		'USER_GET_PLACES' (state, newPlaces) {
 			// @todo: API LOAD HERE
