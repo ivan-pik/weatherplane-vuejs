@@ -206,8 +206,7 @@
 		background: #fff;
 		right: 50px;
 		top: 0;
-		height: 100%;
-		bottom: 0;
+		bottom: 1px;
 
 		.uiLink {
 			margin-left: 1em; 
