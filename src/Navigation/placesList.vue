@@ -38,7 +38,6 @@
 
 <script>
 	import placesListItem from './placesListItem.vue';
-	import {placeSorter} from 'libs/placeSorter.js';
 
 	import uiSortList from 'uiComponents/sortList.vue';
 	import uiSortListItem from 'uiComponents/sortListItem.vue';
@@ -84,7 +83,6 @@
 					return place;
 				});
 
-				newPlaces.sort(placeSorter);
 
 				setTimeout(() => {
 					this.itemDropped = true;
