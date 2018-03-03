@@ -60,7 +60,7 @@
 				this.dropItem = payload;
 				this.movingItem = {};
 
-				if (payload.change === false) {
+				if (payload.change === false || this.moveAway.takeSpaceOfIndex === undefined) {
 					this.itemDropped = true;
 					return;
 				}
