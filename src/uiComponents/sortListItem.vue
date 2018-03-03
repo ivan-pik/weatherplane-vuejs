@@ -31,6 +31,9 @@
 </template>
 
 <script>
+
+	import {minMaxLimiter} from 'libs/minMaxLimiter.js';
+
 	export default {
 		name: 'SortListItem',
 		components: {
@@ -108,11 +111,22 @@
 					this.itemReset();
 				}
 			},
-			y (y) {
-				this.itemMoveHandler(y);
-			},
 			listScroll (top) {
-				this.itemMoveHandler(this.y);
+				if (this.isDragging) {
+					if (!this.lastListScroll) {
+						this.lastListScroll = top;
+					}
+
+					let difference = top - this.lastListScroll;
+
+					let newTop = Math.round(this.itemTop + difference)
+
+					this.itemMoveHandler( newTop, { scrollType: 'scroll' } );
+
+					this.$nextTick(() => {
+						this.lastListScroll = top;
+					});
+				}
 			}
 		},
 		computed: {
@@ -207,7 +221,12 @@
 				this.itemTop = 0;
 				this.moveItemOffset = 0;
 				this.initialPageY = null;
+				this.lastScrollerY = null;
 				this.busy = false;
+				this.lastListScroll = null;
+				this.itemScreenTop = 0;
+				this.itemOffsetTop = null;
+				this.scrollOffset = 0;
 			},
 			touchmoveHandler (event) {
 				if (this.busy || !this.arrangeList) {
@@ -216,34 +235,59 @@
 				if(this.longTapTimer) {
 					clearTimeout(this.longTapTimer);
 				}
-				this.y = event.touches[0].clientY;
+
+				this.itemMoveHandler(event.touches[0].clientY, {scrollType: 'pointer'});
 			},
 			mousemoveHandler (event) {
 				if (this.busy || !this.arrangeList) {
 					return;
 				}
 
-				this.y = event.pageY;
+				this.itemMoveHandler(event.pageY, {scrollType: 'pointer'});
 
 			},
-			itemMoveHandler (y) {
+			/* Moves draged item to follow cursor
+				options: {
+					scrollType: 'scroll' / 'pointer'
+				}
+			*/
+			itemMoveHandler (y, options) {
 				if (this.isDragger && !this.isDropped) {
 					this.isDragging = true;
 
-					let scrollOffsetY = y + this.listScroll;
-
-					if (!this.initialPageY) {
-						let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
-						let difference = scrollOffsetY - (itemTop + this.itemHeight * 0.5);
-						this.initialPageY = scrollOffsetY - difference;
+					if (options.scrollType == 'pointer') {
+						if (!this.initialPageY) {
+							let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
+							let difference = y - (itemTop + this.itemHeight * 0.5);
+							this.initialPageY = y - difference;
+						}
+						this.itemScreenTop = y;
+						this.itemOffsetTop = y - this.initialPageY;
+					} else if (options.scrollType == 'scroll') {
+						// Just in case somehow the scroll event is fired before the item is actually dragged away
+						if (!this.itemScreenTop) {
+							return;
+						}
+						this.scrollOffset = y - this.itemOffsetTop;
+						
 					}
 
-					this.itemTop = scrollOffsetY - this.initialPageY;
+					this.itemTop = Math.round(
+						minMaxLimiter(
+							// Current Value
+							this.itemOffsetTop + this.scrollOffset,
+							// Min Value
+							- this.index * this.itemHeight,
+							// Max Value
+							this.itemHeight * (this.nOfItems - 1 - this.index)
+						)
+					);
 
+					console.log('itemTop', this.itemTop);
 
 					this.$parent.$emit('itemIsDragging', {
 						index: this.index,
-						top: scrollOffsetY
+						top: this.itemScreenTop
 					});
 				}
 			},
@@ -270,13 +314,19 @@
 				TRANSITION_TIME: 200,
 				isDropped: false,
 				initialPageY: null,
+				lastScrollerY: null,
 				draggerCanTransition: false,
 				itemCanTransition: true,
 				busy: false,
 				y: 0,
 				isTouch: false,
 				LONG_TAP_TIMEOUT: 200,
-				longTapTimer: null
+				longTapTimer: null,
+				lastListScroll: null,
+				scrollerTicking: false,
+				itemScreenTop: 0,
+				itemOffsetTop: null,
+				scrollOffset: 0
 			}
 		}
 	}

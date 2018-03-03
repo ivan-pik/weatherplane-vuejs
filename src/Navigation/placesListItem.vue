@@ -3,7 +3,7 @@
 		<div class="placesList__item">
 			<router-link class="placesList__itemLink" :to="'/' + place._userID + '/' + place.placeSlug">
 				<span class="placesList__name">
-					{{place.placeName}}
+					({{place.listOrder}}) - {{place.placeName}} 
 				</span>
 			</router-link>
 			<button class="placesList__contextMenuToggler"

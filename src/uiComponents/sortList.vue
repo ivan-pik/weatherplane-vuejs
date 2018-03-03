@@ -27,6 +27,9 @@
 </template>
 
 <script>
+
+	import {minMaxLimiter} from 'libs/minMaxLimiter.js';
+
 	export default {
 		name: 'SortList',
 		components: {
@@ -82,7 +85,13 @@
 				let cursor = movingItem.top - this.posTop;
 
 				let chartHeight = this.items.length * this.itemHeight;
-				this.takeSpaceOfIndex = Math.max(Math.min(Math.floor((cursor + this.scroll.top) / this.itemHeight), this.items.length - 1),0);
+
+
+				this.takeSpaceOfIndex = minMaxLimiter(
+					Math.floor((cursor + this.scroll.top) / this.itemHeight),	// Current Value
+					0,	// Min Value
+					this.items.length - 1	// Max Value
+				)
 
 				this.$emit('wedgeDraggedItem', {
 					draggedItemIndex: movingItem.index,
@@ -91,10 +100,12 @@
 			},
 			itemDropped (itemDropped) {
 				clearInterval(this.scroll.timer);
+				this.autoScrollIsBusy = false;
 
 				if (itemDropped) {
 					this.transitionAll = false;
 					this.firstMove = true;
+					this.takeSpaceOfIndex = null;
 
 					setTimeout(() => {
 						this.takeSpaceOfIndex = null;
@@ -106,19 +117,19 @@
 				if(this.listHeight == this.listFullHeight) {
 					return;
 				}
+
 				if (direction === 0) {
 					clearInterval(this.scroll.timer);
+					this.autoScrollIsBusy = false;
 					return;
 				} else {
+					this.autoScrollIsBusy = true;
 					this.scroll.timer = setInterval( () => {
-						this.scroll.top = Math.min(Math.max(this.scroll.top + (10 * this.scroll.speed) * direction, 0), this.listFullHeight - this.listHeight); 
+						this.scroll.top = Math.min(Math.max(this.scroll.top + (10 * this.scroll.speed) * direction, 0), this.listFullHeight - this.listHeight);
+						this.$refs.list.scrollTop = this.scroll.top;
 					},50);
 				}
 			},
-			'scroll.top': function (top) {
-				this.$refs.list.scrollTop = top;
-				this.$emit('listScroll', top);
-			}
 		},
 		computed: {
 			dropCursorStyle () {
@@ -143,23 +154,22 @@
 				if (!this.arrangeList || !this.movingItem.top) {
 					return;
 				}
-
-
 				if (event.clientY < (this.posTop + this.itemHeight)) {
 					// Scroll Up
 					this.scroll.speed = Math.round( (1 - (event.clientY - (this.posTop)) / this.itemHeight) * 10) / 10;
 					this.scroll.direction = -1;
-
 				} else if (event.clientY > (this.posTop + this.listHeight - this.itemHeight)) {
 					// Scroll Down
 					this.scroll.speed = Math.round( (1 - ((this.posTop + this.listHeight) - event.clientY) / this.itemHeight) * 10 ) / 10;	
-					// speed = Math.round( (1 - (event.clientY - (this.posTop + this.itemHeight)) / this.itemHeight) * 10) / 10;
 					this.scroll.direction = 1;
-
 				} else {
 					this.scroll.direction = 0;
 				}
-			}
+			},
+			scrollHandler () {
+				this.scroll.top = this.$refs.list.scrollTop;
+				this.$emit('listScroll', this.scroll.top);
+			},
 		},
 		data() {
 			return {
@@ -174,8 +184,9 @@
 					speed: 0,
 					top: 0,
 					direction: 0,
-					timer: null
-				}
+					timer: null,
+				},
+				autoScrollIsBusy: false,
 			}
 		}
 	}
