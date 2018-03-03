@@ -212,7 +212,6 @@
 				this.$emit('listScroll', this.scroll.top);
 			},
 			touchstartHandler (e) {
-				debugger;
 				this.isTouch = true;
 
 				if (e.target.closest('.uiSortList__scroller') && this.movingItem.top) {
@@ -268,7 +267,7 @@
 
 	.uiSortList__scroller {
 		position: relative;
-		// height: 200px;
+		height: 200px;
 		overflow: auto;
 	}
 
