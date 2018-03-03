@@ -103,6 +103,9 @@
 				}
 			},
 			'scroll.direction': function (direction) {
+				if(this.listHeight == this.listFullHeight) {
+					return;
+				}
 				if (direction === 0) {
 					clearInterval(this.scroll.timer);
 					return;
