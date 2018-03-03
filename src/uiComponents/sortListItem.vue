@@ -8,7 +8,8 @@
 			ref="dragItem"
 			v-bind:style="draggerStyle"
 			v-bind:class="{
-				'uiSortListItem__dragger--dragging' : isDragging
+				'uiSortListItem__dragger--dragging' : isDragging,
+				'uiSortListItem__dragger--dragging-active' : isDragger
 			}"
 		>
 			<slot />
@@ -353,11 +354,12 @@
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
 		background-color: rgba(#fff, 0.8);
+	}
 
-		.uiSortListItem__draggerButton {
-			svg {
-				fill: $uiInputInactive;
-			}
+	.uiSortListItem__dragger--dragging-active {
+		box-shadow: 0 0 6px 4px rgba(0,0,0,0.1);
+		.uiSortListItem__draggerButton svg {
+			fill: $uiInputInactive;
 		}
 	}
 
