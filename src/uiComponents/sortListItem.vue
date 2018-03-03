@@ -63,6 +63,9 @@
 			},
 			nOfItems: {
 				type: Number
+			},
+			sortListIsBusy: {
+				type: Boolean
 			}
 		},
 		created () {
@@ -136,6 +139,12 @@
 						this.sortList.lastScrollTop = top;
 					});
 				}
+			},
+			sortListIsBusy (sortListIsBusy) {
+				if (sortListIsBusy) {
+					this.sortList.isBusySorting = sortListIsBusy;
+					this.item.canAnimate = false;
+				}
 			}
 		},
 		computed: {
@@ -144,13 +153,14 @@
 					top: this.dragger.positionTop + 'px',
 					'z-index': this.item.isDragging ? '1' : '0',
 					height: this.itemHeight + 'px',
+					transition: (this.dragger.canAnimate) ? `all ${this.interaction.TRANSITION_TIME}ms ease-in-out` : `none`
 				}
 			},
 			itemStyle () {
 				return {
 					height: this.itemHeight + 'px',
 					top: this.item.moveItemOffset + 'px',
-					// transition: 'all ' + (this.item.canAnimate ? '200' : '0' ) + 'ms ease-in-out'
+					transition: (this.item.canAnimate) ? `top ${this.interaction.TRANSITION_TIME}ms ease-in-out` : `none`
 				}
 			}
 		},
@@ -219,9 +229,18 @@
 				this.item.canAnimate = false;
 			},
 			dropDragger () {
+
+				this.item.isDragger = false;
+
 				// Align the dragger between items
+				
 				this.dragger.canAnimate = true;
 				this.dragger.positionTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
+				setTimeout(() => {
+					this.dragger.canAnimate = false;
+				}, this.interaction.TRANSITION_TIME)
+
+			
 
 				// Let the SortList know it's been dropped
 				// let it know if it has been dropped to 
@@ -241,7 +260,6 @@
 				this.item.isDragger = false;
 				this.item.isDragging = false;
 				this.item.initialScreenY = null;
-				this.item.canAnimate = true;
 				this.item.moveItemOffset = 0;
 				this.item.screenPositionTop = 0;
 
@@ -255,6 +273,13 @@
 
 				this.interaction.isTouch = false;
 				this.interaction.longTapTimer = null;
+
+				// This needs to be reset after the top 
+				// position is removed, to prevent unwanted
+				// transition
+				this.$nextTick(() => {
+					this.item.canAnimate = true;
+				});
 			},
 			touchmoveHandler (event) {
 				// List is being sorted or we are not arranging, do nothing
@@ -382,6 +407,7 @@
 				interaction: {
 					isTouch: false,
 					LONG_TAP_TIMEOUT: 200,
+					TRANSITION_TIME: 200,
 					longTapTimer: null,
 				},
 			}

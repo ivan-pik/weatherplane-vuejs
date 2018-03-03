@@ -24,6 +24,7 @@
 			:itemDropped="itemDropped"
 			:listScroll="listScroll"
 			:nOfItems="places.length"
+			:sortListIsBusy="sortListIsBusy"
 		>
 			<places-list-item
 				v-on:enterArrangingMode="arranging=true"
@@ -60,9 +61,13 @@
 			dropItemHandler (payload) {
 				this.dropItem = payload;
 				this.movingItem = {};
+				this.sortListIsBusy = true;
 
 				if (payload.change === false || this.moveAway.takeSpaceOfIndex === undefined) {
-					this.itemDropped = true;
+					setTimeout(() => {
+						this.itemDropped = true;
+						this.sortListIsBusy = false;
+					}, this.TRANSITION_TIME);
 					return;
 				}
 			
@@ -86,8 +91,10 @@
 
 
 				setTimeout(() => {
-					this.itemDropped = true;
 					this.$store.dispatch('PLACE_UPDATE_LIST_ORDERS', newPlaces);
+					this.itemDropped = true;
+					this.sortListIsBusy = false;
+
 				}, this.TRANSITION_TIME);
 
 			},
@@ -112,6 +119,7 @@
 				itemDropped: false,
 				TRANSITION_TIME: 200,
 				listScroll: 0,
+				sortListIsBusy: false,
 				
 			}
 		}
