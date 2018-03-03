@@ -1,16 +1,22 @@
 <template>
 	<div 
 		class="uiSortList"
-		ref="list"
+		
 		:class="{
 			'uiSortList--arranging' : arrangeList
 		}"
 	>
-		<slot />
 		<div
-			class="uiSortList__dropCursor"
-			v-bind:style="dropCursorStyle"
+			ref="list"
+			class="uiSortList__scroller"
+			@scroll="scrollHandler"
 		>
+			<slot />
+			<div
+				class="uiSortList__dropCursor"
+				v-bind:style="dropCursorStyle"
+			>
+			</div>
 		</div>
 		<div class="uiSortList__arrangingTools">
 			<button
@@ -176,13 +182,18 @@
 	.uiSortList {
 		background-color: #fff;
 		border-top: 1px solid #ddd;
+		
+	}
+
+	.uiSortList__scroller {
 		position: relative;
-		height: 400px;
+		height: 200px;
 		overflow: auto;
 	}
 
 	.uiSortList--arranging {
-		overflow: hidden;
+		.uiSortList__scroller {
+		}
 	}
 
 	.uiSortList__dropCursor {
