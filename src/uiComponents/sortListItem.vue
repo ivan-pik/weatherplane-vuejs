@@ -85,6 +85,9 @@
 		},
 		watch: {
 			moveAway (moveAway) {
+				// SortList tells this item to make a space for the dragger
+
+				// Dragger haven't taken anyone's space yet
 				if (moveAway.draggedItemIndex == this.index) {
 					return;
 				}
@@ -108,11 +111,16 @@
 				}
 			},
 			itemDropped (itemDropped) {
+				// Places are sorted and saved in Store
+				// We can reset everything
 				if (itemDropped) {
 					this.itemReset();
 				}
 			},
 			listScroll (top) {
+				// The list can scroll while dragging the item
+				// We will tell itemMoveHandler to compenasate
+				// position for the scrolled amount
 				if (this.item.isDragging) {
 					if (!this.sortList.lastScrollTop) {
 						this.sortList.lastScrollTop = top;
@@ -122,7 +130,7 @@
 
 					let newTop = Math.round(this.dragger.positionTop + difference)
 
-					this.itemMoveHandler( newTop, { scrollType: 'scroll' } );
+					this.itemMoveHandler(newTop, {scrollType: 'scroll'});
 
 					this.$nextTick(() => {
 						this.sortList.lastScrollTop = top;
@@ -136,14 +144,13 @@
 					top: this.dragger.positionTop + 'px',
 					'z-index': this.item.isDragging ? '1' : '0',
 					height: this.itemHeight + 'px',
-					transition: 'all ' + (this.dragger.isAnimating ? '200' : '0' ) + 'ms ease-in-out' 
 				}
 			},
 			itemStyle () {
 				return {
 					height: this.itemHeight + 'px',
 					top: this.item.moveItemOffset + 'px',
-					transition: 'all ' + (this.item.isAnimating ? '200' : '0' ) + 'ms ease-in-out'
+					// transition: 'all ' + (this.item.canAnimate ? '200' : '0' ) + 'ms ease-in-out'
 				}
 			}
 		},
@@ -153,16 +160,20 @@
 				this.mousedownHandler(event);
 			},
 			mousedownHandler (event) {
+				// List is sorting itself, do nothing
 				if (this.sortList.isBusySorting) {
 					return;
 				}
-				this.item.isDropped = false;
-				this.dragger.isAnimating = false;
-				this.item.isAnimating = true;
+
+				// We are not sorting the list, do nothing
 				if (!this.arrangeList) {
 					return;
 				}
+
+				// If this particular item is being dragged
 				if (event.target == this.$refs.dragger) {
+					// Item will become a dragger after a long tap
+					// on a touch screen
 					if (this.interaction.isTouch) {
 						this.interaction.longTapTimer = setTimeout(
 							() => {
@@ -170,44 +181,51 @@
 							},
 							this.interaction.LONG_TAP_TIMEOUT
 						);
-					} else {
+					} 
+					// otherwise immediately become the dragged item
+					else {
 						this.item.isDragger = true;
 					}
-				} else {
-					this.item.isDragger = false;
 				}
 			},
 			touchendHandler (event) {
 				this.interaction.isTouch = false;
 				clearTimeout(this.interaction.longTapTimer);
+
 				this.mouseupHandler(event);
 			},
 			mouseupHandler (event) {
+				// Not arraning list, do nothing
 				if (!this.arrangeList) {
 					return;
 				}
 
+				// The dragger hasn't been moved, do nothing
 				if (!this.item.isDragging) {
-					this.itemReset();
 					return;
 				}
 
+				// Prevent all UI interactions till the new order is in the store
 				this.sortList.isBusySorting = true;
 
-				this.item.isDropped = true;
+				// If this is a dragged item, drop it now
 				if (this.item.isDragger) {
 					this.dropDragger();
-				}
-				if (this.item.isDragger) {
-					this.dragger.positionTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
-					this.dragger.isAnimating = true;
-				} else {
-					this.item.isAnimating = false;
-				}
-				setTimeout(this.itemReset, this.interaction.TRANSITION_TIME + 100);
-				
+				} 
+
+				// Disable animations for normal items
+				// because Vue will swop their order and reset styles
+				// Like this it won't be noticeable in the browser
+				this.item.canAnimate = false;
 			},
 			dropDragger () {
+				// Align the dragger between items
+				this.dragger.canAnimate = true;
+				this.dragger.positionTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
+
+				// Let the SortList know it's been dropped
+				// let it know if it has been dropped to 
+				// a new slot or not
 				this.$parent.$emit('dropItem', {
 					index: this.index,
 					top: event.pageY,
@@ -216,22 +234,35 @@
 
 			},
 			itemReset () {
-				this.item.isDropped = false;
+				// This is called after the SortList
+				// has rearranged itself
+				// We can then clean up all the mess
+		
 				this.item.isDragger = false;
 				this.item.isDragging = false;
-				this.dragger.positionTop = 0;
-				this.item.moveItemOffset = 0;
 				this.item.initialScreenY = null;
+				this.item.canAnimate = true;
+				this.item.moveItemOffset = 0;
+				this.item.screenPositionTop = 0;
+
 				this.sortList.isBusySorting = false;
 				this.sortList.lastScrollTop = null;
-				this.item.screenPositionTop = 0;
-				this.dragger.offsetTop = null;
 				this.sortList.scrollTopOffset = 0;
+
+				this.dragger.canAnimate = false;
+				this.dragger.positionTop = 0;
+				this.dragger.offsetTop = null;
+
+				this.interaction.isTouch = false;
+				this.interaction.longTapTimer = null;
 			},
 			touchmoveHandler (event) {
+				// List is being sorted or we are not arranging, do nothing
 				if (this.sortList.isBusySorting || !this.arrangeList) {
 					return;
 				}
+
+				// As we have moved the finger, prevent long tap from happening
 				if(this.interaction.longTapTimer) {
 					clearTimeout(this.interaction.longTapTimer);
 				}
@@ -252,51 +283,75 @@
 				}
 			*/
 			itemMoveHandler (y, options) {
-				if (this.item.isDragger && !this.item.isDropped) {
-					this.item.isDragging = true;
+				// SortList is being sorted or this is not a dragger, do nothing
+				if (this.sortList.isBusySorting || !this.item.isDragger) {
+					return;
+				}
 
-					if (options.scrollType == 'pointer') {
-						if (!this.item.initialScreenY) {
-							let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
-							let difference = y - (itemTop + this.itemHeight * 0.5);
-							this.item.initialScreenY = y - difference;
-						}
-						this.item.screenPositionTop = y;
-						this.dragger.offsetTop = y - this.item.initialScreenY;
-					} else if (options.scrollType == 'scroll') {
-						// Just in case somehow the scroll event is fired before the item is actually dragged away
-						if (!this.item.screenPositionTop) {
-							return;
-						}
-						this.sortList.scrollTopOffset = y - this.dragger.offsetTop;
-						
+				// Flag that the dragger is moving
+				this.item.isDragging = true;
+
+				// Dragger position can be either caused 
+				// by a pointer (mousemove or touchmove)
+
+				// or by the SortList being scrolled up and down
+				// the position of the dragger on the screen need to be offset
+				// by the scrolled amount
+
+				if (options.scrollType == 'pointer') {
+					if (!this.item.initialScreenY) {
+						// We will align the dragged item to the middle with the cursor
+						let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
+						let difference = y - (itemTop + this.itemHeight * 0.5);
+						this.item.initialScreenY = y - difference;
+					}
+					// Save the absolute screen position
+					this.item.screenPositionTop = y;
+
+					// Save the relative position away from dragger's original slot
+					this.dragger.offsetTop = y - this.item.initialScreenY;
+				} else if (options.scrollType == 'scroll') {
+					// Just in case the pointer event doesn't happen first, do nothing
+					if (!this.item.screenPositionTop) {
+						return;
 					}
 
-					this.dragger.positionTop = Math.round(
-						minMaxLimiter(
-							// Current Value
-							this.dragger.offsetTop + this.sortList.scrollTopOffset,
-							// Min Value
-							- this.index * this.itemHeight,
-							// Max Value
-							this.itemHeight * (this.nOfItems - 1 - this.index)
-						)
-					);
-
-					console.log('itemTop', this.dragger.positionTop);
-
-					this.$parent.$emit('itemIsDragging', {
-						index: this.index,
-						top: this.item.screenPositionTop
-					});
+					// How much we need to compensate for the scroll
+					this.sortList.scrollTopOffset = y - this.dragger.offsetTop;
+					
 				}
+
+				this.dragger.positionTop = Math.round(
+					minMaxLimiter(
+						// Current Value - Item's + scrolled offset
+						this.dragger.offsetTop + this.sortList.scrollTopOffset,
+						// Min Value
+						- this.index * this.itemHeight,
+						// Max Value
+						this.itemHeight * (this.nOfItems - 1 - this.index)
+					)
+				);
+
+				// Let the SortList know that we are dragging this item
+				// It will make sure the other items will move away
+				// And it will tell us some useful stuff via this component properties
+				this.$parent.$emit('itemIsDragging', {
+					index: this.index,
+					top: this.item.screenPositionTop
+				});
 			},
+			// This makes space for the dragger by moving away
+			// up or down
+			// pos = -1, 0 , 1
 			moveOnePosition (pos) {
 				let offset = this.itemHeight;
 				this.item.moveItemOffset = offset * pos;
-
 			},
 			contextmenuHandler (event) {
+				// When arraning a list,
+				// we need a long tap event
+				// to select the item
+				// not to open the context menu
 				if (this.arrangeList) {
 					event.preventDefault();
 					event.stopPropagation();
@@ -310,9 +365,8 @@
 					isDragger: false,
 					isDragging: false,
 					initialScreenY: null,
-					isAnimating: true,
+					canAnimate: true,
 					moveItemOffset: 0,
-					isDropped: false,
 					screenPositionTop: 0,
 				},
 				sortList: {
@@ -321,7 +375,7 @@
 					scrollTopOffset: 0
 				},
 				dragger: {
-					isAnimating: false,
+					canAnimate: false,
 					positionTop: 0,
 					offsetTop: null,
 				},
@@ -329,7 +383,6 @@
 					isTouch: false,
 					LONG_TAP_TIMEOUT: 200,
 					longTapTimer: null,
-					TRANSITION_TIME: 200,
 				},
 			}
 		}
