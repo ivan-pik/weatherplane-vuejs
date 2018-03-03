@@ -13,7 +13,7 @@
 		>
 			<slot />
 			<button
-				class="placesList__sortingDragger"
+				class="uiSortListItem__draggerButton"
 				v-if="arrangeList"
 				ref="dragger"
 			>
@@ -261,6 +261,28 @@
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
 		background-color: rgba(#fff, 0.8);
+
+		.uiSortListItem__draggerButton {
+			svg {
+				fill: $uiInputInactive;
+			}
+		}
+	}
+
+	.uiSortListItem__draggerButton {
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		top: 0;
+		bottom: 0;
+		height: 100%;
+		text-align: right;
+
+		svg {
+			pointer-events: none;
+			fill: $uiInputActive;
+		}
 	}
 
 </style>
