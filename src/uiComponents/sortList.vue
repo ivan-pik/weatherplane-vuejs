@@ -77,14 +77,18 @@
 				}
 			},
 			movingItem (movingItem) {
-				if (!movingItem.top) {
+				if (!'top' in movingItem) {
 					return;
 				}
 
+				
+
 				if (this.firstMove) {
-					this.transitionAll = false;
 					setTimeout(() => {
-						this.transitionAll = true;
+						this.cursor.canTransitonPosition = true;
+					}, 20)
+					setTimeout(() => {
+						this.cursor.canTransitonPosition = true;
 						this.firstMove = false;
 					}, this.TRANSITION_TIME)
 				}
@@ -95,10 +99,15 @@
 
 
 				this.takeSpaceOfIndex = minMaxLimiter(
-					Math.floor((cursor + this.scroll.top) / this.itemHeight),	// Current Value
-					0,	// Min Value
-					this.items.length - 1	// Max Value
+					// Current Value
+					Math.floor((cursor + this.scroll.top) / this.itemHeight),
+					// Min Value
+					0,
+					// Max Value
+					this.items.length - 1
 				)
+
+				this.cursor.top = this.takeSpaceOfIndex * this.itemHeight;
 
 				this.$emit('wedgeDraggedItem', {
 					draggedItemIndex: movingItem.index,
@@ -106,17 +115,17 @@
 				});
 			},
 			itemDropped (itemDropped) {
+				this.cursor.canTransitonPosition = false;
+
 				clearInterval(this.scroll.timer);
 				this.autoScrollIsBusy = false;
 
 				if (itemDropped) {
-					this.transitionAll = false;
 					this.firstMove = true;
 					this.takeSpaceOfIndex = null;
 
 					setTimeout(() => {
 						this.takeSpaceOfIndex = null;
-						this.transitionAll = true;
 					}, 200);
 				}
 			},
@@ -139,12 +148,22 @@
 			},
 		},
 		computed: {
+			cursorOpacity () {
+				if ('top' in this.movingItem) {
+					return '1'
+				} else {
+					return '0'
+				}
+			},
 			dropCursorStyle () {
+				const fadeInTransition = `opacity ${this.TRANSITION_TIME}ms ease-in-out`;
+				const movingTransition = `all ${this.TRANSITION_TIME}ms ease-in-out`;
+
 				return {
-					height: this.itemHeight + 'px',
-					top: this.takeSpaceOfIndex * this.itemHeight + 'px',
-					opacity: (this.takeSpaceOfIndex !== null && this.transitionAll) ? '1' : '0',
-					transition: (this.transitionAll == true ? 'all' : 'opacity') + ' 200ms ease-in-out'
+					height: `${this.itemHeight}px`,
+					top: `${this.cursor.top}px`,
+					opacity: this.cursorOpacity,
+					transition: (this.cursor.canTransitonPosition) ? movingTransition : fadeInTransition
 				}
 			},
 			scrollerStyle () {
@@ -167,7 +186,6 @@
 				if (!this.preventTouchScroll) {
 					clearTimeout(this.preventScrollTimer);
 				}
-
 				this.autoScroll(event.touches[0].clientY);
 			},
 			mousemoveHandler (event) {
@@ -216,7 +234,6 @@
 				listHeight: null,
 				listFullHeight: null,
 				takeSpaceOfIndex: null,
-				transitionAll: true,
 				firstMove: true,
 				TRANSITION_TIME: 200,
 				scroll: {
@@ -230,6 +247,10 @@
 				preventTouchScroll: false,
 				preventScrollTimer: null,
 				LONG_TAP_TIMEOUT: 200,
+				cursor: {
+					canTransitonPosition: false,
+					top: 0,
+				}
 			}
 		}
 	}
@@ -247,13 +268,8 @@
 
 	.uiSortList__scroller {
 		position: relative;
-		height: 200px;
+		// height: 200px;
 		overflow: auto;
-	}
-
-	.uiSortList--arranging {
-		.uiSortList__scroller {
-		}
 	}
 
 	.uiSortList__dropCursor {
@@ -261,8 +277,6 @@
 		background-color: rgba(green, 0.2);
 		width: 100%;
 		pointer-events: none;
-		opacity: 0.2;
-		transition: all 200ms ease-in-out;
 	}
 
 	.uiSortList__arrangingTools {
