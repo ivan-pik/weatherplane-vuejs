@@ -131,6 +131,7 @@
 		},
 		methods: {
 			touchstartHandler (event) {
+				this.isTouch = true;
 				this.mousedownHandler(event);
 			},
 			mousedownHandler (event) {
@@ -141,18 +142,38 @@
 				this.draggerCanTransition = false;
 				this.itemCanTransition = true;
 				if (!this.arrangeList) {
-					return true;
+					return;
 				}
 				if (event.target == this.$refs.dragger) {
-					this.isDragger = true;
+					if (this.isTouch) {
+						this.longTapTimer = setTimeout(
+							() => {
+								this.isDragger = true;
+							},
+							this.LONG_TAP_TIMEOUT
+						);
+					} else {
+						this.isDragger = true;
+					}
 				} else {
 					this.isDragger = false;
 				}
 			},
 			touchendHandler (event) {
+				this.isTouch = false;
+				clearTimeout(this.longTapTimer);
 				this.mouseupHandler(event);
 			},
 			mouseupHandler (event) {
+				if (!this.arrangeList) {
+					return;
+				}
+
+				if (!this.isDragging) {
+					this.itemReset();
+					return;
+				}
+
 				this.busy = true;
 
 				this.isDropped = true;
@@ -186,13 +207,16 @@
 				this.busy = false;
 			},
 			touchmoveHandler (event) {
-				if (this.busy) {
+				if (this.busy || !this.arrangeList) {
 					return;
+				}
+				if(this.longTapTimer) {
+					clearTimeout(this.longTapTimer);
 				}
 				this.y = event.touches[0].clientY;
 			},
 			mousemoveHandler (event) {
-				if (this.busy) {
+				if (this.busy || !this.arrangeList) {
 					return;
 				}
 
@@ -203,17 +227,20 @@
 				if (this.isDragger && !this.isDropped) {
 					this.isDragging = true;
 
-					y = y + this.listScroll;
+					let scrollOffsetY = y + this.listScroll;
 
 					if (!this.initialPageY) {
-						this.initialPageY = y;
+						let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
+						let difference = scrollOffsetY - (itemTop + this.itemHeight * 0.5);
+						this.initialPageY = scrollOffsetY - difference;
 					}
 
-					this.itemTop = y - this.initialPageY;
+					this.itemTop = scrollOffsetY - this.initialPageY;
+
 
 					this.$parent.$emit('itemIsDragging', {
 						index: this.index,
-						top: y
+						top: scrollOffsetY
 					});
 				}
 			},
@@ -243,7 +270,10 @@
 				draggerCanTransition: false,
 				itemCanTransition: true,
 				busy: false,
-				y: 0
+				y: 0,
+				isTouch: false,
+				LONG_TAP_TIMEOUT: 200,
+				longTapTimer: null
 			}
 		}
 	}
