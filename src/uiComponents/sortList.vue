@@ -9,6 +9,7 @@
 		<div
 			ref="list"
 			class="uiSortList__scroller"
+			v-bind:style="scrollerStyle"
 			@scroll="scrollHandler"
 		>
 			<slot />
@@ -54,6 +55,9 @@
 		created () {
 			window.addEventListener('resize', this.getSizes);
 			document.addEventListener('mousemove', this.mousemoveHandler);
+			document.addEventListener('touchmove', this.touchmoveHandler);
+			document.addEventListener('touchstart', this.touchstartHandler);
+			document.addEventListener('touchend', this.touchendHandler);
 
 		},
 		mounted () {
@@ -62,6 +66,9 @@
 		beforeDestroy () {
 			window.removeEventListener('resize', this.getSizes);
 			document.removeEventListener('mousemove', this.mousemoveHandler);
+			document.removeEventListener('touchmove', this.touchmoveHandler);
+			document.removeEventListener('touchstart', this.touchstartHandler);
+			document.removeEventListener('touchend', this.touchendHandler);
 		},
 		watch: {
 			arrangeList (arrangeList) {
@@ -139,6 +146,12 @@
 					opacity: (this.takeSpaceOfIndex !== null && this.transitionAll) ? '1' : '0',
 					transition: (this.transitionAll == true ? 'all' : 'opacity') + ' 200ms ease-in-out'
 				}
+			},
+			scrollerStyle () {
+				return {
+					'touch-action': (this.preventTouchScroll) ? 'none' : 'pan-y',
+					'overflow': (this.preventTouchScroll) ? 'hidden' : 'auto'
+				}
 			}
 		},
 		methods: {
@@ -150,17 +163,27 @@
 			stopArranging () {
 				this.$emit('stopArraning');
 			},
+			touchmoveHandler (event) {
+				if (!this.preventTouchScroll) {
+					clearTimeout(this.preventScrollTimer);
+				}
+
+				this.autoScroll(event.touches[0].clientY);
+			},
 			mousemoveHandler (event) {
+				this.autoScroll(event.clientY);
+			},
+			autoScroll (y) {
 				if (!this.arrangeList || !this.movingItem.top) {
 					return;
 				}
-				if (event.clientY < (this.posTop + this.itemHeight)) {
+				if (y < (this.posTop + this.itemHeight)) {
 					// Scroll Up
-					this.scroll.speed = Math.round( (1 - (event.clientY - (this.posTop)) / this.itemHeight) * 10) / 10;
+					this.scroll.speed = Math.round( (1 - (y - (this.posTop)) / this.itemHeight) * 10) / 10;
 					this.scroll.direction = -1;
-				} else if (event.clientY > (this.posTop + this.listHeight - this.itemHeight)) {
+				} else if (y > (this.posTop + this.listHeight - this.itemHeight)) {
 					// Scroll Down
-					this.scroll.speed = Math.round( (1 - ((this.posTop + this.listHeight) - event.clientY) / this.itemHeight) * 10 ) / 10;	
+					this.scroll.speed = Math.round( (1 - ((this.posTop + this.listHeight) - y) / this.itemHeight) * 10 ) / 10;	
 					this.scroll.direction = 1;
 				} else {
 					this.scroll.direction = 0;
@@ -169,6 +192,22 @@
 			scrollHandler () {
 				this.scroll.top = this.$refs.list.scrollTop;
 				this.$emit('listScroll', this.scroll.top);
+			},
+			touchstartHandler (e) {
+				debugger;
+				this.isTouch = true;
+
+				if (e.target.closest('.uiSortList__scroller') && this.movingItem.top) {
+					this.preventTouchScroll = true;
+				}
+				this.preventScrollTimer = setTimeout(() => {
+					this.preventTouchScroll = true;
+				}, this.LONG_TAP_TIMEOUT);
+			},
+			touchendHandler (event) {
+				this.isTouch = false;
+				this.preventTouchScroll = false;
+				clearTimeout(this.preventScrollTimer);
 			},
 		},
 		data() {
@@ -187,6 +226,10 @@
 					timer: null,
 				},
 				autoScrollIsBusy: false,
+				isTouch: false,
+				preventTouchScroll: false,
+				preventScrollTimer: null,
+				LONG_TAP_TIMEOUT: 200,
 			}
 		}
 	}
