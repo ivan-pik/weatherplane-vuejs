@@ -8,8 +8,8 @@
 			ref="dragItem"
 			v-bind:style="draggerStyle"
 			v-bind:class="{
-				'uiSortListItem__dragger--dragging' : isDragging,
-				'uiSortListItem__dragger--dragging-active' : isDragger
+				'uiSortListItem__dragger--dragging' : item.isDragging,
+				'uiSortListItem__dragger--dragging-active' : item.isDragger
 			}"
 		>
 			<slot />
@@ -113,19 +113,19 @@
 				}
 			},
 			listScroll (top) {
-				if (this.isDragging) {
-					if (!this.lastListScroll) {
-						this.lastListScroll = top;
+				if (this.item.isDragging) {
+					if (!this.sortList.lastScrollTop) {
+						this.sortList.lastScrollTop = top;
 					}
 
-					let difference = top - this.lastListScroll;
+					let difference = top - this.sortList.lastScrollTop;
 
-					let newTop = Math.round(this.itemTop + difference)
+					let newTop = Math.round(this.dragger.positionTop + difference)
 
 					this.itemMoveHandler( newTop, { scrollType: 'scroll' } );
 
 					this.$nextTick(() => {
-						this.lastListScroll = top;
+						this.sortList.lastScrollTop = top;
 					});
 				}
 			}
@@ -133,53 +133,53 @@
 		computed: {
 			draggerStyle () {
 				return {
-					top: this.itemTop + 'px',
-					'z-index': this.isDragging ? '1' : '0',
+					top: this.dragger.positionTop + 'px',
+					'z-index': this.item.isDragging ? '1' : '0',
 					height: this.itemHeight + 'px',
-					transition: 'all ' + (this.draggerCanTransition ? '200' : '0' ) + 'ms ease-in-out' 
+					transition: 'all ' + (this.dragger.isAnimating ? '200' : '0' ) + 'ms ease-in-out' 
 				}
 			},
 			itemStyle () {
 				return {
 					height: this.itemHeight + 'px',
-					top: this.moveItemOffset + 'px',
-					transition: 'all ' + (this.itemCanTransition ? '200' : '0' ) + 'ms ease-in-out'
+					top: this.item.moveItemOffset + 'px',
+					transition: 'all ' + (this.item.isAnimating ? '200' : '0' ) + 'ms ease-in-out'
 				}
 			}
 		},
 		methods: {
 			touchstartHandler (event) {
-				this.isTouch = true;
+				this.interaction.isTouch = true;
 				this.mousedownHandler(event);
 			},
 			mousedownHandler (event) {
-				if (this.busy) {
+				if (this.sortList.isBusySorting) {
 					return;
 				}
-				this.isDropped = false;
-				this.draggerCanTransition = false;
-				this.itemCanTransition = true;
+				this.item.isDropped = false;
+				this.dragger.isAnimating = false;
+				this.item.isAnimating = true;
 				if (!this.arrangeList) {
 					return;
 				}
 				if (event.target == this.$refs.dragger) {
-					if (this.isTouch) {
-						this.longTapTimer = setTimeout(
+					if (this.interaction.isTouch) {
+						this.interaction.longTapTimer = setTimeout(
 							() => {
-								this.isDragger = true;
+								this.item.isDragger = true;
 							},
-							this.LONG_TAP_TIMEOUT
+							this.interaction.LONG_TAP_TIMEOUT
 						);
 					} else {
-						this.isDragger = true;
+						this.item.isDragger = true;
 					}
 				} else {
-					this.isDragger = false;
+					this.item.isDragger = false;
 				}
 			},
 			touchendHandler (event) {
-				this.isTouch = false;
-				clearTimeout(this.longTapTimer);
+				this.interaction.isTouch = false;
+				clearTimeout(this.interaction.longTapTimer);
 				this.mouseupHandler(event);
 			},
 			mouseupHandler (event) {
@@ -187,60 +187,59 @@
 					return;
 				}
 
-				if (!this.isDragging) {
+				if (!this.item.isDragging) {
 					this.itemReset();
 					return;
 				}
 
-				this.busy = true;
+				this.sortList.isBusySorting = true;
 
-				this.isDropped = true;
-				if (this.isDragger) {
+				this.item.isDropped = true;
+				if (this.item.isDragger) {
 					this.dropDragger();
 				}
-				if (this.isDragger) {
-					this.itemTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
-					this.draggerCanTransition = true;
+				if (this.item.isDragger) {
+					this.dragger.positionTop =  (this.moveAway.takeSpaceOfIndex - this.index) * this.itemHeight;
+					this.dragger.isAnimating = true;
 				} else {
-					this.itemCanTransition = false;
+					this.item.isAnimating = false;
 				}
-				setTimeout(this.itemReset, this.TRANSITION_TIME + 100);
+				setTimeout(this.itemReset, this.interaction.TRANSITION_TIME + 100);
 				
 			},
 			dropDragger () {
 				this.$parent.$emit('dropItem', {
 					index: this.index,
 					top: event.pageY,
-					change: ( (this.index != this.moveAway.takeSpaceOfIndex ) && this.isDragging)
+					change: ( (this.index != this.moveAway.takeSpaceOfIndex ) && this.item.isDragging)
 				});
 
 			},
 			itemReset () {
-				this.isDropped = false;
-				this.isDragger = false;
-				this.isDragging = false;
-				this.itemTop = 0;
-				this.moveItemOffset = 0;
-				this.initialPageY = null;
-				this.lastScrollerY = null;
-				this.busy = false;
-				this.lastListScroll = null;
-				this.itemScreenTop = 0;
-				this.itemOffsetTop = null;
-				this.scrollOffset = 0;
+				this.item.isDropped = false;
+				this.item.isDragger = false;
+				this.item.isDragging = false;
+				this.dragger.positionTop = 0;
+				this.item.moveItemOffset = 0;
+				this.item.initialScreenY = null;
+				this.sortList.isBusySorting = false;
+				this.sortList.lastScrollTop = null;
+				this.item.screenPositionTop = 0;
+				this.dragger.offsetTop = null;
+				this.sortList.scrollTopOffset = 0;
 			},
 			touchmoveHandler (event) {
-				if (this.busy || !this.arrangeList) {
+				if (this.sortList.isBusySorting || !this.arrangeList) {
 					return;
 				}
-				if(this.longTapTimer) {
-					clearTimeout(this.longTapTimer);
+				if(this.interaction.longTapTimer) {
+					clearTimeout(this.interaction.longTapTimer);
 				}
 
 				this.itemMoveHandler(event.touches[0].clientY, {scrollType: 'pointer'});
 			},
 			mousemoveHandler (event) {
-				if (this.busy || !this.arrangeList) {
+				if (this.sortList.isBusySorting || !this.arrangeList) {
 					return;
 				}
 
@@ -253,30 +252,30 @@
 				}
 			*/
 			itemMoveHandler (y, options) {
-				if (this.isDragger && !this.isDropped) {
-					this.isDragging = true;
+				if (this.item.isDragger && !this.item.isDropped) {
+					this.item.isDragging = true;
 
 					if (options.scrollType == 'pointer') {
-						if (!this.initialPageY) {
+						if (!this.item.initialScreenY) {
 							let itemTop = (this.$refs.dragItem.getBoundingClientRect()).top;
 							let difference = y - (itemTop + this.itemHeight * 0.5);
-							this.initialPageY = y - difference;
+							this.item.initialScreenY = y - difference;
 						}
-						this.itemScreenTop = y;
-						this.itemOffsetTop = y - this.initialPageY;
+						this.item.screenPositionTop = y;
+						this.dragger.offsetTop = y - this.item.initialScreenY;
 					} else if (options.scrollType == 'scroll') {
 						// Just in case somehow the scroll event is fired before the item is actually dragged away
-						if (!this.itemScreenTop) {
+						if (!this.item.screenPositionTop) {
 							return;
 						}
-						this.scrollOffset = y - this.itemOffsetTop;
+						this.sortList.scrollTopOffset = y - this.dragger.offsetTop;
 						
 					}
 
-					this.itemTop = Math.round(
+					this.dragger.positionTop = Math.round(
 						minMaxLimiter(
 							// Current Value
-							this.itemOffsetTop + this.scrollOffset,
+							this.dragger.offsetTop + this.sortList.scrollTopOffset,
 							// Min Value
 							- this.index * this.itemHeight,
 							// Max Value
@@ -284,17 +283,17 @@
 						)
 					);
 
-					console.log('itemTop', this.itemTop);
+					console.log('itemTop', this.dragger.positionTop);
 
 					this.$parent.$emit('itemIsDragging', {
 						index: this.index,
-						top: this.itemScreenTop
+						top: this.item.screenPositionTop
 					});
 				}
 			},
 			moveOnePosition (pos) {
 				let offset = this.itemHeight;
-				this.moveItemOffset = offset * pos;
+				this.item.moveItemOffset = offset * pos;
 
 			},
 			contextmenuHandler (event) {
@@ -307,27 +306,31 @@
 		},
 		data() {
 			return {
-				isDragger: false,
-				isDragging: false,
-				itemTop: 0,
-				moveItemOffset: 0,
-				transitionTime: 200,
-				TRANSITION_TIME: 200,
-				isDropped: false,
-				initialPageY: null,
-				lastScrollerY: null,
-				draggerCanTransition: false,
-				itemCanTransition: true,
-				busy: false,
-				y: 0,
-				isTouch: false,
-				LONG_TAP_TIMEOUT: 200,
-				longTapTimer: null,
-				lastListScroll: null,
-				scrollerTicking: false,
-				itemScreenTop: 0,
-				itemOffsetTop: null,
-				scrollOffset: 0
+				item: {
+					isDragger: false,
+					isDragging: false,
+					initialScreenY: null,
+					isAnimating: true,
+					moveItemOffset: 0,
+					isDropped: false,
+					screenPositionTop: 0,
+				},
+				sortList: {
+					isBusySorting: false,
+					lastScrollTop: null,
+					scrollTopOffset: 0
+				},
+				dragger: {
+					isAnimating: false,
+					positionTop: 0,
+					offsetTop: null,
+				},
+				interaction: {
+					isTouch: false,
+					LONG_TAP_TIMEOUT: 200,
+					longTapTimer: null,
+					TRANSITION_TIME: 200,
+				},
 			}
 		}
 	}
