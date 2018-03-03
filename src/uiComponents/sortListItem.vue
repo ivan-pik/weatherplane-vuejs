@@ -56,6 +56,9 @@
 			},
 			listScroll: {
 				type: Number
+			},
+			nOfItems: {
+				type: Number
 			}
 		},
 		created () {

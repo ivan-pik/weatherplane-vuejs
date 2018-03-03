@@ -23,6 +23,7 @@
 			:dropItem="dropItem"
 			:itemDropped="itemDropped"
 			:listScroll="listScroll"
+			:nOfItems="places.length"
 		>
 			<places-list-item
 				v-on:enterArrangingMode="arranging=true"
