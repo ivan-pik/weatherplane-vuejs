@@ -193,7 +193,7 @@
 				this.$parent.$emit('dropItem', {
 					index: this.index,
 					top: event.pageY,
-					change: (this.index != this.moveAway.takeSpaceOfIndex)
+					change: ( (this.index != this.moveAway.takeSpaceOfIndex ) && this.isDragging)
 				});
 
 			},
