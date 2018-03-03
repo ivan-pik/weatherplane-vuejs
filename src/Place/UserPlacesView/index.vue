@@ -53,7 +53,7 @@
 			},
 			places () {
 				return this.$store.state.user.places;	
-			},
+			},	
 			userInTitle () {
 				if (this.loggedIn && this.userName == this.routeUserName) {
 					return `Your`;
@@ -71,11 +71,10 @@
 						this.$store.dispatch('USER_GET_PLACES', places);
 					}
 				});
-			}
+			},
 		},
 		data () {
 			return {
-				places: null
 			}
 		}
 	}
