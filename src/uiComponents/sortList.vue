@@ -82,8 +82,7 @@
 				let cursor = movingItem.top - this.posTop;
 
 				let chartHeight = this.items.length * this.itemHeight;
-
-				this.takeSpaceOfIndex = Math.max(Math.min(Math.floor(cursor / this.itemHeight), this.items.length - 1),0)
+				this.takeSpaceOfIndex = Math.max(Math.min(Math.floor((cursor + this.scroll.top) / this.itemHeight), this.items.length - 1),0);
 
 				this.$emit('wedgeDraggedItem', {
 					draggedItemIndex: movingItem.index,
