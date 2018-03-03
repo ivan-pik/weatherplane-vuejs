@@ -215,20 +215,5 @@
 		}
 	}
 
-	.placesList__sortingDragger {
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 100%;
-		height: 50px;
-		text-align: right;
-		&.is-dragging {
-			background: rgba(#000, 0.2);
-		}
 
-		svg {
-			pointer-events: none;
-			fill: $uiInputActive;
-		}
-	}
 </style>
