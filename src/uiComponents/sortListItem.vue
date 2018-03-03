@@ -65,6 +65,7 @@
 			document.addEventListener('touchmove', this.touchmoveHandler);
 			document.addEventListener('touchstart', this.touchstartHandler);
 			document.addEventListener('touchend', this.touchendHandler);
+			window.addEventListener('contextmenu', this.contextmenuHandler);
 		},
 		beforeDestroy () {
 			document.removeEventListener('mousedown', this.mousedownHandler);
@@ -73,6 +74,7 @@
 			document.removeEventListener('touchmove', this.touchmoveHandler);
 			document.removeEventListener('touchstart', this.touchstartHandler);
 			document.removeEventListener('touchend', this.touchendHandler);
+			window.removeEventListener('contextmenu', this.contextmenuHandler);
 		},
 		watch: {
 			moveAway (moveAway) {
@@ -220,6 +222,13 @@
 				this.moveItemOffset = offset * pos;
 
 			},
+			contextmenuHandler (event) {
+				if (this.arrangeList) {
+					event.preventDefault();
+					event.stopPropagation();
+					return false;
+				}
+			}
 		},
 		data() {
 			return {
