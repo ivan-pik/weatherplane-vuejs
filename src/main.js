@@ -22,6 +22,7 @@ import uiModal from 'uiComponents/modal.vue'
 import uiRadio from 'uiComponents/buttonRadio.vue'
 import uiSlider from 'uiComponents/slider.vue'
 import uiLoader from 'uiComponents/uiLoader.vue'
+import uiHelpBubble from 'uiComponents/helpBubble.vue'
 
 import navigationHeader from 'Navigation/navigationHeader.vue'
 
@@ -49,6 +50,10 @@ Vue.component(
 
 Vue.component(
 	'ui-loader', uiLoader
+);
+
+Vue.component(
+	'ui-help-bubble', uiHelpBubble
 );
 
 
