@@ -2,7 +2,12 @@
 	<div class="viewWrapper">
 		<navigation-header />
 
-		<div class="viewWrapper__scroller">
+		<div
+			class="viewWrapper__scroller"
+			:class="{
+				'viewWrapper__scroller--noScroll': loggedIn
+			}"
+		>
 			<div v-if="!loggedIn" class="">
 				<p>Hi, blah blah blah blaaaahblah</p>
 				@Todo: Quick slider intro!
@@ -27,6 +32,18 @@
 					:places="places"
 				/>
 			</ui-loader>
+		</div>
+
+		<div
+			class="viewWrapper__bottom"
+		>
+			<div class="uiButtonGroup">
+				<button
+					class="uiButton uiButton--primary"
+					@click="">
+					Add a new place
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
