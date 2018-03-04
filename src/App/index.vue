@@ -1,17 +1,9 @@
 <template>
 	<div id="app" class="app">
-		<div class="globalMessages"
-			v-if="globalMessages.length > 0"
-		>
-			<global-message
-				v-for="(message, index) in globalMessages"
-				:key="index"
-				:text="message.text"
-				:type="message.type"
-				:dismiss="message.dismiss"
-				v-on:dismiss="dismissMessage(index)"
-			/>
-		</div>
+		<ui-global-messages
+			:messages="globalMessages"
+			v-on:dismissMessage="dismissMessage"
+		/>
 
 		<navigation-toggle />
 
@@ -27,7 +19,8 @@ import Vue from 'vue'
 import {checkAuth, getLocalToken} from '../auth'
 import {HTTP} from '../http-common';
 import WPAPI from '../wpapi/index';
-import globalMessage from '../uiComponents/message.vue'
+import globalMessges from '../uiComponents/globalMessages.vue'
+
 import Navigation from '../Navigation/index.vue'
 
 
@@ -77,8 +70,8 @@ export default {
 		}
 	},
 	components: {
-	'global-message': globalMessage,
-	'navigation-toggle': Navigation
+		'ui-global-messages': globalMessges,
+		'navigation-toggle': Navigation
 	},
 	computed: {
 		globalMessages () {
@@ -86,8 +79,8 @@ export default {
 		}
 	},
 	methods: {
-		dismissMessage (index) {
-			this.$store.commit('GLOBAL_REMOVE_MESSAGE', index);
+		dismissMessage (id) {
+			this.$store.commit('GLOBAL_REMOVE_MESSAGE', id);
 		}
 	},
 	data() {

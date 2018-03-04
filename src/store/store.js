@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import WPAPI from '../wpapi/index';
 
 import {placeSorter} from 'libs/placeSorter.js';
+import {UIDgenerator} from 'libs/UIDgenerator.js';
 
 Vue.use(Vuex);
 
@@ -120,10 +121,17 @@ export default new Vuex.Store({
 		},
 		// GlobalApp
 		'GLOBAL_ADD_MESSAGE' (state, message) {
-			state.globalApp.globalMessages.push(message);
+			message.id = UIDgenerator();
+			state.globalApp.globalMessages.unshift(message);
 		},
-		'GLOBAL_REMOVE_MESSAGE' (state, index) {
-			state.globalApp.globalMessages.splice(index, 1);
+		'GLOBAL_REMOVE_MESSAGE' (state, id) {
+			var newMessages = state.globalApp.globalMessages.filter(
+				(item) => {
+					return (item.id != id)
+				}
+			);
+
+			state.globalApp.globalMessages = newMessages;
 		},
 		'GLOBAL_SET_TITLE' (state, title) {
 			state.globalApp.topBarTitle = title;

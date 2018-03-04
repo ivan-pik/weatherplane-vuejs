@@ -86,38 +86,6 @@ body {
 	z-index: 2000;
 }
 
-.uiMessage {
-	margin: 0 0 0.5em 0;
-	font-size: 13px;
-	padding: 1em;
-	position: relative;
-	
-	&.success {
-		background-color: $messageSuccessBackground;
-		color: $messageSuccessText;
-	}
-	&.warning {
-		background-color: $messageWarningBackground;
-		color: $messageWarningText;
-	}
-	&.error {
-		background-color: $messageErrorBackground;
-		color: $messageErrorText;
-	}
-	&.info {
-		background-color: $messageInfoBackground;
-		color: $messageInfoText;
-	}
-}
-
-.uiMessage__dismiss {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	width: 3em;
-	border-left: 1px solid rgba(#fff, 0.5);
-}
 
 .mainNav {
 	height: 40px;
