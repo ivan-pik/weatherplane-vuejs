@@ -72,9 +72,6 @@
 		created () {
 			document.addEventListener('keyup', this.escKeyHandler);
 		},
-		mounted () {
-			this.loadPlacesData();
-		},
 		beforeDestroy () {
 			document.removeEventListener('keyup', this.escKeyHandler);
 		},
@@ -95,6 +92,11 @@
 			},
 			navOpened(state) {
 				this.$store.commit('GLOBAL_MAIN_NAV_OPEN_STATE', state);
+			},
+			loggedIn (loggedIn) {
+				if (loggedIn) {
+					this.loadPlacesData();
+				}
 			}
 		},
 		methods: {
@@ -104,6 +106,7 @@
 				}
 			},
 			loadPlacesData () {
+				debugger;
 				WPAPI.getUserPlaces(this.username)
 				.then(places => {
 					this.$store.dispatch('USER_GET_PLACES', places);
