@@ -31,10 +31,14 @@
 			>
 			</div>
 		</div>
-		<div class="uiSortList__arrangingTools">
+		<div
+			v-if="arrangeList"
+			class="uiSortList__arrangingTools"
+		>
 			<button
+				class="uiButton"
 				@click="stopArranging"
-			>END</button>
+			>Exit Sorting</button>
 		</div>
 	</div>
 </template>
@@ -277,15 +281,17 @@
 	@import '~globalVars';
 
 	.uiSortList {
+		flex: 1 1 auto;
 		background-color: #fff;
 		border-top: 1px solid #ddd;
-		
+		display: flex;
+		flex-direction: column;
 	}
 
 	.uiSortList__scroller {
 		position: relative;
-		height: 200px;
 		overflow: auto;
+		flex: 1 1 auto;
 	}
 
 	.uiSortList__dropCursor {
@@ -296,12 +302,9 @@
 	}
 
 	.uiSortList__arrangingTools {
-		position: fixed;
+		position: absolute;
 		bottom: 0;
-		background-color: red;
-		button {
-			padding: 3em;
-		}
+		width: 100%;
 	}
 
 </style>
