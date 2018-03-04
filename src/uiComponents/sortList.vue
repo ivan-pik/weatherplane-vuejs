@@ -1,11 +1,23 @@
 <template>
 	<div 
 		class="uiSortList"
-		
 		:class="{
 			'uiSortList--arranging' : arrangeList
 		}"
 	>
+
+		<ui-help-bubble
+			:open="arrangeList"
+		>
+			<span v-if="isTouchDeviceFlag">
+				Tap long on the item you want to reorder<br />
+				and then you can move it up and down
+			</span>
+			<span v-else>
+				@TODO
+			</span>
+		</ui-help-bubble>
+
 		<div
 			ref="list"
 			class="uiSortList__scroller"
@@ -71,6 +83,10 @@
 			document.removeEventListener('touchend', this.touchendHandler);
 		},
 		watch: {
+			isTouch (isTouch) {
+				// @todo: Replace with global app detection
+				this.isTouchDeviceFlag = true;
+			},
 			arrangeList (arrangeList) {
 				if (arrangeList) {
 					this.getSizes();
@@ -249,7 +265,8 @@
 				cursor: {
 					canTransitonPosition: false,
 					top: 0,
-				}
+				},
+				isTouchDeviceFlag: false
 			}
 		}
 	}
