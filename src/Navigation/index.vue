@@ -106,7 +106,6 @@
 				}
 			},
 			loadPlacesData () {
-				debugger;
 				WPAPI.getUserPlaces(this.username)
 				.then(places => {
 					this.$store.dispatch('USER_GET_PLACES', places);
