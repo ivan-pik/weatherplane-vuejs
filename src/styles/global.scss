@@ -30,6 +30,10 @@ body {
 	align-items: stretch;
 }
 
+.viewWrapper__scroller--noScroll {
+	overflow: hidden;
+}
+
 .viewWrapper__bottom {
 	
 }
