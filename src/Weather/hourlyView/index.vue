@@ -20,7 +20,6 @@
 </template>
 
 <script>
-	//v-on:mousemove="chartPointer"
 	import Vue from 'vue';
 	import Day from './day/index.vue';
 	
@@ -53,6 +52,9 @@
 			}
 		},
 		computed: {
+			mainNavIsOpen () {
+				return this.$store.state.globalApp.mainNavIsOpen;
+			},
 			rowHeight () {
 				return this.$store.state.existingPlaceView.view.chart.row.height;
 			},
@@ -133,6 +135,14 @@
 			}
 		},
 		watch: {
+			mainNavIsOpen (mainNavIsOpen) {
+				if (mainNavIsOpen) {
+					this.eventsDisabled = true;
+					this.stopScroll();
+				} else {
+					this.eventsDisabled = false;
+				}
+			},
 			chartCursorY (val) {
 				this.lastChartCursorY = val;
 			},
@@ -172,10 +182,17 @@
 		},
 		methods: {
 			touchstartHandler () {
+				if (this.eventsDisabled) {
+					return;
+				}
+
 				this.isTouch = true;
 				this.stopScroll();
 			},
 			touchendHandler () {
+				if (this.eventsDisabled) {
+					return;
+				}
 				// this.stopScroll();
 				// setTimeout(() => {
 				// 	this.isTouch = false;
@@ -226,6 +243,10 @@
 				});
 			},
 			chartPointer (e) {
+				if (this.eventsDisabled) {
+					return;
+				}
+
 				if (e.sourceCapabilities.firesTouchEvents) {
 					this.isTouch = true;
 				}
@@ -271,6 +292,7 @@
 		},
 		data () {
 			return {
+				eventsDisabled: false,
 				// initial Y value
 				cursorY: 0,
 				cursorX: 0,
