@@ -19,7 +19,8 @@ export default new Vuex.Store({
 				timeFormat: '',
 				temperatureUnit: '',
 				weatherRange: '', // how many days of weather to download
-			}
+			},
+			mainNavIsOpen: false,
 		},
 		user: {
 			loggedIn: false,
@@ -138,6 +139,9 @@ export default new Vuex.Store({
 		},
 		'GLOBAL_SET_WEATHER_RANGE' (state, value) {
 			state.globalApp.settings.weatherRange = value;
+		},
+		'GLOBAL_MAIN_NAV_OPEN_STATE' (state, value) {
+			state.globalApp.mainNavIsOpen = value;
 		},
 	},
 	actions: {

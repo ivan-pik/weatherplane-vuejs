@@ -93,6 +93,9 @@
 			'$route': function (route) {
 				this.navOpened = false;
 			},
+			navOpened(state) {
+				this.$store.commit('GLOBAL_MAIN_NAV_OPEN_STATE', state);
+			}
 		},
 		methods: {
 			escKeyHandler (e) {
@@ -105,7 +108,7 @@
 				.then(places => {
 					this.$store.dispatch('USER_GET_PLACES', places);
 				});
-			}
+			},
 		},
 	   data() {
 		return {
