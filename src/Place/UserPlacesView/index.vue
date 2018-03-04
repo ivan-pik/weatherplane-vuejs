@@ -2,7 +2,7 @@
 	<div class="viewWrapper">
 		<navigation-header />
 			
-		<div class="viewWrapper__scroller">
+		<div class="viewWrapper__scroller viewWrapper__scroller--noScroll">
 			<ui-loader
 				:loaded="!!places"
 			>
@@ -25,6 +25,19 @@
 					<a class="uiButton" href="">Login</a> to manage your list or to see your private places
 				</div>
 			</ui-loader>
+		</div>
+
+		<div
+			class="viewWrapper__bottom"
+			v-if="displayAddToPlaceButton"
+		>
+			<div class="uiButtonGroup">
+				<button
+					class="uiButton uiButton--primary"
+					@click="">
+					Add a new place
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -60,6 +73,9 @@
 				} else {
 					return `${this.routeUserName}'s`
 				}
+			},
+			displayAddToPlaceButton () {
+				return (this.routeUserName == this.userName && this.loggedIn)
 			}
 		},
 		methods: {
