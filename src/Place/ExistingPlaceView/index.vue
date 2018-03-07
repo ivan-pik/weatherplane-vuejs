@@ -5,19 +5,24 @@
 		</navigation-header>
 
 		<div class="viewWrapper__scroller">
-			<place-not-found v-if="place404" />
-
 			<login-form
 				v-if="needToLogin"
-				:message="'You need to log-in to see this place'"
+				:message="message"
+				:fillUsername="placeUserName"
 			/>
 
 			<transition v-else name="fade">
-				<load-screen
-					v-if="!place"
-					text="Loading Place"
-				/>
-				<place-details v-else  :activeLocation='place' />
+				<div>
+					<e-404 v-if="place404">
+						<span slot="title">Sorry, this place doesn't exist</span>
+						<span slot="note">Check that the page address is correct</span>
+					</e-404>
+					<load-screen
+						v-if="!place"
+						text="Loading Place"
+					/>
+					<place-details v-else  :activeLocation='place' />
+				</div>
 			</transition>
 			
 		</div>
@@ -28,7 +33,7 @@
 	import Vue from 'vue'
 	import {HTTP} from '../../http-common';
 	import WPAPI from '../../wpapi/index';
-	import placeNotFound from '../placeNotFound/index.vue';
+	import E404 from '404/index.vue';
 	import loginForm from 'Login/loginForm.vue';
 	import placeDetails from '../placeDetails/index.vue';
 	import loadScreen from '../../uiComponents/loadScreen.vue';
@@ -38,7 +43,7 @@
 		name: 'ExistingPlaceView',
 		components: {
 			'load-screen' : loadScreen,
-			'place-not-found' : placeNotFound,
+			'e-404' : E404,
 			'login-form' : loginForm,
 			'place-details': placeDetails,
 			'navigation-header' : navigationHeader,
@@ -60,6 +65,9 @@
 			searchedPlace () {
 				return this.$store.state.placeSearch.selectedLocation.coordinates;
 			},
+			placeUserName () {
+				return this.$route.params.username;
+			}
 		},
 		methods: {
 
@@ -139,7 +147,6 @@
 								}
 								return false;
 							}
-
 							if(errorCode("authentication-required", errors)) {
 								this.needToLogin = true;
 								this.message = "You need to log in to see this place";
@@ -147,8 +154,13 @@
 							}
 
 							if(errorCode("resource-does-not-exist", errors)) {
-								// @todo: Place pseudo 404
 								this.place404 = true;
+							}
+
+							if(errorCode("authorised-no-rights", errors)) {
+								this.needToLogin = true;
+								this.message = `You need to log-in as ${this.placeUserName} to see this place`;
+								this.$store.commit('USER_AUTHENTICATION_REQUIRED')
 							}
 						}
 					}
@@ -181,8 +193,8 @@
 			return {
 				needToLogin: false,
 				place404: false,
-				message: null
-				
+				message: null,
+				loginAsAnotherUser: false
 			}
 		}
 
