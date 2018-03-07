@@ -26,6 +26,7 @@
 		>
 			<slot />
 			<div
+				v-if="arrangeList"
 				class="uiSortList__dropCursor"
 				v-bind:style="dropCursorStyle"
 			>
@@ -74,6 +75,7 @@
 			document.addEventListener('touchmove', this.touchmoveHandler);
 			document.addEventListener('touchstart', this.touchstartHandler);
 			document.addEventListener('touchend', this.touchendHandler);
+			document.addEventListener('keyup', this.escKeyHandler);
 
 		},
 		mounted () {
@@ -85,6 +87,7 @@
 			document.removeEventListener('touchmove', this.touchmoveHandler);
 			document.removeEventListener('touchstart', this.touchstartHandler);
 			document.removeEventListener('touchend', this.touchendHandler);
+			document.removeEventListener('keyup', this.escKeyHandler);
 		},
 		watch: {
 			isTouch (isTouch) {
@@ -94,14 +97,17 @@
 			arrangeList (arrangeList) {
 				if (arrangeList) {
 					this.getSizes();
+				} else {
+					this.cursor.canTransitonPosition = false;
+					this.cursor.top = 0;
+					clearInterval(this.scroll.timer);
+					this.autoScrollIsBusy = false;
 				}
 			},
 			movingItem (movingItem) {
 				if (!'top' in movingItem) {
 					return;
 				}
-
-				
 
 				if (this.firstMove) {
 					setTimeout(() => {
@@ -245,6 +251,11 @@
 				this.isTouch = false;
 				this.preventTouchScroll = false;
 				clearTimeout(this.preventScrollTimer);
+			},
+			escKeyHandler (e) {
+				if(e.keyCode == 27) {
+					this.stopArranging();
+				}
 			},
 		},
 		data() {

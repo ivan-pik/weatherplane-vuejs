@@ -145,6 +145,12 @@
 					this.sortList.isBusySorting = sortListIsBusy;
 					this.item.canAnimate = false;
 				}
+			},
+			arrangeList (arrangeList) {
+				// If we stop arranging while dragging, reset item
+				if (!arrangeList) {
+					this.itemReset();
+				}
 			}
 		},
 		computed: {
