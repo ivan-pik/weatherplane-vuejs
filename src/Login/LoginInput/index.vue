@@ -49,7 +49,7 @@
 							v-model="username"
 							type="text"
 							placeholder="Enter your username"
-							autofocus
+							:autofocus="(!this.fillUsername)"
 						>
 						<span
 							v-show="validationErrors.has('username')"
@@ -67,6 +67,7 @@
 							name="password"
 							v-model="password"
 							placeholder="Enter your password"
+							:autofocus="(this.fillUsername)"
 						/>
 						<span v-show="validationErrors.has('password')" class="uiHelp uiHelp--danger">{{ validationErrors.first('password') }}</span>
 					</div>
@@ -128,6 +129,14 @@ export default {
 	props: {
 		message: {
 			type: String,
+		},
+		fillUsername: {
+			type: String
+		}
+	},
+	mounted () {
+		if (this.fillUsername) {
+			this.username = this.fillUsername;
 		}
 	},
 	methods: {

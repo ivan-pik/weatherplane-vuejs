@@ -8,6 +8,7 @@
 			slot="content"
 			v-on:loginSuccessful="loginSuccessful"
 			:message="message"
+			:fillUsername="fillUsername"
 		/>
 	</ui-modal>
 </template>
@@ -30,6 +31,10 @@
 			overlay: {
 				type: Boolean,
 				default: true
+			},
+			fillUsername: {
+				type: String,
+				default: null
 			}
 		},
 		watch: {
