@@ -277,9 +277,9 @@
 				// This needs to be reset after the top 
 				// position is removed, to prevent unwanted
 				// transition
-				this.$nextTick(() => {
+				setTimeout(() => {
 					this.item.canAnimate = true;
-				});
+				}, this.TRANSITION_TIME);
 			},
 			touchmoveHandler (event) {
 				// List is being sorted or we are not arranging, do nothing
