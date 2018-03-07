@@ -9,48 +9,49 @@
 
 		<div class="viewWrapper__scroller">
 
+			<login-form
+				v-if="!loggedIn"
+				:message="'You need to log-in to access user settings'"
+			/>
 
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Change Units
-				</h3>
-				<setting-units />
-				
-			</div>
+			<transition v-else name="fade">
+				<div>
+					<div class="uiGroup">
+						<h3 class="uiGroup__title">
+							Change Units
+						</h3>
+						<setting-units />
+						
+					</div>
 
-			<div class="uiGroup">
-				<h3 class="uiGroup__title">
-					Weather Settings
-				</h3>
-				<setting-weather />
-				
-			</div>
-
-
-
-			<div class="uiGroup" v-if="loggedIn">
-				<h3 class="uiGroup__title">
-					Change Password
-				</h3>
-				<setting-password />
-				
-			</div>
-
-
-			<div class="uiGroup" v-if="loggedIn">
-				<h3 class="uiGroup__title">
-					Change Email
-				</h3>
-				<setting-email />
-			</div>
+					<div class="uiGroup">
+						<h3 class="uiGroup__title">
+							Weather Settings
+						</h3>
+						<setting-weather />
+						
+					</div>
 
 
 
-		
-		
+					<div class="uiGroup">
+						<h3 class="uiGroup__title">
+							Change Password
+						</h3>
+						<setting-password />
+						
+					</div>
+
+
+					<div class="uiGroup">
+						<h3 class="uiGroup__title">
+							Change Email
+						</h3>
+						<setting-email />
+					</div>
+				</div>
+			</transition>
 		</div>
-
-
 	</div>
 
 </template>
@@ -60,7 +61,8 @@
 	import settingPassword from './settingPassword.vue';
 	import settingEmail from './settingEmail.vue';
 	import settingWeather from './settingWeather.vue';
-	import navigationHeader from 'Navigation/navigationHeader.vue'
+	import navigationHeader from 'Navigation/navigationHeader.vue';
+	import loginForm from 'Login/loginForm.vue';
 
 	export default {
 		name: 'SettingsView',
@@ -70,12 +72,12 @@
 			'setting-password' : settingPassword,
 			'setting-email' : settingEmail,
 			'setting-weather' : settingWeather,
+			'login-form' : loginForm
 		},
 		computed: {
 			loggedIn() {
 				return this.$store.state.user.loggedIn;
 			},
-			
 		},
 		data() {
 			return {
