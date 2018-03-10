@@ -22,39 +22,39 @@ import uiRadio from 'uiComponents/buttonRadio.vue'
 import uiSlider from 'uiComponents/slider.vue'
 import uiLoader from 'uiComponents/uiLoader.vue'
 import uiHelpBubble from 'uiComponents/helpBubble.vue'
+import uiButton from 'uiComponents/button.vue'
+import uiMessage from 'uiComponents/message.vue'
+import uiTitle from 'uiComponents/title.vue'
+import uiButtonGroup from 'uiComponents/layout/buttonGroup.vue'
+import uiTextInput from 'uiComponents/textInput.vue'
+import uiHelp from 'uiComponents/uiHelp.vue'
+import uiLabel from 'uiComponents/label.vue'
+import uiTransitionFade from 'uiComponents/transitions/fade.vue'
+import layoutViewWrapper from 'uiComponents/layout/viewWrapper.vue'
+import uiGroup from 'uiComponents/layout/group.vue'
+import uiTextInputGroup from 'uiComponents/layout/textInputGroup.vue'
 
 import navigationHeader from 'Navigation/navigationHeader.vue'
 
 
-// @todo: better way of registering global components
-Vue.component(
-	'ui-note', uiNote
-);
-
-Vue.component(
-	'ui-modal', uiModal
-);
-
-Vue.component(
-	'navigation-header', navigationHeader
-);
-
-Vue.component(
-	'ui-radio', uiRadio
-);
-
-Vue.component(
-	'ui-slider', uiSlider
-);
-
-Vue.component(
-	'ui-loader', uiLoader
-);
-
-Vue.component(
-	'ui-help-bubble', uiHelpBubble
-);
-
+Vue.component('ui-note', uiNote);
+Vue.component('ui-modal', uiModal);
+Vue.component('navigation-header', navigationHeader);
+Vue.component('ui-radio', uiRadio);
+Vue.component('ui-slider', uiSlider);
+Vue.component('ui-loader', uiLoader);
+Vue.component('ui-help-bubble', uiHelpBubble);
+Vue.component('layout-view-wrapper', layoutViewWrapper);
+Vue.component('ui-group', uiGroup);
+Vue.component('ui-text-input-group', uiTextInputGroup);
+Vue.component('ui-button', uiButton);
+Vue.component('ui-message', uiMessage);
+Vue.component('ui-title', uiTitle);
+Vue.component('ui-button-group', uiButtonGroup);
+Vue.component('ui-text-input', uiTextInput);
+Vue.component('ui-help', uiHelp);
+Vue.component('ui-label', uiLabel);
+Vue.component('ui-transition-fade', uiTransitionFade);
 
 const routes = [
 		{ path: '/', name: 'home', component: WelcomeView},
@@ -96,6 +96,8 @@ const veeConfig = {
 		dirty: 'is-dirty' // control has been interacted with
 	}
 };
+
+
 
 Vue.use(VeeValidate, veeConfig);
 
