@@ -41,7 +41,12 @@
 					</div>
 				</div>
 
-				<router-link class="addNewPlace uiButton uiButton--primary" to="/search">Search for an airfield</router-link>
+				<ui-button
+					text="Add a new place"
+					type="primary"
+					@click="$router.push('/search');"
+					classes="addNewPlace"
+				/>
 			</div>
 		</transition>
 		<ui-transition-fade>
