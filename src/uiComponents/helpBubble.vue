@@ -1,5 +1,5 @@
 <template>
-	<transition name="fade">
+	<ui-transition-fade>
 		<div 
 			v-if="bubbleIsOpen"
 			class="uiHelpBubble"
@@ -8,7 +8,7 @@
 				<slot />
 			</div>
 		</div>
-	</transition>
+	</ui-transition-fade>
 </template>
 
 <script>

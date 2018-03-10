@@ -1,33 +1,34 @@
 <template>
-		<div class="placeInput">
-		
-			<form class="placeInput__form" v-on:submit.prevent="onSubmit">
-				<input
-					class="uiTextInput"
-					id="placeSearch"
-					type="text"
-					v-model="place"
-					@input="autocompleteRequest(place)"
-					placeholder="Search for near a city or landmark"
-					autocomplete="off"
-					@click="searching"
+	<div class="placeInput">
+		<form class="placeInput__form" v-on:submit.prevent="onSubmit">
+			<ui-text-input
+				name="username"
+				placeholder="Search for near a city or landmark"
+				autofocus="autofocus"
+				autocomplete="off"
+				v-model="place"
+				:help="validationErrors.first('username')"
+				@input="autocompleteRequest(place)"
+			/>
+		</form>
+
+		<suggestions-list
+				:suggestions="suggestionsList"
+				v-on:suggestionHighlighted="suggestionHighlighted"
+			/>
+			<ui-group
+				:border="false"
+			>
+				<ui-message
+					v-if="noResults"
+					type="error"
 				>
-				
-
-				
-
-				
-			</form>
-
-			<suggestions-list
-					:suggestions="suggestionsList"
-					v-on:suggestionHighlighted="suggestionHighlighted"
-				/>
-
-				<div class="error" v-if="noResults">No results found</div>
-		</div>
-
+					No results found
+				</ui-message>
+			</ui-group>
+	</div>
 </template>
+
 <script>
 		import Vue from 'vue'
 		import suggestionsList from '../../uiComponents/suggestionsList.vue';
@@ -58,9 +59,6 @@
 				},
 			
 				methods: {
-					searching () {
-						this.$emit('searching');
-					},
 					suggestionHighlighted (key) {
 						this.place = this.suggestions[key].description;
 						this.$emit('suggestionHighlighted', this.suggestions[key]);

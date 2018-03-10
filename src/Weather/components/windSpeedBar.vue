@@ -119,6 +119,26 @@
 
 </script>
 
-<style>
-   
+<style lang="scss">
+	@import '~globalVars';
+	.svgBar{
+		display: block;
+		width: 100px;
+	}
+
+	.svgBar__threshold {
+		stroke: rgba($statusNo, 0.3);
+		stroke-width: 2;
+	}
+
+	.svgBar__overThreshold {
+		fill: $statusNo;
+	}
+
+	.svgBar__windGust {
+		stroke:#fff;
+		stroke-width:8;
+		stroke-dasharray: 2 4;
+	}
 </style>
+

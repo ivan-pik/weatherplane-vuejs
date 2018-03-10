@@ -36,10 +36,11 @@
 			v-if="arrangeList"
 			class="uiSortList__arrangingTools"
 		>
-			<button
-				class="uiButton"
+			<ui-button
+				text="Exit Sorting"
+				type="primary"
 				@click="stopArranging"
-			>Exit Sorting</button>
+			/>
 		</div>
 	</div>
 </template>

@@ -1,17 +1,17 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header>
-			<span slot="title" v-if="place">{{place.placeName}}</span>
-		</navigation-header>
+	<layout-view-wrapper
+		:enableScroll="false"
+	>
+		<span slot="header">{{place ? place.placeName : null}}</span>
 
-		<div class="viewWrapper__scroller">
+		<div slot="content">
 			<login-form
 				v-if="needToLogin"
 				:message="message"
 				:fillUsername="placeUserName"
 			/>
-
-			<transition v-else name="fade">
+			
+			<ui-transition-fade v-else>
 				<div>
 					<e-404 v-if="place404">
 						<span slot="title">Sorry, this place doesn't exist</span>
@@ -23,10 +23,9 @@
 					/>
 					<place-details v-else  :activeLocation='place' />
 				</div>
-			</transition>
-			
+			</ui-transition-fade>
 		</div>
-	</div>
+	</layout-view-wrapper>
 </template>
 
 <script>

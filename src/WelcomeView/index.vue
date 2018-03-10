@@ -1,27 +1,23 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
-
-		<div
-			class="viewWrapper__scroller"
-			:class="{
-				'viewWrapper__scroller--noScroll': loggedIn
-			}"
-		>
+	<layout-view-wrapper 
+		:enableScroll="!loggedIn"
+	>
+		<div slot="content">
 			<div v-if="!loggedIn" class="">
 				<p>Hi, blah blah blah blaaaahblah</p>
 				@Todo: Quick slider intro!
 
-				<button
-					class="uiButton uiButton--primary"
+				<ui-button
+					text="Find my airfield!"
+					type="primary"
 					@click="goToPlaceSearch"
-				>
-					Find my airfield!	
-				</button>
+				/>
 
-				<br>
-
-				<router-link class="uiLink" to="/login">Log In!</router-link>
+				<ui-button
+					text="Log In!"
+					type="primary"
+					@click="$router.push('login');"
+				/>
 			</div>
 
 			<ui-loader
@@ -33,19 +29,14 @@
 				/>
 			</ui-loader>
 		</div>
-
-		<div
-			class="viewWrapper__bottom"
-		>
-			<div class="uiButtonGroup">
-				<button
-					class="uiButton uiButton--primary"
-					@click="">
-					Add a new place
-				</button>
-			</div>
-		</div>
-	</div>
+		<ui-button-group slot="bottom">
+			<ui-button
+				text="Add a new place"
+				type="primary"
+				@click="goToPlaceSearch()"
+			/>
+		</ui-button-group>
+	</layout-view-wrapper>
 </template>
 
 <script>

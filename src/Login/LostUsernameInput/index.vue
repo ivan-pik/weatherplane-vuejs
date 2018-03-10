@@ -1,38 +1,48 @@
 <template>
 	<div class="modal">
-
-		<div class="message message--error" v-if="wrongUsername">
+		<ui-message
+			v-if="wrongUsername"
+			type="error"
+		>
 			This email address is not registered
-		</div>
+		</ui-message>
 
-		<div class="message message--success" v-if="passwordResetSent">
+		<ui-message
+			v-if="passwordResetSent"
+			type="error"
+		>
 			Email with your username was sent
-		</div>
-
+		</ui-message>
 
 		<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
 
-			<div class="uiTextInputGroup">
-				<label class="uiLabel" for="email">Please enter the email address you used for registration</label>
-				<br>
-				<input
-					class="uiTextInput"
-					v-validate="{ rules: { required: true, email: true } }"
-					:class="{'input': true, 'is-danger': validationErrors.has('email') }"
-					type="email"
-					name="email"
-					v-model="email"
-					placeholder="Enter your email here"
-					data-vv-delay="1000"
+			<ui-text-input
+				label="Username"
+				name="email"
+				placeholder="Enter your email here"
+				:autofocus="true"
+				v-model="email"
+				v-validate="{ rules: { required: true, email: true } }"
+				data-vv-value-path="innerValue"
+				data-vv-delay="1000"
+				:help="validationErrors.first('email')"
+			/>
 
-				/>
-				<span v-show="validationErrors.has('email')" class="uiHelp uiHelp--danger">{{ validationErrors.first('email') }}</span>
-			</div>
+			<ui-button
+				text="Continue"
+				type="primary"
+				:submit="true"
+				:disabled="!email"
+			/>
 
-			<button class="uiButton uiButton--primary" type="submit">Continue</button>
 		</form>
 
-		<button class="uiLink" @click="cancel">Back to login</button>
+		<ui-button
+			text="Back to login"
+			type="primary"
+			:raised="false"
+			@click="cancel"
+		/>
 
 	</div>
 </template>

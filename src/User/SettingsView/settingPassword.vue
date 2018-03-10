@@ -1,66 +1,50 @@
 <template>
 	<div class="userSetting userSetting--password">
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">Old password
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('oldPassword') }"
-				name="oldPassword"
-				v-model="oldPassword"
-				type="password"
-				placeholder="Your current password"
-			>
-			
-			<span
-				v-show="validationErrors.has('oldPassword')"
-				class="help is-danger">{{ validationErrors.first('oldPassword') }}
-			</span>
-		</div>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">New password
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('newPassword') }"
-				name="newPassword"
-				v-model="newPassword"
-				type="password"
-				placeholder="New password"
-			>
-			
-			<span
-				v-show="validationErrors.has('newPassword')"
-				class="help is-danger">{{ validationErrors.first('newPassword') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="Old password"
+			name="oldPassword"
+			placeholder="Your current password"
+			v-model="oldPassword"
+			v-validate="{ rules: { required: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('oldPassword')"
+			data-vv-delay="1000"
+			type="password"
+		/>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">Repeat new password
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('newPasswordConfirm') }"
-				name="newPasswordConfirm"
-				v-model="newPasswordConfirm"
-				type="password"
-				placeholder="Repeat new password"
-			>
-			
-			<span
-				v-show="validationErrors.has('newPasswordConfirm')"
-				class="help is-danger">{{ validationErrors.first('newPasswordConfirm') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="New password"
+			name="newPassword"
+			placeholder="New password"
+			v-model="newPassword"
+			v-validate="{ rules: { required: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('newPassword')"
+			data-vv-delay="1000"
+			type="password"
+		/>
 
+		<ui-text-input
+			label="Repeat new password"
+			name="newPasswordConfirm"
+			placeholder="Repeat new password"
+			v-model="newPasswordConfirm"
+			v-validate="{ rules: { required: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('newPasswordConfirm')"
+			data-vv-delay="1000"
+			type="password"
+		/>
 
-		<div class="uiButtonGroup" v-if="valueChanged">
-			<button @click="saveSetting" class="uiButton">Save</button>
-		</div>
+		<ui-button-group v-if="valueChanged">
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting"
+				:disabled="(validationErrors.errors.length > 0)"
+			/>
+		</ui-button-group>
 
 	</div>
 </template>

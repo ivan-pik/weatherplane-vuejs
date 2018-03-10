@@ -1,44 +1,49 @@
 <template>
-	<div class="uiSlider"
-		ref="slider"
-		:class="{
-			'disabled' : disabled,
-			'is-dragging' : isKnob,
-			}"
-	>
-		<div class="uiSlider__trackValue"
-			v-bind:style="{
-				'width': this.left + 'px',
-				'transition' : `all ${this.transitionTime}ms ease-in-out`
-				}"
-		></div>
-		<div class="uiSlider__track"
-			
-			@click="trackClickHandler"
-		></div>
-		<div class="uiSlider__knob"
-			v-bind:class="{'is-dragging' : this.isKnob}"
-			ref="knob"
-			v-on:touchstart="touchStart"
-			v-on:touchend="touchEnd"
-			v-bind:style="{
-				'left': this.left + 'px',
-				'transition' : `all ${this.transitionTime}ms ease-in-out`
+	<div class="uiSliderWrapper">
+		<ui-label v-if="label">
+			{{label}}
+		</ui-label>
+		<div class="uiSlider"
+			ref="slider"
+			:class="{
+				'disabled' : disabled,
+				'is-dragging' : isKnob,
 				}"
 		>
-			<div class="uiSlider__knobValue">
-				{{knobValue}}
+			<div class="uiSlider__trackValue"
+				v-bind:style="{
+					'width': this.left + 'px',
+					'transition' : `all ${this.transitionTime}ms ease-in-out`
+					}"
+			></div>
+			<div class="uiSlider__track"
+				
+				@click="trackClickHandler"
+			></div>
+			<div class="uiSlider__knob"
+				v-bind:class="{'is-dragging' : this.isKnob}"
+				ref="knob"
+				v-on:touchstart="touchStart"
+				v-on:touchend="touchEnd"
+				v-bind:style="{
+					'left': this.left + 'px',
+					'transition' : `all ${this.transitionTime}ms ease-in-out`
+					}"
+			>
+				<div class="uiSlider__knobValue">
+					{{knobValue}}
+				</div>
 			</div>
-		</div>
-		<div class="uiSlider__values">
-			<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
-				{{minValue}} {{minValueUnit}}
-			</div>
-			<div class="uiSlider__currentValue">
-				{{knobValue}} {{knobValueUnit}}
-			</div>
-			<div class="uiSlider__edgeValue uiSlider__edgeValue--max">
-				{{maxValue}} {{maxValueUnit}}
+			<div class="uiSlider__values">
+				<div class="uiSlider__edgeValue uiSlider__edgeValue--min">
+					{{minValue}} {{minValueUnit}}
+				</div>
+				<div class="uiSlider__currentValue">
+					{{knobValue}} {{knobValueUnit}}
+				</div>
+				<div class="uiSlider__edgeValue uiSlider__edgeValue--max">
+					{{maxValue}} {{maxValueUnit}}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -58,6 +63,9 @@
 			event: 'change'
 		},
 		props: {
+			label: {
+				type: String
+			},
 			minValue: {
 				type: Number
 			},

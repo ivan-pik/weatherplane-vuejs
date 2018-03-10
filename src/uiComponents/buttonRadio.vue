@@ -1,13 +1,18 @@
 <template>
 	<div class="uiButtonRadio">
-		<slot name="label"></slot>
+		<ui-label v-if="label">
+			{{label}}
+		</ui-label>
 		<ul
 			class="uiButtonRadio__items"
 		>
-			<li v-for="(radio,index) in radios" class="uiButtonRadio__item"
+			<li 
+				v-for="(radio,index) in radios" 
+				:key="radio.label"
+				class="uiButtonRadio__item"
 				:class="{'uiButtonRadio__item--active' : radio.active}"
 				@click="activeRadioHandler(index)"
-				>
+			>
 				{{radio.label}}
 			</li>
 		</ul>
@@ -30,6 +35,9 @@
 				}
 				*/
 			}, 
+			label: {
+				type: String
+			}
 		},
 		created () {
 			

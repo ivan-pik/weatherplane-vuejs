@@ -1,19 +1,21 @@
 <template>
-	<transition name="fade">
+	<ui-transition-fade>
 		<div v-if="weatherData && !weatherIsLoading">
 			<div class="placeContextMenu">
-				<button
-					class="uiLink placeContextMenu__toggler"
+				<ui-button
 					v-if="placeViewType=='saved'" 
+					text="Settings"
+					type="primary"
+					:raised="false"
 					@click="placeSettingsModal=true"
-				>
-					Settings
-				</button>
-				<button
-					class="uiLink uiLink--primary" v-if="placeViewType=='temporary'"
+				/>
+				<ui-button
+					v-if="placeViewType=='temporary'"
+					text="Save location"
+					type="primary"
+					:raised="false"
 					@click="saveLocationModal=true"
-					>Save location
-				</button>
+				/>
 			</div>
 
 			<ui-modal
@@ -57,7 +59,7 @@
 			text="Loading Weather"
 		/>
 
-	</transition>
+	</ui-transition-fade>
 
 
 </template>

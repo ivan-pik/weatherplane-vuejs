@@ -1,6 +1,11 @@
 <template>
 	<div class="placeSetting placeSetting--delete">
-		<button @click="modal=true" class="uiButton uiButton--danger">DELETE THIS PLACE</button>
+
+		<ui-button
+			text="DELETE THIS PLACE"
+			type="danger"
+			@click="modal=true"
+		/>
 
 		<ui-modal
 			:show="modal"
@@ -9,21 +14,24 @@
 		>	
 			<div slot="content">
 					
-					<div class="uiPromptQuestion">
+					<ui-message
+						type="prompt"
+					>
 						Are you sure you want to delete "{{placeName}}" ?
-					</div>
-					<div class="uiButtonGroup">
-						<button class="uiButton uiButton--danger"
+					</ui-message>
+
+					<ui-button-group>
+						<ui-button
+							text="DELETE"
+							type="danger"
 							@click="saveSetting"
-						>
-							DELETE
-						</button>
-						<button class="uiButton uiButton--primary"
+						/>
+						<ui-button
+							text="Keep it"
+							type="primary"
 							@click="modal=false"
-						>
-							Keep it
-						</button>
-					</div>
+						/>
+					</ui-button-group>
 			</div>
 		</ui-modal>
 

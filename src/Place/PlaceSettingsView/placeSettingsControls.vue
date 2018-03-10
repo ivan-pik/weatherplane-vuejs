@@ -1,45 +1,55 @@
 <template>
 	<div class="">
-		<div class="uiSection">
+		<ui-group
+			:border="false"
+		>
 			<setting-name 
 				:value="place.placeName"
 				v-on:updateSetting="updatePlaceName"
 			/>
-		</div>
+		</ui-group>
 
-		<div class="uiSection">
+		<ui-group
+			:border="false"
+		>
 			<setting-url
 				:value="place.placeSlug"
 				:username="username"
 				v-on:updateSetting="updatePlaceSlug"
 			/>
-		</div>
+		</ui-group>
 
 
-		<div class="uiSection">
+		<ui-group
+			:border="false"
+		>
 			<setting-privacy
 				:value="place.placeSettings.public"
 				:placeSlug="place.placeSlug"
 				:username="username"
 				v-on:updateSetting="updatePrivacy"
 			/>
-		</div>
+		</ui-group>
 
-		<div class="uiSection">
+		<ui-group
+			:border="false"
+		>
 			<setting-location
 				:location="[place.placeLat, place.placeLng]"
 				:bearing="place.placeSettings.runwayOrientation"
 				v-on:updateLocation="updateCoordinates"
 				v-on:updateBearing="updateBearing"
 			/>
-		</div>
+		</ui-group>
 
-		<div class="uiSection">
+		<ui-group
+			:border="false"
+		>
 			<setting-delete
 				v-on:deletePlace="deletePlace"
 				:placeName="place.placeName"
 			/>
-		</div>
+		</ui-group>
 	</div>
 </template>
 
@@ -53,7 +63,6 @@
 	import settingURL from './settingURL.vue';
 	import settingPrivacy from './settingPrivacy.vue';
 	import settingLocation from './settingLocation.vue';
-	import settingBearing from './settingBearing.vue';
 	import settingDelete from './settingDelete.vue';
 	import navigationHeader from 'Navigation/navigationHeader.vue'
 	
@@ -66,7 +75,6 @@
 			'setting-url' : settingURL,
 			'setting-privacy' : settingPrivacy,
 			'setting-location' : settingLocation,
-			'setting-bearing' : settingBearing,
 			'setting-delete' : settingDelete,
 			
 		},

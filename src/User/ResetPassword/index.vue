@@ -1,7 +1,6 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
-		<div class="viewWrapper__scroller">
+	<layout-view-wrapper>
+		<div slot="content">
 			<div class="uiMessage uiMessage--error" v-if="tokenInvalid">
 				The password reset link has expired.
 				@todo: Go to retrieve your password again
@@ -15,60 +14,44 @@
 			</div>
 
 			<form v-if="!passwordResetSent && !tokenInvalid" v-on:submit.prevent="onSubmit">
-				<div class="uiGroup">
+				<ui-group
+					title="Enter a new password"
+				>
+					<ui-text-input
+						label="Password"
+						name="password"
+						placeholder="Enter your password here"
+						v-model="password"
+						v-validate="{ rules: { required: true, confirmed:'password' } }"
+						data-vv-value-path="innerValue"
+						:help="validationErrors.first('password')"
+						data-vv-delay="1000"
+						:autofocus="true"
+					/>
 
-					<h1 class="uiGroup__title">
-						Enter a new password
-					</h1>
-						
-					<div class="uiTextInputGroup">
-						<label class="uiLabel" for="password">Password</label>
-						<input
-							class="uiTextInput"
-							v-validate="{ rules: { required: true } }"
-							:class="{'input': true, 'is-danger': validationErrors.has('password') }"
-							name="password"
-							v-model="password"
-							type="password"
-							placeholder="Enter your password here"
-							autofocus
-							data-vv-delay="1000"
-						>
-						<span
-							v-show="validationErrors.has('password')"
-							class="uiHelp uiHelp--danger">{{ validationErrors.first('password') }}
-						</span>
-					</div>
-
-					<div class="uiTextInputGroup">
-						<label class="uiLabel" for="confirmPassword">Confirm Password</label>
-						<input
-							class="uiTextInput"
-							v-validate="{ rules: { required: true, confirmed:'password' } }"
-							:class="{'input': true, 'is-danger': validationErrors.has('confirmPassword') }"
-							name="confirmPassword"
-							v-model="confirmPassword"
-							type="password"
-							placeholder="Enter your password here"
-							autofocus
-							data-vv-delay="1000"
-						>
-						<span
-							v-show="validationErrors.has('confirmPassword')"
-							class="uiHelp uiHelp--danger">
-							{{ validationErrors.first('confirmPassword') }}
-						</span>
-
-					</div>
+					<ui-text-input
+						label="Confirm Password"
+						name="confirmPassword"
+						placeholder="Enter your password again"
+						v-model="confirmPassword"
+						v-validate="{ rules: { required: true, confirmed:'password' } }"
+						data-vv-value-path="innerValue"
+						:help="validationErrors.first('confirmPassword')"
+						data-vv-delay="1000"
+					/>
 
 					<!-- @todo: Delay the validation till the first field is filled -->
 					
-					<button class="uiButton uiButton--primary" type="submit">Continue</button>
-				</div>
+					<ui-button
+						text="Continue"
+						type="primary"
+						:submit="true"
+					/>
+				</ui-group>
 			</form>
 
 		</div>
-	</div>
+	</layout-view-wrapper>
 </template>
 
 <script>

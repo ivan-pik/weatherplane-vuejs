@@ -1,60 +1,47 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header>
-			<span slot="title">
-				User Settings
-			</span>
-		</navigation-header>	
-		
+	<layout-view-wrapper>
+		<span slot="header">
+			User Settings
+		</span>
 
-		<div class="viewWrapper__scroller">
+		<div slot="content">
 
 			<login-form
 				v-if="!loggedIn"
 				:message="'You need to log-in to access user settings'"
 			/>
-
-			<transition v-else name="fade">
+			<ui-transition-fade v-else>
 				<div>
-					<div class="uiGroup">
-						<h3 class="uiGroup__title">
-							Change Units
-						</h3>
+					<ui-group
+						title="Change Units"
+					>
 						<setting-units />
-						
-					</div>
+					</ui-group>
 
-					<div class="uiGroup">
-						<h3 class="uiGroup__title">
-							Weather Settings
-						</h3>
+					<ui-group
+						title="Weather Settings"
+					>
 						<setting-weather />
-						
-					</div>
+					</ui-group>
 
-
-
-					<div class="uiGroup">
-						<h3 class="uiGroup__title">
-							Change Password
-						</h3>
+					<ui-group
+						title="Change Password"
+					>
 						<setting-password />
-						
-					</div>
+					</ui-group>
 
-
-					<div class="uiGroup">
-						<h3 class="uiGroup__title">
-							Change Email
-						</h3>
+					<ui-group
+						title="Change Email"
+					>
 						<setting-email />
-					</div>
+					</ui-group>
 				</div>
-			</transition>
+			</ui-transition-fade>
 		</div>
-	</div>
+	</layout-view-wrapper>
 
 </template>
+
 <script>
 	import Vue from 'vue'
 	import settingUnits from './settingUnits.vue';

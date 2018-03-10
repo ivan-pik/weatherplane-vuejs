@@ -1,9 +1,7 @@
 <template>
 	<div class="userSetting userSetting--units">
-		<label class="uiLabel">
-			Get weather for {{newWeatherRange}} days ahead
-		</label>
 		<ui-slider
+			:label="`Get weather for ${newWeatherRange} days ahead`"
 			:minValue="1"
 			:maxValue="7"
 			v-model="newWeatherRange"

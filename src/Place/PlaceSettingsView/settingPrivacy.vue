@@ -1,27 +1,32 @@
 <template>
 	<div class="placeSetting placeSetting--name">
 
-		<div class="uiTextInputGroup">
+		<ui-text-input-group>
 
 			<ui-radio
+				label="Who can access this place URL?"
 				:radios="privacyOptions"
 				v-on:change="updateHandler"
-			>
-				<label class="uiLabel" slot="label">Who can access this place URL?</label>
-			</ui-radio>
+			/>
 			<ui-note v-if="!newValue">
 				You have to log-in to visit www.weatherplane.com/{{username}}/{{placeSlug}}
 			</ui-note>
 			<ui-note v-if="newValue">
 				Anyone can visit www.weatherplane.com/{{username}}/{{placeSlug}}
 			</ui-note>
-		</div>
+		</ui-text-input-group>
 
-		<div class="uiButtonGroup">
-			<button v-if="valueChanged" @click="saveSetting" class="uiButton uiButton--primary">Save</button>
-			<button v-if="valueChanged" @click="reset" class="uiButton">Reset</button>
-		</div>
-
+		<ui-button-group v-if="valueChanged">
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting" 
+			/>
+			<ui-button
+				text="Reset"
+				@click="reset"
+			/>
+		</ui-button-group>
 	</div>
 </template>
 

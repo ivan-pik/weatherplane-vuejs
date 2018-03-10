@@ -1,45 +1,40 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
-			
-		<div class="viewWrapper__scroller viewWrapper__scroller--noScroll">
-			<ui-loader
-				:loaded="!!places"
-			>
-				<div class="uiTitle">
-					{{userInTitle}} places
-				</div>
-				
-				<places-list
-					:places="places"
-				/>
-
-				<div
-					class=""
-					v-if="!loggedIn"
-				>
-					@todo: Design
-					<br>
-					Are you <strong>{{routeUserName}}</strong>?
-					<br>
-					<a class="uiButton" href="">Login</a> to manage your list or to see your private places
-				</div>
-			</ui-loader>
-		</div>
-
-		<div
-			class="viewWrapper__bottom"
-			v-if="displayAddToPlaceButton"
+	<layout-view-wrapper>
+		<ui-loader
+			slot="content"
+			:loaded="!!places"
 		>
-			<div class="uiButtonGroup">
-				<button
-					class="uiButton uiButton--primary"
-					@click="">
-					Add a new place
-				</button>
+			<ui-title>
+				{{userInTitle}} places
+			</ui-title>
+			
+			<places-list
+				:places="places"
+			/>
+
+			<div
+				class=""
+				v-if="!loggedIn"
+			>
+				@todo: Design
+				<br>
+				Are you <strong>{{routeUserName}}</strong>?
+				<br>
+				<a class="uiButton" href="">Login</a> to manage your list or to see your private places
 			</div>
-		</div>
-	</div>
+		</ui-loader>
+
+		<ui-button-group
+			v-if="displayAddToPlaceButton"
+			slot="bottom"
+		>
+			<ui-button
+				text="Add a new place"
+				type="primary"
+				@click="$router.push('/search');"
+			/>
+		</ui-button-group>
+	</layout-view-wrapper>
 </template>
 <script>
 

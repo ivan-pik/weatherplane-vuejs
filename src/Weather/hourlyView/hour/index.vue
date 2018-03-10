@@ -377,10 +377,99 @@
 
 		  }
 		}
-
 	}
-
-
-
 </script>
 
+<style lang="scss">
+@import '~globalVars';
+
+.hour {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid $colorBorder;
+	padding: 0 0 0 $widthStatusBar;
+	&:last-child {
+		border-bottom: none;
+	}
+
+	.status {
+		position: absolute;
+		left: 0;
+		top: -1px;
+		bottom: 0px;
+		min-height: 20px;
+	}
+	.wind-speed-bar {
+		flex: 0 1 40%;
+		margin-right: $widthGridSpace;
+
+	}
+	.hourWindSpeed {
+		margin: 0 0 0 auto;
+		padding-left: $widthGridSpace;
+	}
+}
+
+
+// --------------------------------
+.sunTimeIndicator {
+	position: absolute;
+	top: 0;
+	left: $widthStatusBar;
+	display: block;
+	width: 9vw;
+	min-width: 2.5rem;
+	height: 100%;
+	z-index: 0;
+	pointer-events: none;
+	
+}
+
+.sunTimeIndicator__progress {
+	position: absolute;
+	width: 100%;
+	&:after {
+		content: '';
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 16px;
+	}
+}
+
+.sunTimeIndicator--night {
+	background-color: rgb(229, 228, 241);
+	
+	.sunTimeIndicator__progress {
+		display: none;
+	}
+}
+.sunTimeIndicator--sunRising {
+	background: rgb(253, 253, 216);
+	.sunTimeIndicator__progress {
+		top: 0;
+		background-color: rgb(229, 228, 241);
+		&:after {
+			top: 100%;
+			background: linear-gradient(to bottom, rgb(229, 228, 241) 0%,rgb(253, 253, 216) 100%); 
+		}
+		
+	}
+}
+.sunTimeIndicator--day {
+	background: rgb(253, 253, 216);
+}
+.sunTimeIndicator--sunSetting {
+	background: rgb(253, 253, 216);
+	.sunTimeIndicator__progress {
+		bottom: 0;
+		background-color: rgb(229, 228, 241);
+		&:after {
+			bottom: 100%;
+			background: linear-gradient(to bottom, rgb(255,255,255) 0%,rgb(229, 228, 241) 100%); 
+		}
+	}
+}
+</style>

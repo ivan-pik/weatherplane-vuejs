@@ -15,17 +15,21 @@
 			<div
 				v-if="contextMenuOpen"
 				class="placesList__contextMenu">
-				<button 
-					class="uiLink"
+
+				<ui-button
+					text="Settings"
+					type="primary"
 					@click="openPlaceSettings"
-				>
-					Settings
-				</button>
-				<button class="uiLink"
+					:raised="false"
+				/>
+
+				<ui-button
+					text="Reorder"
+					type="primary"
 					@click="activateArrangeMode"
-				>
-					Reorder
-				</button>
+					:raised="false"
+				/>
+		
 			</div>
 
 			

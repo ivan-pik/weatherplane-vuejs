@@ -1,58 +1,56 @@
 <template>
 	<div class="">
 
-			<login-view :message="message" v-if="!loggedIn" />
+		<login-view :message="message" v-if="!loggedIn" />
 
-			<form v-else v-on:submit.prevent="onSubmit">
+		<form v-else v-on:submit.prevent="onSubmit">
 
-
-					<div class="uiTextInputGroup">
-						<label class="uiLabel" for="username">Location Name, Available: {{nameAvailable}}</label>
-						<input
-							class="uiTextInput"
-							v-validate="{ rules: { required: true } }"
-							:class="{'input': true, 'is-danger': validationErrors.has('placeName') }"
-							name="placeName"
-							v-model="placeName"
-							type="text"
-							placeholder="Location name here"
-							autofocus
-							autocomplete="off"
-						>
-						
-						<span
-							v-show="validationErrors.has('placeName')"
-							class="uiHelp uiHelp--danger">{{ validationErrors.first('placeName') }}
-						</span>
-
-						
-					</div>
-					<ui-note>
-						You will be able to access the place quickly via
-						{{newPlaceURL}}
-					</ui-note>
+				<ui-text-input
+					label="Location Name"
+					name="newPassword"
+					placeholder="New password"
+					v-model="placeName"
+					v-validate="{ rules: { required: true } }"
+					data-vv-value-path="innerValue"
+					:help="validationErrors.first('placeName')"
+					:available="nameAvailable"
+					:autocomplete="false"
+					:autofocus="true"
+				/>
 				
-					<div class="uiTextInputGroup">
-						<ui-radio
-							:radios="privacyOptions"
-							v-on:change="updateHandler"
-						>
-							<label class="uiLabel" slot="label">Who can access this place URL?</label>
-						</ui-radio>
-						<ui-note v-if="!placeIsPublic">
-							You have to log-in to visit www.weatherplane.com/{{userName}}/{{placeNameURL}}
-						</ui-note>
-						<ui-note v-if="placeIsPublic">
-							Anyone can visit www.weatherplane.com/{{userName}}/{{placeNameURL}}
-						</ui-note>
-					</div>
+				<ui-note
+					v-if="nameAvailable"
+				>
+					You will be able to access the place quickly via
+					{{newPlaceURL}}
+				</ui-note>
 
-					<button type="submit" v-if="nameAvailable" class="uiButton uiButton--primary">Save</button>
-			</form>
+				<ui-text-input-group>
+					<ui-radio
+						label="Who can access this place URL?"
+						:radios="privacyOptions"
+						v-on:change="updateHandler"
+					/>
+					<ui-note v-if="!placeIsPublic">
+						You have to log-in to visit www.weatherplane.com/{{userName}}/{{placeNameURL}}
+					</ui-note>
+					<ui-note v-if="placeIsPublic">
+						Anyone can visit www.weatherplane.com/{{userName}}/{{placeNameURL}}
+					</ui-note>
+				</ui-text-input-group>
+
+				<ui-button
+					v-if="nameAvailable" 
+					text="Save"
+					type="primary"
+					:submit="true"
+				/>
+		</form>
 		
 	</div>
 	
 </template>
+
 <script>
 		import Vue from 'vue';
 

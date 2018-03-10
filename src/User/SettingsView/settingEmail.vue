@@ -1,28 +1,28 @@
 <template>
 	<div class="userSetting userSetting--password">
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="newEmail">New email
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('newEmail') }"
-				name="newEmail"
-				v-model="newEmail"
-				type="text"
-				placeholder="URL here"
-			>
-			
-			<span
-				v-show="validationErrors.has('newEmail')"
-				class="help is-danger">{{ validationErrors.first('newEmail') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="New email"
+			name="newEmail"
+			placeholder="Enter your new email"
+			v-model="newEmail"
+			v-validate="{ rules: { required: true, alpha_dash: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('newEmail')"
+			data-vv-delay="1000"
+		/>
 
-		<div class="uiButtonGroup">
-			<button v-if="valueChanged"  @click="saveSetting" class="uiButton">Save</button>
-		</div>
+		<!-- @todo: check if email exists alreadt -->
+
+		<ui-button-group
+			v-if="valueChanged"  
+		>
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting"
+			/>
+		</ui-button-group>
 
 	</div>
 </template>
@@ -40,7 +40,7 @@
 		},
 		watch: {
 			newEmail (val) {
-				if (val != '') {
+				if (val !== '') {
 					this.valueChanged = true;
 				}
 			}

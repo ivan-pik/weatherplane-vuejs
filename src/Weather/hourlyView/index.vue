@@ -323,6 +323,14 @@
 
 </script>
 
-<style>
-
+<style lang="scss">
+.weather-hourly {
+	position: fixed;
+	top: 280px;
+	width: 100%;
+	bottom: 0;
+	overflow: scroll;
+	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
+}
 </style>

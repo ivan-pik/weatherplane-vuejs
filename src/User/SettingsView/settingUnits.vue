@@ -1,25 +1,22 @@
 <template>
 	<div class="userSetting userSetting--units">
 		<ui-radio
+			label="Wind Unit"
 			:radios="windUnitOptions"
 			v-on:change="updateWindUnitSetting"
-		>
-			<label class="uiLabel" slot="label">Wind Unit</label>
-		</ui-radio>
+		/>
 
 		<ui-radio
+			label="Temperature Unit"
 			:radios="temperatureOptions"
 			v-on:change="updateTemperatureSetting"
-		>
-			<label class="uiLabel" slot="label">Temperature Unit</label>
-		</ui-radio>
+		/>
 
 		<ui-radio
+			label="Time Format"
 			:radios="timeFormatOptions"
 			v-on:change="updateTimeFormatSetting"
-		>
-			<label class="uiLabel" slot="label">Time Format</label>
-		</ui-radio>
+		/>
 		
 	</div>
 </template>

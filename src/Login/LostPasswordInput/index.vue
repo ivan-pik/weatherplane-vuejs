@@ -1,37 +1,43 @@
 <template>
 	<div class="modal">
-
-		<div class="message message--error" v-if="wrongUsername">
+		<ui-message
+			v-if="wrongUsername"
+			type="error"
+		>
 			This user doesn't exist
-		</div>
+		</ui-message>
 
 		<div v-if="passwordResetSent">
 			Check your mail for new password
 		</div>
 
 		<form v-if="!passwordResetSent" v-on:submit.prevent="onSubmit">
-			<div class="uiTextInputGroup">
-				<label class="uiLabel" for="username">Username</label>
-				<input
-					class="uiTextInput"
-					v-validate="{ rules: { required: true, alpha_dash: true } }"
-					:class="{'input': true, 'is-danger': validationErrors.has('username') }"
-					name="username"
-					v-model="username"
-					type="text"
-					placeholder="Enter your username here"
-					autofocus
-				>
-				<span
-					v-show="validationErrors.has('username')"
-					class="uiHelp uiHelp--danger">
-					{{ validationErrors.first('username') }}
-				</span>
-			</div>
-			<button class="uiButton uiButton--primary" type="submit">Continue</button>
+
+			<ui-text-input
+				label="Username"
+				name="username"
+				placeholder="Enter your username here"
+				:autofocus="true"
+				v-model="username"
+				v-validate="{ rules: { required: true, alpha_dash: true } }"
+				data-vv-value-path="innerValue"
+				:help="validationErrors.first('username')"
+			/>
+			
+			<ui-button
+				text="Continue"
+				:submit="true"
+				type="primary"
+				:disabled="!username"
+			/>
 		</form>
 
-		<button class="uiLink" @click="cancel">Back to login</button>
+		<ui-button
+			text="Back to login"
+			type="primary"
+			@click="cancel"
+			:raised="false"
+		/>
 
 	</div>
 </template>

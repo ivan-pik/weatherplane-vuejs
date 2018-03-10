@@ -92,29 +92,42 @@ export default {
 }
 
 </script>
-<style src="" lang="scss">
+
+<style lang="scss">
+	// @todo: save locally
+	@import url('https://rsms.me/inter/inter-ui.css');
+
+	@import '../styles/reset';
 	@import '~globalVars';
-	@import '../styles/main.scss';
+
+	body, html {
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	body {
+		color: $textBaseColour;
+		font-family: 'Inter UI', sans-serif;
+	}
+
+	.routerTransition-enter-active, .routerTransition-leave-active {
+		transition-property: opacity;
+		transition-duration: .4s;
 
 
-.routerTransition-enter-active, .routerTransition-leave-active {
-	transition-property: opacity;
-  	transition-duration: .4s;
+	}
+
+	.routerTransition-enter-active {
+		transition-delay: .4s;
 
 
-}
+	}
 
-.routerTransition-enter-active {
-	 transition-delay: .4s;
-
-
-}
-
-.routerTransition-enter, .routerTransition-leave-active {
-	 opacity: 0;
+	.routerTransition-enter, .routerTransition-leave-active {
+		opacity: 0;
 
 
-}
+	}
 
 </style>
 

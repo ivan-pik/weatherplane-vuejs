@@ -1,69 +1,53 @@
 <template>
 	<div class="placeSetting placeSetting--name">
-		
-		<button
-			class="uiLink"
+		<ui-button
+			text="Open map"
+			type="primary"
 			@click="openMap"
-		>
-			Open map
-		</button>
+			:raised="false"
+		/>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="username">Lat</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placeName') }"
-				name="placeName"
-				v-model="newLocationValue[0]"
-				type="text"
-				placeholder="Location name here"
-			>
-			<span
-				v-show="validationErrors.has('placeName')"
-				class="help is-danger">{{ validationErrors.first('placeName') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="Latitude"
+			name="latitude"
+			placeholder="Enter latitude"
+			v-model="newLocationValue[0]"
+			v-validate="{ rules: { required: true, decimal: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('latitude')"
+		/>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="username">Lng</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('longitude') }"
-				name="longitude"
-				v-model="newLocationValue[1]"
-				type="text"
-				placeholder="Location name here"
-			>
-			<span
-				v-show="validationErrors.has('longitude')"
-				class="help is-danger">{{ validationErrors.first('longitude') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="Longitude"
+			name="longitude"
+			placeholder="Enter longitude"
+			v-model="newLocationValue[1]"
+			v-validate="{ rules: { required: true, decimal: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('longitude')"
+		/>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="username">Bearing</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placeName') }"
-				name="placeName"
-				v-model="newBearingValue"
-				type="text"
-				placeholder="Location name here"
-			>
-			
-			<span
-				v-show="validationErrors.has('placeName')"
-				class="help is-danger">{{ validationErrors.first('placeName') }}
-			</span>
-		</div>
+		<ui-text-input
+			label="Bearing"
+			name="bearing"
+			placeholder="Enter runway bearing"
+			v-model="newBearingValue"
+			v-validate="{ rules: { required: true,  decimal: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('bearing')"
+		/>
 
-		<div class="uiButtonGroup">
-			<button v-if="locationValueChanged || bearingValueChanged" @click="saveSetting" class="uiButton uiButton--primary">Save</button>
-			<button v-if="locationValueChanged || bearingValueChanged" @click="resetMapAndBearing" class="uiButton">Reset</button>
-		</div>
+		<ui-button-group v-if="locationValueChanged || bearingValueChanged">
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting" 
+			/>
+			<ui-button
+				text="Reset"
+				@click="resetMapAndBearing"
+			/>
+		</ui-button-group>
 
 
 		<ui-modal
@@ -89,10 +73,18 @@
 						v-model="newBearingValue"
 					/>
 				</div>
-				<div class="uiButtonGroup"  >
-					<button class="uiButton uiButton--primary" @click="mapOpen=false">Close Map</button>
-					<button class="uiButton" v-if="locationValueChanged || bearingValueChanged" @click="resetMapAndBearing">Reset</button>
-				</div>
+				<ui-button-group>
+					<ui-button
+						text="Close Map"
+						type="primary"
+						 @click="mapOpen=false"
+					/>
+					<ui-button
+						v-if="locationValueChanged || bearingValueChanged" 
+						text="Reset"
+						@click="resetMapAndBearing"
+					/>
+				</ui-button-group>
 				
 			</div>
 		</ui-modal>

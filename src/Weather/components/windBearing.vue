@@ -178,6 +178,79 @@
 
 </script>
 
-<style>
-   
+<style lang="scss">
+@import '~globalVars';
+
+// --------------------------------
+.windBearing {
+	font-size: 10px;
+	margin-left: $widthGridSpace *0.5;
+}
+
+.windBearing__value {
+	display: inline-block;
+	vertical-align: middle;
+	min-width: 2em;
+	text-align: right;
+}
+
+.windBearing__chart {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.windBearing__fullCircle {
+	stroke: #859098;
+	fill: none;
+	stroke-width: 2px;
+	&.yes {
+		stroke: $statusYes;
+	}
+	&.no {
+		stroke: $statusNo;
+	}
+}
+
+.windBearing__runway {
+	stroke: #859098;
+	stroke-width: 1px;
+
+	stroke-width: 2;
+	stroke-dasharray: 2,2;
+	
+}
+
+.windBearing__crossWindPie {
+	&.yes {
+		fill: lighten($statusYes, 30%);
+	}
+	&.no {
+		fill: lighten($statusNo, 30%);
+	}
+}
+
+.windBearing__directionLine {
+	stroke-width: 2px;
+	fill: none;
+	stroke: #859098;
+	&.yes {
+		stroke: $statusYes;
+	}
+	&.no {
+		stroke: $statusNo;
+	}
+}
+
+.windBearing__directionArrow {
+	stroke-width: 0px;
+	fill: #859098;
+	&.yes {
+		fill: $statusYes;
+	}
+	&.no {
+		fill: $statusNo;
+	}
+	
+}
+
 </style>

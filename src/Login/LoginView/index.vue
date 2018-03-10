@@ -1,15 +1,13 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
-
-		<div class="viewWrapper__scroller">
-			<login-form 
-				v-on:logged-in="loggedInHandler"
-				:overlay="false"
-			/>
-		</div>
-	</div>
+	<layout-view-wrapper>
+		<login-form 
+			slot="content"
+			v-on:logged-in="loggedInHandler"
+			:overlay="false"
+		/>
+	</layout-view-wrapper>
 </template>
+
 <script>
 
 	import navigationHeader from 'Navigation/navigationHeader.vue'

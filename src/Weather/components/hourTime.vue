@@ -76,3 +76,24 @@
 
 </script>
 
+<style lang="scss">
+@import '~globalVars';
+.hour__time {
+	font-size: 15px;
+	padding: 0 0 0 $widthGridSpace;
+	min-width: 3em;
+	width: 8vw;
+	z-index: 1;
+}
+
+.hour__time__sup {
+	vertical-align: top;
+	font-size: 9px;
+	position: relative;
+	left: -0.3em;
+}
+
+.hour__spaceDummy {
+	flex: 1 1 auto;
+}
+</style>

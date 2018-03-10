@@ -15,95 +15,75 @@
 			</div>
 		
 			<form  v-on:submit.prevent="onSubmit">
-				<div class="message message--error"
+				<ui-message
 					v-if="errors.registrationFailed && !errors.unknownFailure"
+					type="error"
 				>
-						{{errors.message}}
-				</div>
-				<div class="message message--error"
-					v-else-if="errors.unknownFailure"
+					{{errors.message}}
+				</ui-message>
+
+				<ui-message
+					v-else-if="errors.unknownFailure" 
+					type="error"
 				>
-						Registration failed. Please try again.
-				</div>
+					Registration failed. Please try again.
+				</ui-message>
 
-				<div class="uiTextInputGroup">
-					<label class="uiLabel" for="username">Username</label>
-					<input
-						class="uiTextInput"
-						v-validate="{ rules: { required: true, alpha_dash: true } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('username') }"
-						name="username"
-						v-model="username"
-						type="text"
-						placeholder="Enter your username here"
-						autofocus
-						data-vv-delay="1000"
-					>
-					<span
-						v-show="validationErrors.has('username')"
-						class="uiHelp uiHelp--danger">{{ validationErrors.first('username') }}
-					</span>
-				</div>
+				<ui-text-input
+					label="Username"
+					name="username"
+					placeholder="Enter your username here"
+					v-model="username"
+					v-validate="{ rules: { required: true, alpha_dash: true } }"
+					data-vv-value-path="innerValue"
+					:help="validationErrors.first('username')"
+					data-vv-delay="1000"
+					autofocus="autofocus"
+				/>
 
-				<div class="uiTextInputGroup">
-					<label class="uiLabel" for="password">Password</label>
-					<input
-						class="uiTextInput"
-						v-validate="{ rules: { required: true } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('password') }"
-						name="password"
-						v-model="password"
-						type="password"
-						placeholder="Enter your password here"
-						autofocus
-						data-vv-delay="1000"
-					>
-					<span
-						v-show="validationErrors.has('password')"
-						class="uiHelp uiHelp--danger">{{ validationErrors.first('password') }}
-					</span>
-				</div>
+				<ui-text-input
+					label="Password"
+					name="password"
+					placeholder="Enter your password here"
+					v-model="password"
+					v-validate="{ rules: { required: true, alpha_dash: true } }"
+					data-vv-value-path="innerValue"
+					:help="validationErrors.first('password')"
+					data-vv-delay="1000"
+				/>
+
+				
 
 				<!-- @todo: Delay the validation till the first field is filled -->
 
-				<div class="uiTextInputGroup">
-					<label class="uiLabel" for="confirmPassword">Confirm Password</label>
-					<input
-						class="uiTextInput"
-						v-validate="{ rules: { required: true, confirmed:'password' } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('confirmPassword') }"
-						name="confirmPassword"
-						v-model="confirmPassword"
-						type="password"
-						placeholder="Repeat your password here"
-						autofocus
-						data-vv-delay="1000"
-					>
-					<span
-						v-show="validationErrors.has('confirmPassword')"
-						class="uiHelp uiHelp--danger">
-							{{ validationErrors.first('confirmPassword') }}
-					</span>
-				</div>
+				<ui-text-input
+					label="Confirm Password"
+					name="confirmPassword"
+					placeholder="Enter your password here"
+					v-model="confirmPassword"
+					v-validate="{ rules: { required: true, confirmed:'password' } }"
+					data-vv-value-path="innerValue"
+					:help="validationErrors.first('confirmPassword')"
+					data-vv-delay="1000"
+				/>
 
+				<ui-text-input
+					label="Email"
+					name="email"
+					placeholder="Enter your email here"
+					v-model="email"
+					v-validate="{ rules: { required: true, email: true } }"
+					data-vv-value-path="innerValue"
+					:help="validationErrors.first('email')"
+					data-vv-delay="1000"
+				/>
 
-				<div class="uiTextInputGroup">
-					<label class="uiLabel" for="email">Email</label>
-					<input
-						class="uiTextInput"
-						v-validate="{ rules: { required: true, email: true } }"
-						:class="{'input': true, 'is-danger': validationErrors.has('email') }"
-						type="email"
-						name="email"
-						v-model="email"
-						placeholder="Enter your email here"
-						data-vv-delay="1000"
-
-					/>
-					<span v-show="validationErrors.has('email')" class="uiHelp uiHelp--danger">{{ validationErrors.first('email') }}</span>
-				</div>
-
-				<button class="uiButton uiButton--primary" type="submit">Signup</button>
+				<ui-button
+					text="Signup"
+					type="primary"
+					:submit="true"
+					:disabled="(validationErrors.errors.length > 0)"
+				/>
 			</form>
 		</div>
 	</div>
@@ -344,6 +324,25 @@ export default {
 		display: block;
 		animation: flipInY 800ms linear both;
 	}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+
+	20%, 80% {
+		transform: translate3d(2px, 0, 0);
+	}
+
+	30%, 50%, 70% {
+		transform: translate3d(-4px, 0, 0);
+	}
+
+	40%, 60% {
+		transform: translate3d(4px, 0, 0);
+	}
+}
+
 
 
 </style>

@@ -55,6 +55,21 @@
 
 </script>
 
-<style>
-   
+<style lang="scss">
+	@import '~globalVars';
+	// --------------------------------
+	.hourTemperature {
+		font-size: 12px;
+		margin-right: $widthStatusBar;
+		padding: 0 $widthGridSpace 0 0;
+		min-width: 2em;
+		text-align: right;
+
+		&.yes {
+			color: $statusYes;
+		}
+		&.no {
+			color: $statusNo;
+		}
+	}
 </style>

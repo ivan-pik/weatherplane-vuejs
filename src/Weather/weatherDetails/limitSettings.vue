@@ -2,10 +2,8 @@
 	<div class="limitSettings">
 		<div class="limitSettings__content">
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.windSpeed.label}}
-				</label>
 				<ui-slider
+					label="reactiveControls.windSpeed.label"
 					:minValue="reactiveControls.windSpeed.minValue"
 					:maxValue="convertWindSpeedUnit(reactiveControls.windSpeed.maxValue,'meters-per-second',this.windUnit)"
 					v-model="reactiveControls.windSpeed.currentValue"
@@ -16,10 +14,8 @@
 			</div>
 
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.crossWindSpeed.label}}
-				</label>
 				<ui-slider
+					:label="reactiveControls.crossWindSpeed.label"
 					:minValue="reactiveControls.crossWindSpeed.minValue || 0"
 					:maxValue="reactiveControls.windSpeed.currentValue"
 					v-model="reactiveControls.crossWindSpeed.currentValue"
@@ -30,10 +26,8 @@
 			</div>
 
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.bearing.label}}
-				</label>
 				<ui-slider
+					label="reactiveControls.bearing.label"
 					:minValue="reactiveControls.bearing.minValue || 0"
 					:maxValue="reactiveControls.bearing.maxValue"
 					v-model="reactiveControls.bearing.currentValue"
@@ -44,10 +38,8 @@
 			</div>
 
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.minTemperature.label}}
-				</label>
 				<ui-slider
+					label="reactiveControls.minTemperature.label"
 					:minValue="this.convertTemperatureUnit(-20,'c', this.temperatureUnit)"
 					:maxValue="reactiveControls.maxTemperature.currentValue - 1"
 					v-model="reactiveControls.minTemperature.currentValue"
@@ -58,10 +50,8 @@
 			</div>
 
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.maxTemperature.label}}
-				</label>
 				<ui-slider
+					label="reactiveControls.maxTemperature.label"
 					:minValue="reactiveControls.minTemperature.currentValue + 1"
 					:maxValue="this.convertTemperatureUnit(60,'c', this.temperatureUnit)"
 					v-model="reactiveControls.maxTemperature.currentValue"
@@ -72,10 +62,8 @@
 			</div>
 
 			<div class="limitSettings__group">
-				<label class="uiLabel">
-					{{reactiveControls.precipitation.label}}
-				</label>
 				<ui-slider
+					label="reactiveControls.precipitation.label"
 					:minValue="reactiveControls.precipitation.minValue || 0"
 					:maxValue="reactiveControls.precipitation.maxValue"
 					v-model="reactiveControls.precipitation.currentValue"
@@ -85,20 +73,19 @@
 				/>
 			</div>
 		</div>
-		
-		<div
+		<ui-button-group
 			v-if="settingsTweaked"
-			class="uiButtonGroup uiButtonGroup--limitSettings">
-			<button
-				class="uiButton uiButton--primary"
+		>
+			<ui-button
+				text="Save"
+				type="primary"
 				@click="saveSettings"
-			>Save</button>
-			<button
-				class="uiButton"
+			/>
+			<ui-button
+				text="Reset"
 				@click="resetControls"
-			>Reset</button>
-		</div>
-		
+			/>
+		</ui-button-group>
 	</div>
 </template>
 

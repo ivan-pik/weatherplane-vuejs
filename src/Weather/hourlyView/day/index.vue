@@ -132,3 +132,9 @@
 
 </script>
 
+<style lang="scss">
+.day-list {
+	display: block;
+	position: relative;
+}
+</style>

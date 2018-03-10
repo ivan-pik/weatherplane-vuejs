@@ -1,38 +1,33 @@
 <template>
 	<div class="placeSetting placeSetting--url">
-	
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="placeSlug">Location URL
-			<span v-if="valueChanged" class="availability">
-				Available: {{urlAvailable}}
-			</span>
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placeSlug') }"
-				name="placeSlug"
-				v-model="newValue"
-				type="text"
-				placeholder="URL here"
-			>
-			
-			<span
-				v-show="validationErrors.has('placeSlug')"
-				class="help is-danger">{{ validationErrors.first('placeSlug') }}
-			</span>
-			
-		</div>
+		<ui-text-input
+			label="Password"
+			name="placeSlug"
+			placeholder="URL here"
+			v-model="newValue"
+			v-validate="{ rules: { required: true, alpha_dash: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('placeSlug')"
+			data-vv-delay="1000"
+			:available="urlAvailable"
+		/>
 
 		<ui-note>
 			www.weatherplane.com/{{username}}/{{newValue}}
 		</ui-note>
 
-		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="urlAvailable"  @click="saveSetting" class="uiButton uiButton--primary">Save</button>
-			<button  @click="reset" class="uiButton">Reset</button>
-		</div>
-
+		<ui-button-group v-if="valueChanged">
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting"
+				:disabled="!urlAvailable"
+			/>
+			<ui-button
+				text="Reset"
+				@click="reset"
+			/>
+		</ui-button-group>
 	</div>
 </template>
 

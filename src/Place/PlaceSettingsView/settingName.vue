@@ -1,32 +1,28 @@
 <template>
 	<div class="placeSetting placeSetting--name">
+		<ui-text-input
+			label="Location Name"
+			name="placeName"
+			placeholder="Location name here"
+			v-model="newValue"
+			v-validate="{ rules: { required: true } }"
+			data-vv-value-path="innerValue"
+			:help="validationErrors.first('placeName')"
+			:available="(valueChanged) ? nameAvailable : null"
+		/>
 
-		<div class="uiTextInputGroup">
-			<label class="uiLabel" for="username">Location Name
-			<span v-if="valueChanged" class="availability">
-				Available: {{nameAvailable}}
-			</span>
-			</label>
-			<input
-				class="uiTextInput"
-				v-validate="{ rules: { required: true } }"
-				:class="{'input': true, 'is-danger': validationErrors.has('placeName') }"
-				name="placeName"
-				v-model="newValue"
-				type="text"
-				placeholder="Location name here"
-			>
-			
-			<span
-				v-show="validationErrors.has('placeName')"
-				class="help is-danger">{{ validationErrors.first('placeName') }}
-			</span>
-		</div>
-
-		<div class="uiButtonGroup" v-if="valueChanged">
-			<button v-if="nameAvailable"  @click="saveSetting" class="uiButton uiButton--primary">Save</button>
-			<button  @click="reset" class="uiButton">Reset</button>
-		</div>
+		<ui-button-group v-if="valueChanged">
+			<ui-button
+				text="Save"
+				type="primary"
+				@click="saveSetting"
+				:disabled="!nameAvailable"
+			/>
+			<ui-button
+				text="Reset"
+				@click="reset"
+			/>
+		</ui-button-group>
 
 	</div>
 </template>

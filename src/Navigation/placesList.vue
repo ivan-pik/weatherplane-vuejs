@@ -216,7 +216,7 @@
 		top: 0;
 		bottom: 1px;
 
-		.uiLink {
+		.uiButton {
 			margin-left: 1em; 
 			line-height: 38px;
 			height: 38px;

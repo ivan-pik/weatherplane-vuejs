@@ -3,7 +3,7 @@
 		class="uiGlobalMessages"
 	>
 		<transition-group name="list" tag="div">
-			<ui-message
+			<ui-global-message
 				v-for="(message, index) in messages"
 				:key="message.id"
 				:messageID="message.id"
@@ -18,25 +18,24 @@
 		 	v-if="displayTools"
 		 	class="uiGlobalMessages__tools"
 		>
-			<button
-				class="uiButton"
+			<ui-button
+				text="Dismiss All"
+				type="primary"
 				@click="dismissAll"
-			>
-				Dismiss All
-			</button>
+			/>
 		</div>
 	</div>
 </template>
 
 <script>
 
-	import message from 'uiComponents/message.vue'
+	import message from 'uiComponents/globalMessage.vue'
 	import {deepCopy} from 'libs/deepCopy.js';
   
 	export default {
 		name: 'uiGlobalMessages',
 		components: {
-			'ui-message' : message
+			'ui-global-message' : message
 		},
 		props: {
 			messages: {

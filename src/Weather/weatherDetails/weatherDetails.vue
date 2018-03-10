@@ -334,6 +334,7 @@
 	width: 100%;
 	text-align: center;
 	font-size: 12px;
+	z-index: 1;
 
 	.status {
 		width: 10px;
@@ -429,7 +430,7 @@
 	font-size: 7px;
 	text-transform: uppercase;
 	position: absolute;
-	right: 6em;
+	right: 7em;
 	bottom: 0.2em;
 	color: $textLabelColour;
 }

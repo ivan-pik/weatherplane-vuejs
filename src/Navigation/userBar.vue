@@ -1,18 +1,51 @@
 <template>
 	<div class="userBar">
 		<div class="userBar__group">
-			<router-link class="uiLink" v-if="!loggedIn" to="/login">Login</router-link>
-			<router-link class="uiLink" v-if="!loggedIn" to="/signup">Signup</router-link>
+			<ui-button
+				v-if="!loggedIn"
+				text="Login"
+				@click="$router.push('login');"
+				:raised="false"
+			/>
+
+			<ui-button
+				v-if="!loggedIn"
+				text="Signup"
+				@click="$router.push('signup');"
+				:raised="false"
+			/>
+
+
+
+
+
+
+
 			<span v-if="loggedIn" class="userBar__username">{{ username }}</span>
-			<router-link  v-if="loggedIn" class="uiLink" to="/settings">User Settings</router-link>
-			<a class="uiLink" v-if="loggedIn" @click="logOut">Logout</a>
+			<ui-button
+				v-if="loggedIn"
+				text="User Settings"
+				@click="$router.push('settings');"
+				:raised="false"
+			/>
+			<ui-button
+				v-if="loggedIn"
+				text="Logout"
+				@click="logOut"
+				:raised="false"
+			/>
 		</div>
 		<div class="userBar__group">
-			
-
-			<a class="uiLink" @click="openUnitsSettings=true">Set Units</a>
-
-			<a class="uiLink" @click="openWeatherSettings=true">Weather Settings</a>
+			<ui-button
+				text="Set Units"
+				 @click="openUnitsSettings=true"
+				:raised="false"
+			/>
+			<ui-button
+				text="Weather Settings"
+				@click="openWeatherSettings=true"
+				:raised="false"
+			/>
 		</div>
 
 		<ui-modal
@@ -87,7 +120,7 @@
 	padding: 0 $widthGridLargerSpace 0 50px;
 	
 	margin: 0 0 1em 0;
-	a {
+	.uiButton {
 		margin-left: 1em;
 	}
 }

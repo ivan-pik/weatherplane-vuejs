@@ -44,13 +44,13 @@
 				<router-link class="addNewPlace uiButton uiButton--primary" to="/search">Search for an airfield</router-link>
 			</div>
 		</transition>
-		<transition name="fade">
+		<ui-transition-fade>
 			<button
 				v-if="navOpened"
 				class="mainNavigation__closer"
 				@click="navOpened=!navOpened"
 			/>
-		</transition>
+		</ui-transition-fade>
 	</nav>
 </template>
 

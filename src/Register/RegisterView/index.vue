@@ -1,21 +1,14 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
-
-		<div class="viewWrapper__scroller">
-			<register-form
-				@login-successful="loginSuccessful"
-			/>
-		</div>
-	</div>
+	<layout-view-wrapper>
+		<register-form 
+			slot="content"
+			@login-successful="loginSuccessful"
+		/>
+	</layout-view-wrapper>
 </template>
 
 <script>
-	import bus from '../../bus'
-	import Vue from 'vue'
-
 	import RegisterForm from '../RegisterForm/index.vue'
-	
 
 	export default {
 		name: 'RegisterView',
@@ -33,6 +26,5 @@
 			}
 		}
 	}
-
 </script>
 

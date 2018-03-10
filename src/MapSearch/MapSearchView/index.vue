@@ -1,46 +1,50 @@
 <template>
-	<div class="viewWrapper">
-		<navigation-header />
+	<layout-view-wrapper>
+		<place-input 
+			slot="content"
+			v-if="!placeChosen" 
+			v-on:suggestionHighlighted="suggestionHighlighted" 
+		/>
 
-		<div class="viewWrapper__scroller">
+		<ui-tabs
+			slot="content"
+			v-if="placeChosen"
+			:tabs="tabs"
+		/>
 
-			<place-input 
-				v-if="!placeChosen" 
-				v-on:suggestionHighlighted="suggestionHighlighted" 
-				v-on:searching="searching=true"
+		<div class="mapSearchView_wrapper"
+			slot="content"
+		>
+			<location-map
+				v-if="showMap"
+				:place="place"
+				:disableControls="this.tabs[0].active"
+				v-on:placeSelected="saveActiveLocation"
 			/>
-
-			<ui-tabs
-				v-if="placeChosen"
-				:tabs="tabs"
+			<bearing-selector
+				:active="this.tabs[0].active"
+				v-show="placeChosen"
+				v-model="bearing"
 			/>
-
-			<div class="mapSearchView_wrapper">
-				<location-map
-					v-if="showMap"
-					:place="place"
-					:disableControls="this.tabs[0].active"
-					v-on:placeSelected="saveActiveLocation"
-				/>
-				<bearing-selector
-					:active="this.tabs[0].active"
-					v-show="placeChosen"
-					v-model="bearing"
-				/>
-			</div>
+		</div>
 			
-		</div>
-
-		<div class="viewWrapper__bottom">
-			<div class="uiButtonGroup">
-				<button class="uiButton uiButton--primary" @click="choosePlace" v-if="place && !placeChosen">Confirm location</button>
-				<button class="uiButton uiButton--primary" @click="setBearing" v-if="placeChosen">Continue</button>
-			</div>
-		</div>
-		
-	</div>
-
+		<ui-button-group slot="bottom">
+			<ui-button
+				v-if="place && !placeChosen"
+				text="Confirm location"
+				type="primary"
+				@click="choosePlace"
+			/>
+			<ui-button
+				v-if="placeChosen"
+				text="Continue"
+				type="primary"
+				@click="setBearing" 
+			/>
+		</ui-button-group>
+	</layout-view-wrapper>
 </template>
+
 <script>
 		import Vue from 'vue'
 		import placeInput from '../placeInput/index.vue';
@@ -103,7 +107,6 @@
 								active: false
 							}
 						],
-						searching: false,
 					}
 				}
 		}
