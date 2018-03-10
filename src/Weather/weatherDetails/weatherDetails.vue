@@ -323,9 +323,6 @@
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: 195px;
-	border-color: $colorPanel;
-	border-style: solid;
-	border-width: 0 $widthStatusBar;
 	margin-top: 5px;
 }
 
@@ -391,10 +388,10 @@
 		margin-bottom: 32px;
 	}
 	.weatherDetails__col--1 & {
-		padding-left: $widthGridSpace;
+		padding-left: $widthGridSpace * 1.6;
 	}
 	.weatherDetails__col--2 & {
-		padding-right: $widthGridSpace;
+		padding-right: $widthGridSpace * 1.6;
 	}
 	.status {
 		position: absolute;
@@ -402,10 +399,10 @@
 		height: 100%;
 		
 		.weatherDetails__col--1 & {
-			left: -$widthStatusBar;
+			left: 0;
 		}
 		.weatherDetails__col--2 & {
-			right: -$widthStatusBar;
+			right: 0;
 		}
 	}
 }
