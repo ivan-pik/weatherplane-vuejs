@@ -36,6 +36,7 @@
 		<ui-modal
 			:show="limitsSettingsPanelOpen"
 			:closeButton="true"
+			:scrollContent="false"
 			@close-button-clicked="limitsSettingsPanelOpen=false"
 		>
 			<div

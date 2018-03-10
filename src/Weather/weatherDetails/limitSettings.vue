@@ -314,12 +314,16 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	flex: 1 1 auto;
 	.uiLabel {
 		text-align: center;
 	}
 }
 .limitSettings__content {
 	flex: 1 1 auto;
+	overflow: auto;
+	touch-action: pan-y;
+	padding: 1em 0;
 }
 .limitSettings__group {
 	margin: 0 0.5em 1.5em;

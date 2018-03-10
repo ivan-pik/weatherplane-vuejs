@@ -4,10 +4,9 @@
 			class="limitSettingsOverview__button"
 			@click="buttonClicked"
 		>
-			<svg width="3px" height="13px" viewBox="0 0 3 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-				<path d="M1.5,3 C0.671572875,3 0,2.32842712 0,1.5 C0,0.671572875 0.671572875,0 1.5,0 C2.32842712,0 3,0.671572875 3,1.5 C3,2.32842712 2.32842712,3 1.5,3 Z M1.5,13 C0.671572875,13 0,12.3284271 0,11.5 C0,10.6715729 0.671572875,10 1.5,10 C2.32842712,10 3,10.6715729 3,11.5 C3,12.3284271 2.32842712,13 1.5,13 Z M1.5,8 C0.671572875,8 0,7.32842712 0,6.5 C0,5.67157288 0.671572875,5 1.5,5 C2.32842712,5 3,5.67157288 3,6.5 C3,7.32842712 2.32842712,8 1.5,8 Z" id="path-1"></path>
-			</svg>
-			Change Limits
+			<span class="limitSettingsOverview__button-text">
+				Set Limits
+			</span>
 		</button>
 
 		<div class="limitSettingsOverview__params-wrapper">
@@ -146,34 +145,23 @@
 		display: flex;
 		align-items: center;
 		color: $textLabelColour;
-		padding: 0 0 0 $widthGridSpace;
 		z-index: 1;
 		position: relative;
 	}
 
 	.limitSettingsOverview__button {
-		color: $textLabelColour;
+		width: auto;
+		background: rgba(#fff, 0.2);
+		height: 100%;
 		text-transform: uppercase;
-		font-size: 9px;
+		font-size: 7px;
+		padding: 0 1em;
 		white-space: nowrap;
-		
-		text-align: center;
-		height: 40px;
-		line-height: 40px;
+	}
+	
+	.limitSettingsOverview__button-text {
 
-		@media screen and (min-width: 900px) {
-			width: 20%;
-		}
-		
-
-		svg {
-			vertical-align: middle;
-			fill: $textLabelColour;
-			margin: 0 0.5em 0 0;
-			position: relative;
-			top: -1px;
-		}
-	}	
+	}
 
 	.limitSettingsOverview__params-wrapper {
 		flex: 1 1 auto;
@@ -182,7 +170,8 @@
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
-		
+		overflow: auto;
+		touch-action: pan-x;
 	}
 
 
@@ -190,7 +179,7 @@
 		display: flex;
 		flex-direction: column;
 		position: relative;
-		margin: 0 0 0 0.5em;
+		margin: 0 0.5em;
 		@media screen and (min-width: 900px) {
 			padding: 0 0 0 30px;
 			margin: 0;
@@ -217,16 +206,15 @@
 	}
 
 	.limitSettingsOverview__label {
-		order: 1;
 		font-size: 7px;
 		text-transform: uppercase;
 		white-space: nowrap;
+		margin-bottom: 2px;
 	}
 
 	.limitSettingsOverview__value {
 		font-size: 10px;
 		white-space: nowrap;
-		margin-bottom: 2px;
 	}
 
 	.limitSettingsOverview__param--windDirection {
