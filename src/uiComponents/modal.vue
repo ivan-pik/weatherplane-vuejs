@@ -4,7 +4,8 @@
 			:class="{
 				'uiModal--overlay' : this.overlay,
 				'uiModal--popup' : this.popup,
-				'uiModal--hasCloseButton' : this.closeButton
+				'uiModal--hasCloseButton' : this.closeButton,
+				'uiModal--scrollContent' : this.scrollContent
 			}"
 		>
 			<div class="uiModal__content">
@@ -47,6 +48,10 @@
 			popup: {
 				type: Boolean,
 				default: false
+			},
+			scrollContent: {
+				type: Boolean,
+				default: true
 			}
 		},
 		watch: {
@@ -100,9 +105,14 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	overflow: auto;
 	background-color: #fff;
 	z-index: 1000;
+}
+
+
+.uiModal--scrollContent {
+	overflow: auto;
+	touch-action: pan-y;
 }
 
 .uiModal--popup {
@@ -128,6 +138,7 @@
 		// height: 100%;
 		display: flex;
 		flex-direction: column;
+		border-top: 1px solid $colorSubtleBorder;
 	}
 }
 
