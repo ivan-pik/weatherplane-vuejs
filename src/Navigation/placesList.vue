@@ -28,10 +28,12 @@
 		>
 			<places-list-item
 				v-on:enterArrangingMode="arranging=true"
+				v-on:contextMenuOpen="contextMenuOpenHandler(index)"
 				:arrangeList="arranging"
-
+				:contextMenuOpenIndex="contextMenuOpenIndex"
 				class="placesList__item"
 				:place="place"
+				:index="index"
 			/>
 
 		</ui-sort-list-item>
@@ -107,6 +109,9 @@
 			},
 			listScrollHandler (top) {
 				this.listScroll = top;
+			},
+			contextMenuOpenHandler (index) {
+				this.contextMenuOpenIndex = index;
 			}
 	
 		},
@@ -120,7 +125,7 @@
 				TRANSITION_TIME: 200,
 				listScroll: 0,
 				sortListIsBusy: false,
-				
+				contextMenuOpenIndex: -1,
 			}
 		}
 	}

@@ -46,6 +46,12 @@
 			},
 			arrangeList: {
 				type: Boolean
+			},
+			contextMenuOpenIndex: {
+				type: Number,
+			},
+			index: {
+				type: Number,
 			}
 		},
 		
@@ -61,8 +67,22 @@
 			}
 		},
 		watch: {
-			
-			
+			contextMenuOpen (contextMenuOpen) {
+				if (contextMenuOpen) {
+					this.componentTriggeredContextMenu = true;
+					this.$emit('contextMenuOpen', this.index);
+				} else {
+					this.componentTriggeredContextMenu = false;
+				}
+			},
+			contextMenuOpenIndex (index) {
+				if ((index !== this.index) && this.contextMenuOpen  ) {
+					this.contextMenuOpen = false;
+					this.componentTriggeredContextMenu = false;
+				} else if (this.contextMenuOpen) {
+					this.componentTriggeredContextMenu = false;
+				}
+			}
 		},
 		methods: {
 			openPlaceSettings () {
@@ -76,7 +96,8 @@
 		},
 		data() {
 			return {
-				contextMenuOpen: false
+				contextMenuOpen: false,
+				componentTriggeredContextMenu: false
 			}
 		}
 	}
