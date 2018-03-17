@@ -38,6 +38,7 @@
 			:closeButton="true"
 			:scrollContent="false"
 			@close-button-clicked="limitsSettingsPanelOpen=false"
+			headerTitle="Weather Limits"
 		>
 			<div
 				v-if="!currentUserResource"

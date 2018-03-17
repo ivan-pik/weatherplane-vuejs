@@ -57,6 +57,7 @@
 			v-on:closed="closeMap"
 			v-on:close-button-clicked="mapOpen=false"
 			:closeButton="true"
+			headerTitle="Change location or bearing"
 		>	
 			<div slot="content" class="mapWrapper">
 				<ui-tabs
@@ -96,7 +97,6 @@
 
 <script>
 	import Vue from 'vue';
-	import uiOverlayPanel from '../../uiComponents/overlayPanel.vue'
 	import placeInput from '../../MapSearch/placeInput/index.vue';
 	import map from '../../MapSearch/map/index.vue';
 	import bearingSelector from '../../MapSearch/bearingSelector.vue';
@@ -107,7 +107,6 @@
 	export default {
 		name: 'placeSettingLocation',
 		components: {
-			'overlay-panel' : uiOverlayPanel,
 			'place-input' : placeInput,
 			'location-map' : map,
 			'bearing-selector' : bearingSelector,
@@ -220,5 +219,6 @@
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
+	min-height: 500px;
 }
 </style>
