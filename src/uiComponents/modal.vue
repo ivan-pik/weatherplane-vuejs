@@ -1,25 +1,37 @@
 <template>
-	<transition name="modalFlipOutX">
+	<transition name="modal">
 		<div v-if="show" class="uiModal"
+			ref="overlay"
 			:class="{
 				'uiModal--overlay' : this.overlay,
 				'uiModal--popup' : this.popup,
 				'uiModal--hasCloseButton' : this.closeButton,
+				'uiModal--hasTitle' : this.headerTitle,
 				'uiModal--scrollContent' : this.scrollContent
 			}"
+			@click="closeOverlayHandler"
 		>
-			<div class="uiModal__content">
-				<button
-					v-if="closeButton"
-					class="modal__toggler is-open"
-					@click="closeButtonHandler"
-				>
-					<span class="mainNavigation__burger mainNavigation__burger--1"></span>
-					<span class="mainNavigation__burger mainNavigation__burger--2"></span>
-					<span class="mainNavigation__burger mainNavigation__burger--2B"></span>
-					<span class="mainNavigation__burger mainNavigation__burger--3"></span>
-				</button>
-				<slot name="content"></slot>
+			
+			<div class="uiModal__window">
+				<div class="uiModal__header">
+					<div class="uiModal__title">
+						{{headerTitle}}
+					</div>
+					<button
+						v-if="closeButton"
+						class="modal__toggler is-open"
+						@click="closeButtonHandler"
+					>
+						<span class="mainNavigation__burger mainNavigation__burger--1"></span>
+						<span class="mainNavigation__burger mainNavigation__burger--2"></span>
+						<span class="mainNavigation__burger mainNavigation__burger--2B"></span>
+						<span class="mainNavigation__burger mainNavigation__burger--3"></span>
+					</button>
+					
+				</div>
+				<div class="uiModal__content">
+					<slot name="content"></slot>
+				</div>
 			</div>
 		</div>
 	</transition>
@@ -52,6 +64,9 @@
 			scrollContent: {
 				type: Boolean,
 				default: true
+			},
+			headerTitle: {
+				type: String
 			}
 		},
 		watch: {
@@ -70,8 +85,27 @@
 		computed: {
 			
 		},
+		created () {
+			document.addEventListener('keyup', this.escKeyHandler);
+		},
+		beforeDestroy () {
+			document.removeEventListener('keyup', this.escKeyHandler);
+		},
 	 	methods: {
 			closeButtonHandler () {
+				this.emitCloseEvent();
+			},
+			closeOverlayHandler (e) {
+				if (e.target == this.$refs.overlay) {
+					this.emitCloseEvent();
+				}
+			},
+			escKeyHandler (e) {
+				if(e.keyCode == 27) {
+					this.emitCloseEvent();
+				}
+			},
+			emitCloseEvent () {
 				this.$emit('close-button-clicked');
 			}
 		},
@@ -91,13 +125,15 @@
 @import '~globalVars';
 
 .uiModal {
-	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
-	// justify-content: center;
+	justify-content: center;
 	align-content: stretch;
 	align-items: center;
 }
+
+//--------------------------------------------
+// Overlay Popup
 
 .uiModal--overlay {
 	position: fixed;
@@ -105,19 +141,58 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: #fff;
+	background-color: rgba(#000, 0.8);
 	z-index: 1000;
+	padding: 1em;
+
+	.uiModal__window {
+		background-color: #fff;
+		border-radius: 3px;
+		min-width: 300px;
+		max-width: 400px;
+		width: 100%;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		min-height: 300px;
+	}
 }
 
+.uiModal__window {
+	transition: all 200ms ease-in-out;
+}
+
+.uiModal__header {
+	border-bottom: 1px solid silver;
+	height: 40px;
+	line-height: 40px;
+}
+
+.uiModal__content {
+	display: flex;
+	flex-direction: column;
+}
+
+.uiModal {
+	.uiModal__content {
+		overflow: hidden;
+	}
+}
 
 .uiModal--scrollContent {
-	overflow: auto;
-	touch-action: pan-y;
+	.uiModal__content {
+		overflow: auto;
+		touch-action: pan-y;
+	}
 }
+
+
+
 
 .uiModal--popup {
 	background-color: rgba(#000, 0.8);
-	& > .uiModal__content {
+	& > .uiModal__window {
 		background-color: #fff;
 		position: relative;
 		padding: 40px 1em 1em 1em;
@@ -132,43 +207,49 @@
 }
 
 .uiModal:not(.uiModal--popup) {
-	& > .uiModal__content {
-		flex: 1 1 auto;
-		width: 100%;
+	& > .uiModal__window {
+		// flex: 1 1 auto;
+		// width: 100%;
 		// height: 100%;
-		display: flex;
-		flex-direction: column;
-		border-top: 1px solid $colorSubtleBorder;
+		// display: flex;
+		// flex-direction: column;
+		// border-top: 1px solid $colorSubtleBorder;
 	}
 }
 
-.uiModal--hasCloseButton.uiModal--overlay{
-	padding-top: 40px;
+
+
+.uiModal__title {
+	padding: 0 50px;
+	text-align: center;
+	font-size: 0.9rem;
+	font-weight: 700;
 }
 
 .modal__toggler {
-	position: fixed;
 	top: 0;
 	right: 0;
 }
 
-.modalFlipOutX-enter-active {
-	// -webkit-backface-visibility: visible !important;
-	// backface-visibility: visible !important;
-	// animation: flipOutX 0.5s reverse;
-
-	-webkit-backface-visibility: visible !important;
-	backface-visibility: visible !important;
-	animation: flipInX 1s;
-	
+.modal-enter-active {
+	animation: flipInX 200ms;
+	.uiModal__window {
+		transform: translate(0,-20px);
+		opacity: 0;
+	}
 }
-.modalFlipOutX-leave-active {
-	-webkit-backface-visibility: visible !important;
-	backface-visibility: visible !important;
-	animation: flipOutX 1s;
+
+.modal-leave-active {
+	animation: flipOutX 200ms;
+	.uiModal__window {
+		
+	}
 }
 
 .modal__toggler {
+	position: absolute;
+	right: 0;
+	top: 0;
 	display: block;
 	width: 40px;
 	height: 40px;
@@ -209,23 +290,7 @@
 	bottom: 14px;
 }
 
-.modal__toggler.is-closed {
-	.mainNavigation__burger--1 {
-		transition: all 100ms 80ms ease-in-out;
-	}
 
-	.mainNavigation__burger--2{
-		transition: all 100ms 0 ease-in-out;
-	}
-
-	.mainNavigation__burger--2B{
-		transition: all 100ms 0 ease-in-out;
-	}
-
-	.mainNavigation__burger--3 {
-		transition: all 100ms 80ms ease-in-out;
-	}
-}
 
 .modal__toggler.is-open {
 	.mainNavigation__burger--1 {
@@ -260,16 +325,14 @@
 
   @keyframes flipOutX {
 	from {
-	  transform: perspective(400px);
-	}
-  
-	30% {
-	  transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
 	  opacity: 1;
 	}
   
+	30% {
+	
+	}
+  
 	to {
-	  transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
 	  opacity: 0;
 	}
   }
@@ -278,27 +341,23 @@
   
 	@keyframes flipInX {
 		from {
-			transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
-			animation-timing-function: ease-in;
 			opacity: 0;
 		}
 	
 		40% {
-			transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
-			animation-timing-function: ease-in;
+		
 		}
 	
 		60% {
-			transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
-			opacity: 1;
+			
 		}
 	
 		80% {
-			transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+			
 		}
 	
 		to {
-			transform: perspective(400px);
+			opacity: 1;
 		}
 	}
 
