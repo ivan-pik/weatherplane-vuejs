@@ -30,6 +30,7 @@ import uiTextInput from 'uiComponents/textInput.vue'
 import uiHelp from 'uiComponents/uiHelp.vue'
 import uiLabel from 'uiComponents/label.vue'
 import uiTransitionFade from 'uiComponents/transitions/fade.vue'
+import uiTransitionSlideUp from 'uiComponents/transitions/slide-up.vue'
 import layoutViewWrapper from 'uiComponents/layout/viewWrapper.vue'
 import uiGroup from 'uiComponents/layout/group.vue'
 import uiTextInputGroup from 'uiComponents/layout/textInputGroup.vue'
@@ -55,6 +56,7 @@ Vue.component('ui-text-input', uiTextInput);
 Vue.component('ui-help', uiHelp);
 Vue.component('ui-label', uiLabel);
 Vue.component('ui-transition-fade', uiTransitionFade);
+Vue.component('ui-transition-slide-up', uiTransitionSlideUp);
 
 const routes = [
 		{ path: '/', name: 'home', component: WelcomeView},
