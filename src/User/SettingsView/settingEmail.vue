@@ -15,7 +15,7 @@
 		<!-- @todo: check if email exists alreadt -->
 
 		<ui-button-group
-			v-if="valueChanged"  
+			:show="valueChanged"  
 		>
 			<ui-button
 				text="Save"

@@ -25,7 +25,7 @@
 		</ui-loader>
 
 		<ui-button-group
-			v-if="displayAddToPlaceButton"
+			:show="displayAddToPlaceButton"
 			slot="bottom"
 		>
 			<ui-button

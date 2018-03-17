@@ -16,7 +16,9 @@
 			www.weatherplane.com/{{username}}/{{newValue}}
 		</ui-note>
 
-		<ui-button-group v-if="valueChanged">
+		<ui-button-group
+			:show="valueChanged"
+		>
 			<ui-button
 				text="Save"
 				type="primary"

@@ -74,7 +74,8 @@
 			</div>
 		</div>
 		<ui-button-group
-			v-if="settingsTweaked"
+			:show="settingsTweaked"
+			:collapseHeight="false"
 		>
 			<ui-button
 				text="Save"

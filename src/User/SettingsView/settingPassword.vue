@@ -37,7 +37,7 @@
 			type="password"
 		/>
 
-		<ui-button-group v-if="valueChanged">
+		<ui-button-group :show="valueChanged">
 			<ui-button
 				text="Save"
 				type="primary"

@@ -16,7 +16,9 @@
 			</ui-note>
 		</ui-text-input-group>
 
-		<ui-button-group v-if="valueChanged">
+		<ui-button-group
+			:show="valueChanged"
+		>
 			<ui-button
 				text="Save"
 				type="primary"

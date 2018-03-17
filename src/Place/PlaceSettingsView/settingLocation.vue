@@ -37,7 +37,9 @@
 			:help="validationErrors.first('bearing')"
 		/>
 
-		<ui-button-group v-if="locationValueChanged || bearingValueChanged">
+		<ui-button-group
+			:show="locationValueChanged || bearingValueChanged"
+		>
 			<ui-button
 				text="Save"
 				type="primary"
