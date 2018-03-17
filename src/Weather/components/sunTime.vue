@@ -1,6 +1,6 @@
 <template>
 	<div class="hour__sunTime"
-		:class="'hour__sunTime'+sunTimeKeyword"
+		:class="'hour__sunTime--'+sunTimeKeyword"
 	>
 		<span class="hour__sunTime-label">
 			{{sunTimeLabel}}
@@ -100,12 +100,28 @@
 
 </script>
 
-<style>
+<style lang="scss">
+	@import '~globalVars';
 	.hour__sunTime {
-		bottom: 6px;
-		font-size: 9px;
+		bottom: -0.6rem;
+		font-size: 0.5rem;
 		position: absolute;
-		z-index: 1000;
-		left: 10px;
+		z-index: 10000;
+		left: 0;
+		height: 1.2rem;
+		line-height: 1.2rem;
+		padding: 0 1em;
+		border-radius: 0 100px 100px 0;
+		
+	}
+
+	.hour__sunTime--sunrise {
+		background-color: $chart-colour-day;
+		box-shadow: 1px 1px 1px 0 rgba(126,107,0,0.23);
+	}
+
+	.hour__sunTime--sunset {
+		background-color: $chart-colour-night;
+		box-shadow: 1px 1px 1px 0 #9FABB5;
 	}
 </style>

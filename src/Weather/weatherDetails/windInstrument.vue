@@ -23,10 +23,14 @@
 					/>
 				</mask>
 				<clipPath id="windBearingClip">
-					<circle cx="90" cy="90" r="78"></circle>
+					<circle cx="90" cy="90" r="67"></circle>
 				</clipPath>
 				
 			</defs>
+
+			<g mask="url(#inactiveMask)">
+				<circle class="windInstrument__dial" cx="90" cy="90" r="77"></circle>
+			</g>
 
 			<g clip-path="url(#windBearingClip)">
 				<svg x="08" y="08" width="164" height="164"  viewBox="-1 -1 2 2">
@@ -39,62 +43,60 @@
 					/>
 				</svg>
 			</g>
-			
-			<g mask="url(#inactiveMask)">
+				
+
 				<ellipse
 					class="windInstrument__maxWindSpeedIndicator"
+					:class="{
+						'windInstrument__maxWindSpeedIndicator--outOfLimit' : crossWindSpeedOutOfLimit
+					}"
 					cx="90"
 					cy="90"
 					:rx="maxWindSpeedDiameter" 
 					:ry="maxCrossWindSpeedDiameter"
 				>
 				</ellipse>
-				<circle class="windInstrument__dial" cx="90" cy="90" r="72"></circle>
-				<circle class="windInstrument__dialSteps" cx="90" cy="90" r="69"></circle>
+				<circle class="windInstrument__dialSteps" cx="90" cy="90" r="77"></circle>
 
-				
-				
-			</g>
-			<g :transform="rotation">
-			<svg width="16px" height="180px" viewBox="0 0 16 180"
-				x="82"
-				y="0"
-			>
-				<rect 
-					class="windInstrument__windDirectionIndicator"
-					width="4" 
-					height="148"
-					x="6" 
-					y="16"
-				/>
-				<use 
-					:class="overflowClass"
-					y="7" class="windInstrument__windDirectionArrow" xlink:href="#arrow">
-				</use>
-
-				<use y="163" class="windInstrument__windDirectionArrow" xlink:href="#arrow"></use>
-
-				<g transform="rotate(-90 0 0) translate(-90,-17)">
-					<svg width="71" height="50">
-						<wind-speed-bar
-							:uid="'instrumentBar'" 
-							:order="0"
-							:role="'windInstrument'"
-							:windSpeed="windSpeed" 
-							:windGust="windGust"
-							:maxSpeedToDisplay="maxWindSpeedToDisplay"
-							:maxSpeedTreshold="maxSpeedTresholdRelToBearing"
-							:chartWidth="chartWidth"
-							
+				<g :transform="rotation">
+					<svg width="16px" height="180px" viewBox="0 0 16 180"
+						x="82"
+						y="0"
+					>
+						<rect 
+							class="windInstrument__windDirectionIndicator"
+							width="4" 
+							height="148"
+							x="6" 
+							y="16"
 						/>
+						<use 
+							:class="overflowClass"
+							y="7" class="windInstrument__windDirectionArrow" xlink:href="#arrow">
+						</use>
+
+						<use y="162" class="windInstrument__windDirectionArrow" xlink:href="#arrow"></use>
+
+						<g transform="rotate(-90 0 0) translate(-90,-17)">
+							<svg width="73" height="50">
+								<wind-speed-bar
+									:uid="'instrumentBar'" 
+									:order="0"
+									:role="'windInstrument'"
+									:windSpeed="windSpeed" 
+									:windGust="windGust"
+									:maxSpeedToDisplay="maxWindSpeedToDisplay"
+									:maxSpeedTreshold="maxSpeedTresholdRelToBearing"
+									:chartWidth="chartWidth"
+								/>
+							</svg>
+						</g>
 					</svg>
 				</g>
-			</svg>
-			</g>
 
-			<circle class="windInstrument__center" cx="90" cy="90" r="5"></circle>
-
+				<circle class="windInstrument__center" cx="90" cy="90" r="8"></circle>
 			
+
 		</svg>
 	</div>
 </template>
@@ -166,6 +168,9 @@
 		},
 
 		computed: {
+			crossWindSpeedOutOfLimit () {
+				return (this.windSpeed > this.maxSpeedTresholdRelToBearing);
+			},
 			bearingToPercents () {
 				return (this.settingsMaxWindBearingToRWY / 180);
 			},
@@ -192,7 +197,7 @@
 			chartWidth () {
 				// This is so that maxSpeedThreshold is as wide as the wind dial circle
 				let proportion = this.maxWindSpeedToDisplay / this.maxSpeedTreshold;
-				return proportion * 70;
+				return proportion * 71;
 			},
 			maxCrossWindSpeedDiameter () {
 				return this.speedToPixels(this.settingsMaxCrossWindSpeed);
@@ -305,30 +310,32 @@
 
 .windInstrument__dial {
 	fill: none;
-	stroke-width: 3;
-	stroke: #859098;
+	stroke-width: 10;
+	stroke: #cfd9e1;
 }
 
 .windInstrument__dialSteps {
 	fill: none;
-	stroke-width: 9;
-	stroke: #859098;
+	stroke-width: 4;
+	stroke: #7e8b96;
 	stroke-dasharray: 1.5,16.5;
+	stroke-dasharray: 0,30.2;
 	stroke-dashoffset: 0;
+	stroke-linecap: round;
 }
 
 .windInstrument__maxWindSpeedIndicator {
-	// fill: rgba($statusNo, 0.2);
-fill: none;
-	stroke: $statusNo;
+	fill: none;
 	stroke-width: 2;
-	stroke: rgba($statusNo, 0.3);
+	stroke: rgba($statusYes, 0.5);
+}
+
+.windInstrument__maxWindSpeedIndicator--outOfLimit {
+	stroke: $statusNo;
 }
 
 .windInstrument__center {
-	fill: #fff;
-	stroke-width: 2;
-	stroke: #859098;
+	fill: #2b3338;
 }
 
 .svgBar__windSpeedPoint--instrument {
@@ -339,14 +346,14 @@ fill: none;
 
 
 .windInstrument__windDirectionArrow {
-	fill: #859098;
+	fill: #2b3338;
 	&.overflow {
 		fill: $no;
 	}
 }
 
 .windInstrument__windDirectionIndicator {
-	fill: #859098;
+	fill: #2b3338;
 }
 
 .windInstrument {
@@ -358,14 +365,20 @@ fill: none;
 }
 
 .windInstrument__crossWindPie {
-	stroke-width: 0.25;
+	stroke-width: 0.6;
 	fill: none;
+	opacity: 0.3;
 	&.yes {
-		stroke: lighten($statusYes, 40%);
+		stroke: $statusYes;
 	}
 	&.no {
-		stroke: lighten($statusNo, 20%);
+		stroke: $statusNo;
 	}
+}
+
+
+.windInstrument__crossWindPie-center {
+	fill: #fff;
 }
 
 

@@ -28,12 +28,14 @@
 			</mask>
 		</defs>
 
-		<line class="svgBar__threshold" 
+		<line
+			class="windSpeetChart__threshold" 
 			:x1="windSpeedThresholdPixels"
 			:x2="windSpeedThresholdPixels" 
 			:y2="chartHeight"
 			y1="0"
 		/>
+
 
 		<wind-speed-bar v-for="(hourWeather, index) in weather"
 			:uid="uid(hourWeather.time)" 
@@ -96,7 +98,7 @@
 				return (this.weather.length) * this.rowHeight;
 			},
 			windSpeedThresholdPixels () {
-				return this.speedToPixels(this.maxSpeedTreshold);
+				return Math.round(this.speedToPixels(this.maxSpeedTreshold));
 			},
 			chartStyle () {
 				return "width:" + this.chartWidth + "px; left:" + this.chartLeftPos + "px;";
@@ -171,7 +173,6 @@
 				this.weather.forEach((hour) => {
 					
 					speed = hour.windSpeed;
-					
 					points.push([
 						parseFloat(this.speedToPixels(speed)) + this.CHART_OFFSET_X,
 						this.rowHeight*i
@@ -209,14 +210,20 @@
 </script>
 
 <style lang="scss">
-// --------------------------------
-.windSpeedChart {
-	display: block;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	height: 100%;
-}
+	@import '~globalVars';
+	.windSpeedChart {
+		display: block;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		height: 100%;
+	}
 
+
+
+	.windSpeetChart__threshold {
+		stroke: rgba($statusNo, 0.7);
+		stroke-width: 1;
+	}
 
 </style>

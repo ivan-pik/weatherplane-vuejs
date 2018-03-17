@@ -54,22 +54,17 @@
 @import '~globalVars';
 
 // --------------------------------
-$hourWindSpeed__size: 2.4em;
+$hourWindSpeed__size: 2.2em;
 $hourGustSpeed__size: 1.4em;
 
 .hourWindSpeed {
 	display: inline-flex;
 	align-items: center;
-	width: ($hourWindSpeed__size*1.6);
-
+	width: ($hourWindSpeed__size*2);
 }
-
-
 
 .hourWindSpeed__display {
 	color: $textColourStatus;
-
-
 	text-align: center;
 
 	&.yes {
@@ -86,12 +81,12 @@ $hourGustSpeed__size: 1.4em;
 	border-radius: 50%;
 	width: $hourWindSpeed__size;
 	height: $hourWindSpeed__size;
-	line-height: $hourWindSpeed__size;
+	line-height: 2.25em;
 }
 
 
 .hourWindSpeed__display--gust {
-	font-size: 10px;
+	font-size: 12px;
 	width: $hourGustSpeed__size;
 	// height: $hourGustSpeed__size;
 	margin-left: 0.4em;
@@ -99,27 +94,13 @@ $hourGustSpeed__size: 1.4em;
 	background: none !important;
 	
 	position: relative;
-	&::after {
-		content: '';
-		display: block;
-		height: 2px;
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-	}
 
 	&.yes {
 		color: $statusYes;
-		&::after {
-			background: $statusYes;
-		}
 	}
 
 	&.no {
 		color: $statusNo;
-		&::after {
-			background: $statusNo;
-		}
 	}
 }
 

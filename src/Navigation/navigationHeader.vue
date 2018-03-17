@@ -41,7 +41,7 @@
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 40px;
+	height: var(--layout-header-height);
 	padding: 0 40px;
 }
 

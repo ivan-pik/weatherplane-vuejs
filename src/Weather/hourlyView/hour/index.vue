@@ -9,14 +9,14 @@
 			 :scrollPosition="scrollPosition"
 		/>
 
-		<status :status="totalStatus" />
-
 		<hour-time :time="weather.time" />
 
 		<sun-time
 			v-if="displaySunTime"
 			:time="sunTime"
 		 />
+
+		<status :status="totalStatus" />
 
 		<div v-if="order==0" class="hour__spaceDummy" ref="hourSpaceDummy"></div>
 
@@ -389,16 +389,15 @@
 	justify-content: space-between;
 	align-items: center;
 	border-bottom: 1px solid $colorBorder;
-	padding: 0 0 0 $widthStatusBar;
 	&:last-child {
 		border-bottom: none;
 	}
 
 	.status {
 		position: absolute;
-		left: 0;
-		top: -1px;
-		bottom: 0px;
+		left: var(--layout-chart-time-width);
+		top: 0;
+		bottom: -1px;
 		min-height: 20px;
 	}
 	.wind-speed-bar {
@@ -408,7 +407,7 @@
 	}
 	.hourWindSpeed {
 		margin: 0 0 0 auto;
-		padding-left: $widthGridSpace;
+		padding-left: 0.5em;
 	}
 }
 
@@ -417,11 +416,10 @@
 .sunTimeIndicator {
 	position: absolute;
 	top: 0;
-	left: $widthStatusBar;
+	left: 0;
 	display: block;
-	width: 9vw;
-	min-width: 2.5rem;
-	height: 100%;
+	width: var(--layout-chart-time-width);
+	bottom: -1px;
 	z-index: 0;
 	pointer-events: none;
 	
@@ -440,35 +438,35 @@
 }
 
 .sunTimeIndicator--night {
-	background-color: rgb(229, 228, 241);
+	background-color: $chart-colour-night;
 	
 	.sunTimeIndicator__progress {
 		display: none;
 	}
 }
 .sunTimeIndicator--sunRising {
-	background: rgb(253, 253, 216);
+	background: $chart-colour-day;
 	.sunTimeIndicator__progress {
 		top: 0;
-		background-color: rgb(229, 228, 241);
+		background-color: $chart-colour-night;
 		&:after {
 			top: 100%;
-			background: linear-gradient(to bottom, rgb(229, 228, 241) 0%,rgb(253, 253, 216) 100%); 
+			background: linear-gradient(to bottom, $chart-colour-night 0%, $chart-colour-day 100%); 
 		}
 		
 	}
 }
 .sunTimeIndicator--day {
-	background: rgb(253, 253, 216);
+	background: $chart-colour-day;
 }
 .sunTimeIndicator--sunSetting {
-	background: rgb(253, 253, 216);
+	background: $chart-colour-day;
 	.sunTimeIndicator__progress {
 		bottom: 0;
-		background-color: rgb(229, 228, 241);
+		background-color: $chart-colour-night;
 		&:after {
 			bottom: 100%;
-			background: linear-gradient(to bottom, rgb(255,255,255) 0%,rgb(229, 228, 241) 100%); 
+			background: linear-gradient(to bottom, $chart-colour-day 0%, $chart-colour-night 100%); 
 		}
 	}
 }

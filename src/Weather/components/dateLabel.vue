@@ -89,7 +89,7 @@
 		left: 0;
 		right: 0;
 		z-index: 1;
-		font-size: 10px;
+		font-size: 0.8rem;
 		text-align: center;
 		opacity: 0;
 		transition: all 0.2s ease-in-out;
@@ -103,9 +103,10 @@
 		display: inline-block;
 		background: rgba(#000,0.8);
 		color: #fff;
-		border-radius: 15px;
+		border-radius: 30px;
 		line-height: 1;
-		padding: 0.5em 3em; 
+		padding: 1em 3em; 
+		letter-spacing: 0.05em;
 	}
 
 	

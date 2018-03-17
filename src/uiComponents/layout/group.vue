@@ -37,7 +37,7 @@
 	@import '~globalVars';
 	.uiGroup {
 		display: block;
-		margin: $widthGridLargerSpace;
+		margin: 1em;
 		position: relative;
 
 		& > .uiButtonGroup > * {

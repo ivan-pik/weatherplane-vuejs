@@ -324,6 +324,7 @@
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: 195px;
 	margin-top: 5px;
+	background: #fff;
 }
 
 
@@ -337,13 +338,13 @@
 	z-index: 1;
 
 	.status {
-		width: 10px;
-		height: 10px;
+		width: 12px;
+		height: 12px;
 		border-radius: 50%;
 		display: inline-block;
 		vertical-align: middle;
 		position: relative;
-		top: -1px;
+		top: -2px;
 		margin-right: 0.2em;
 		
 	}
@@ -424,6 +425,10 @@
 	font-size: 11px;
 	color: $textLabelColour;
 
+}
+
+.weatherDetails__valueAmount {
+	font-weight: 700;
 }
 
 .weatherDetails__valueNote {

@@ -9,7 +9,7 @@
 		v-on:listScroll="listScrollHandler"
 		:items="places"
 		:movingItem="movingItem"
-		:itemHeight="50"
+		:itemHeight="60"
 		:itemDropped="itemDropped"
 		
 	>
@@ -18,7 +18,7 @@
 			:index="index"
 			:key="place._id"
 			:arrangeList="arranging"
-			:itemHeight="50"
+			:itemHeight="60"
 			:moveAway="moveAway"
 			:dropItem="dropItem"
 			:itemDropped="itemDropped"
@@ -144,7 +144,7 @@
 
 	.placesList__items.arranging {
 		display: block;
-		margin-bottom: 50px;
+		margin-bottom: 60px;
 	}
 
 	.placesList__exitSorting {
@@ -154,19 +154,19 @@
 
 	.placesList__itemWrapper {
 		display: block;
-		height: 50px;
+		height: 60px;
 		
 	
 	}
 
 	.placesList__itemPlaceHolder {
 		display: block;
-		height: 50px;
+		height: 60px;
 	}
 
 	.placesList__item {
-		height: 50px;
-		line-height: 50px;
+		height: 60px;
+		line-height: 60px;
 		width: 100%;
 		display: flex;
 		position: relative;
@@ -207,8 +207,8 @@
 		right: 0;
 		top: 0;
 		display: block;
-		width: 50px;
-		height: 50px;
+		width: 60px;
+		height: 60px;
 		svg {
 			fill: $uiButtonPrimary;
 		}

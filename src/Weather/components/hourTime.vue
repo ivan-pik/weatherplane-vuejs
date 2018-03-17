@@ -79,21 +79,23 @@
 <style lang="scss">
 @import '~globalVars';
 .hour__time {
-	font-size: 15px;
-	padding: 0 0 0 $widthGridSpace;
-	min-width: 3em;
-	width: 8vw;
+	font-size: 0.8rem;
+	padding: 0 0.3rem 0 0;
+	width: var(--layout-chart-time-width);
 	z-index: 1;
+	text-align: right;
 }
 
 .hour__time__sup {
 	vertical-align: top;
-	font-size: 9px;
+	font-size: 8px;
 	position: relative;
 	left: -0.3em;
+	top: 0.15em;
 }
 
 .hour__spaceDummy {
 	flex: 1 1 auto;
+	margin-left: $widthStatusBar;
 }
 </style>

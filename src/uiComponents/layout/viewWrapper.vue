@@ -59,7 +59,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		padding: 40px 0 0 0;
+		padding: var(--layout-header-height) 0 0 0;
 		height: 100vh;
 		overflow: hidden;
 	}

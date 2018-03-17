@@ -5,7 +5,7 @@
 			v-else
 			class="uiLoader__screen"
 		>
-			LOADING
+			{{text}}
 		</div>
 	</div>
 </template>
@@ -19,6 +19,9 @@
 			loaded: {
 				type: Boolean,
 				required: true
+			},
+			text: {
+				type: String
 			}
 		},
 		data () {
@@ -37,8 +40,17 @@
 }
 
 .uiLoader__screen {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: red;
 	color: #fff;
 	padding: 3em;
+	z-index: 1000;
 }
 </style>

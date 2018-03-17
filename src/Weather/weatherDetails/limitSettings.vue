@@ -314,7 +314,10 @@
 	padding: 1em 0;
 }
 .limitSettings__group {
-	margin: 0 0.5em 1.5em;
+	margin: 0 0.5em;
+	&:not(:last-child) {
+		margin-bottom: 1.5em;
+	}
 	.uiLabel {
 		margin: 0 10px;
 	}

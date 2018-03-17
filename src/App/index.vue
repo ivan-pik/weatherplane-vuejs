@@ -129,5 +129,12 @@ export default {
 
 	}
 
+	:root {
+		--layout-header-height: 40px;
+		
+		--layout-chart-top: 280px;
+		--layout-chart-time-width: 2.8rem;
+	}
+
 </style>
 

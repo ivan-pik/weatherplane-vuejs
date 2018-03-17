@@ -1,20 +1,22 @@
 <template>
-	<div id="scroller" class="weather-hourly"
-		v-on:scroll="chartScroll"
-		ref="chartScroller"
-	>
-		<day 
-			:weather="weather.hourly"
-			:sunTimes="sunTimes"
-			:cursorY="chartCursorY"
-			:scrollPosition="lastScrollPosition"
-			:cursorScreenY="cursorScreenYlimited"
-			:chartHeight="chartHeight"
-		/>
-		<div class="scroller__spacer"
-			ref="chartSpacer"
-			:style="fillSpaceHeight"
+	<div class="weather-hourly-wrapper">
+		<div id="scroller" class="weather-hourly"
+			v-on:scroll="chartScroll"
+			ref="chartScroller"
 		>
+			<day 
+				:weather="weather.hourly"
+				:sunTimes="sunTimes"
+				:cursorY="chartCursorY"
+				:scrollPosition="lastScrollPosition"
+				:cursorScreenY="cursorScreenYlimited"
+				:chartHeight="chartHeight"
+			/>
+			<div class="scroller__spacer"
+				ref="chartSpacer"
+				:style="fillSpaceHeight"
+			>
+			</div>
 		</div>
 	</div>
 </template>
@@ -324,13 +326,39 @@
 </script>
 
 <style lang="scss">
+
+.weather-hourly-wrapper {
+	display: block;
+	width: 100%;
+	position: fixed;
+	top: var(--layout-chart-top);
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+
+	&:before {
+		top: 0;
+		z-index: 1;
+		position: absolute;
+		display: block;
+		content: '';
+		height: 13px;
+		left: 0;
+		right: 0;
+		width: 100%;
+		background-image: linear-gradient(-180deg, rgba(132,143,150,0.17) 0%, rgba(255,255,255,0.00) 100%);
+		box-shadow: inset 0 3px 3px 0 rgba(0,0,0,0.05);
+	}
+}
+
 .weather-hourly {
 	position: fixed;
-	top: 280px;
+	top: var(--layout-chart-top);
 	width: 100%;
 	bottom: 0;
 	overflow: scroll;
 	-webkit-overflow-scrolling: touch;
 	touch-action: pan-y;
+	
 }
 </style>

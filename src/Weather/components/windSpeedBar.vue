@@ -18,7 +18,7 @@
 					:width="windSpeedPixels"
 					height="8"
 					fill="white"
-					:rx="(role=='windInstrument') ? 0 : 4"
+					rx="4"
 				/>
 				<line
 					class="svgBar__windGust"
@@ -124,11 +124,6 @@
 	.svgBar{
 		display: block;
 		width: 100px;
-	}
-
-	.svgBar__threshold {
-		stroke: rgba($statusNo, 0.3);
-		stroke-width: 2;
 	}
 
 	.svgBar__overThreshold {
