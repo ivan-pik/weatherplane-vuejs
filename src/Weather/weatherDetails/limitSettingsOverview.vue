@@ -140,13 +140,14 @@
 	@import '~globalVars';
 
 	.limitSettingsOverview {
-		background: $colorPanel;
+		background: #fff;
 		height: 40px;
 		display: flex;
 		align-items: center;
 		color: $textLabelColour;
 		z-index: 1;
 		position: relative;
+		border-top: 1px solid #eceeef;
 	}
 
 	.limitSettingsOverview__button {
@@ -160,7 +161,11 @@
 	}
 	
 	.limitSettingsOverview__button-text {
-
+		display: inline-block;
+		// border: 1px solid #eceeef;
+		padding: 0.4em 0.8em 0.5em;
+		background-color: #849098;
+		color: #fff;
 	}
 
 	.limitSettingsOverview__params-wrapper {
@@ -180,18 +185,13 @@
 		flex-direction: column;
 		position: relative;
 		margin: 0 0.5em;
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding: 0 0 0 30px;
 			margin: 0;
 		}
-		
-
-		&:last-child {
-			padding-right: 1em;
-		}
 
 		svg {
-			@media screen and (min-width: 900px) {
+			@media screen and (min-width: 500px) {
 				display: block;
 				position: absolute;
 				fill: $textLabelColour;
@@ -209,7 +209,8 @@
 		font-size: 7px;
 		text-transform: uppercase;
 		white-space: nowrap;
-		margin-bottom: 2px;
+		margin-top: 2px;
+		order: 1;
 	}
 
 	.limitSettingsOverview__value {
@@ -219,7 +220,7 @@
 
 	.limitSettingsOverview__param--windDirection {
 		
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding-left: 28px;
 		}
 		svg {
@@ -228,7 +229,7 @@
 	}
 
 	.limitSettingsOverview__param--crossWind {
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding-left: 30px;
 		}
 		svg {
@@ -237,7 +238,7 @@
 	}
 
 	.limitSettingsOverview__param--windSpeed {
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding-left: 27px;
 		}
 		svg {
@@ -246,7 +247,7 @@
 	}
 
 	.limitSettingsOverview__param--temperature {
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding-left: 18px;
 		}
 		svg {
@@ -255,7 +256,7 @@
 	}
 
 	.limitSettingsOverview__param--precipProbability {
-		@media screen and (min-width: 900px) {
+		@media screen and (min-width: 500px) {
 			padding-left: 20px;
 		}
 		svg {
