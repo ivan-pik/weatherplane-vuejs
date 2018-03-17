@@ -48,7 +48,6 @@
 		methods: {
 			dismissMessage () {
 				clearTimeout(this.timer);
-				debugger;
 				this.$emit('dismiss', this.messageID);
 			}
 		},

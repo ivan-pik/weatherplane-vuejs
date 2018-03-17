@@ -59,7 +59,6 @@
 		},
 		methods: {
 			dismissMessage(id) {
-				debugger;
 				this.$emit('dismissMessage', id);
 			},
 			dismissAll() {
