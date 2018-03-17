@@ -9,10 +9,12 @@
 				v-on:change="updateHandler"
 			/>
 			<ui-note v-if="!newValue">
-				You have to log-in to visit www.weatherplane.com/{{username}}/{{placeSlug}}
+				You have to log-in to visit
+				<br />www.weatherplane.com/{{username}}/{{placeSlug}}
 			</ui-note>
 			<ui-note v-if="newValue">
-				Anyone can visit www.weatherplane.com/{{username}}/{{placeSlug}}
+				Anyone can visit
+				<br />www.weatherplane.com/{{username}}/{{placeSlug}}
 			</ui-note>
 		</ui-text-input-group>
 
