@@ -3,7 +3,7 @@
 		<div class="limitSettings__content">
 			<div class="limitSettings__group">
 				<ui-slider
-					label="reactiveControls.windSpeed.label"
+					:label="reactiveControls.windSpeed.label"
 					:minValue="reactiveControls.windSpeed.minValue"
 					:maxValue="convertWindSpeedUnit(reactiveControls.windSpeed.maxValue,'meters-per-second',this.windUnit)"
 					v-model="reactiveControls.windSpeed.currentValue"
@@ -27,7 +27,7 @@
 
 			<div class="limitSettings__group">
 				<ui-slider
-					label="reactiveControls.bearing.label"
+					:label="reactiveControls.bearing.label"
 					:minValue="reactiveControls.bearing.minValue || 0"
 					:maxValue="reactiveControls.bearing.maxValue"
 					v-model="reactiveControls.bearing.currentValue"
@@ -39,7 +39,7 @@
 
 			<div class="limitSettings__group">
 				<ui-slider
-					label="reactiveControls.minTemperature.label"
+					:label="reactiveControls.minTemperature.label"
 					:minValue="this.convertTemperatureUnit(-20,'c', this.temperatureUnit)"
 					:maxValue="reactiveControls.maxTemperature.currentValue - 1"
 					v-model="reactiveControls.minTemperature.currentValue"
@@ -51,7 +51,7 @@
 
 			<div class="limitSettings__group">
 				<ui-slider
-					label="reactiveControls.maxTemperature.label"
+					:label="reactiveControls.maxTemperature.label"
 					:minValue="reactiveControls.minTemperature.currentValue + 1"
 					:maxValue="this.convertTemperatureUnit(60,'c', this.temperatureUnit)"
 					v-model="reactiveControls.maxTemperature.currentValue"
@@ -63,7 +63,7 @@
 
 			<div class="limitSettings__group">
 				<ui-slider
-					label="reactiveControls.precipitation.label"
+					:label="reactiveControls.precipitation.label"
 					:minValue="reactiveControls.precipitation.minValue || 0"
 					:maxValue="reactiveControls.precipitation.maxValue"
 					v-model="reactiveControls.precipitation.currentValue"
