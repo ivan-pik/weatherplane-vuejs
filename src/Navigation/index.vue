@@ -31,6 +31,7 @@
 					<ui-loader
 						v-if="loggedIn"
 						:loaded="!!places"
+						text="Loading Places"
 						>
 						<places-list
 							:places="places"

@@ -3,6 +3,7 @@
 		<ui-loader
 			slot="content"
 			:loaded="!!places"
+			text="Loading Places"
 		>
 			<ui-title>
 				{{userInTitle}} places

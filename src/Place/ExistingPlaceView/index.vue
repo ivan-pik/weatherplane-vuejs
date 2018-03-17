@@ -17,11 +17,13 @@
 						<span slot="title">Sorry, this place doesn't exist</span>
 						<span slot="note">Check that the page address is correct</span>
 					</e-404>
-					<load-screen
-						v-if="!place"
-						text="Loading Place"
-					/>
-					<place-details v-else  :activeLocation='place' />
+					<ui-loader v-else
+						slot="content"
+						:loaded="!!place"
+						text="Loading Place Details"
+					>
+						<place-details :activeLocation='place' />
+					</ui-loader>
 				</div>
 			</ui-transition-fade>
 		</div>
@@ -35,13 +37,11 @@
 	import E404 from '404/index.vue';
 	import loginForm from 'Login/loginForm.vue';
 	import placeDetails from '../placeDetails/index.vue';
-	import loadScreen from '../../uiComponents/loadScreen.vue';
 	import navigationHeader from 'Navigation/navigationHeader.vue'
 
 	export default {
 		name: 'ExistingPlaceView',
 		components: {
-			'load-screen' : loadScreen,
 			'e-404' : E404,
 			'login-form' : loginForm,
 			'place-details': placeDetails,

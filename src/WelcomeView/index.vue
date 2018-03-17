@@ -23,6 +23,7 @@
 			<ui-loader
 				v-else
 				:loaded="!!places"
+				text="loadingPlaces"
 				>
 				<places-list
 					:places="places"

@@ -1,6 +1,9 @@
 <template>
 	<ui-transition-fade>
-		<div v-if="weatherData && !weatherIsLoading">
+		<ui-loader
+			:loaded="!!weatherData"
+			text="Loading Weather"
+		>
 			<div class="placeContextMenu">
 				<ui-button
 					v-if="placeViewType=='saved'" 
@@ -22,8 +25,8 @@
 				v-if="placeViewType=='saved'"
 				:show="placeSettingsModal"
 				:closeButton="true"
-				
 				@close-button-clicked="placeSettingsModal=false"
+				headerTitle="Place Settings"
 			>
 				<div
 					v-if="!currentUserResource"
@@ -51,18 +54,13 @@
 				/>
 			</ui-modal>
 			
-			<weather-details-data :weather="weatherData.hourly" />
+			<weather-details-data v-if="weatherData" :weather="weatherData.hourly" />
 			<hourly-view :weather="weatherData" />
-		</div>
-		<load-screen
-			v-else
-			text="Loading Weather"
-		/>
+		</ui-loader>
 
 	</ui-transition-fade>
-
-
 </template>
+
 <script>
 		import Vue from 'vue';
 		import WPAPI from '../../wpapi/index';
@@ -136,7 +134,6 @@
 				
 		
 				fetchWeather () {
-					this.weatherIsLoading = true;
 					if (this.placeViewType === 'saved') {
 						let oid = this.activeLocation.weather[0].oid;
 
@@ -151,7 +148,6 @@
 								var diff = Date.now() - time;
 								if (diff < timeout) {
 									this.$store.commit('PLACE_SAVE_WEATHER_DATA', savedWeather);
-									this.weatherIsLoading = false;
 									return;
 								}
 							}
@@ -161,8 +157,6 @@
 							if (localStorage) {
 								localStorage.setItem(oid, JSON.stringify(weather));
 							}
-
-							this.weatherIsLoading = false;
 						});
 
 						return;
@@ -212,7 +206,6 @@
 					errors: null,
 					placeName: '',
 					placeIsPublic: false,
-					weatherIsLoading: true,
 					saveLocationModal: false,
 					placeSettingsModal: false,
 					MODEL_OFF_TIMEOUT: 800
