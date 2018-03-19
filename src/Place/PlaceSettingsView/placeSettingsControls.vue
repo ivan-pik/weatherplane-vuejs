@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+	<div v-if="place">
 		<ui-group
 			:border="false"
 		>
