@@ -4,7 +4,7 @@ import axios from 'axios';
 import {placeSorter} from 'libs/placeSorter.js';
 
 const HTTP = axios.create({
-	baseURL: '//localhost:4000/',
+	baseURL: '//192.168.1.4:4000/',
 	headers: {'authorization': getLocalToken()}
 })
 
