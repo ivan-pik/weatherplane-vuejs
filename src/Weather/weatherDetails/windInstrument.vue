@@ -30,6 +30,17 @@
 
 			<g mask="url(#inactiveMask)">
 				<circle class="windInstrument__dial" cx="90" cy="90" r="77"></circle>
+				<ellipse
+					class="windInstrument__maxWindSpeedIndicator"
+					:class="{
+						'windInstrument__maxWindSpeedIndicator--outOfLimit' : crossWindSpeedOutOfLimit
+					}"
+					cx="90"
+					cy="90"
+					:rx="maxWindSpeedDiameter" 
+					:ry="maxCrossWindSpeedDiameter"
+				>
+				</ellipse>
 			</g>
 
 			<g clip-path="url(#windBearingClip)">
@@ -45,17 +56,7 @@
 			</g>
 				
 
-				<ellipse
-					class="windInstrument__maxWindSpeedIndicator"
-					:class="{
-						'windInstrument__maxWindSpeedIndicator--outOfLimit' : crossWindSpeedOutOfLimit
-					}"
-					cx="90"
-					cy="90"
-					:rx="maxWindSpeedDiameter" 
-					:ry="maxCrossWindSpeedDiameter"
-				>
-				</ellipse>
+				
 				<circle class="windInstrument__dialSteps" cx="90" cy="90" r="77"></circle>
 
 				<g :transform="rotation">
