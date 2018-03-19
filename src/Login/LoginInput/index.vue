@@ -237,11 +237,9 @@ export default {
 
 	.loginForm__content {
 		width: 100%;
-		max-width: 290px;
-		padding: $widthGridLargerSpace $widthGridLargerSpace * 2;
-		border: 2px solid $uiFrame;
-		border-radius: 7px;
-		background-color: $colorAppBackground;
+		padding: 1rem;
+		border: 2px solid transparent;
+		border-radius: 3px;
 	}
 
 	.loginForm__links {
