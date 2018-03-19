@@ -281,7 +281,7 @@ export default {
 	.registerForm__content {
 		width: 100%;
 		max-width: 290px;
-		padding: $widthGridLargerSpace $widthGridLargerSpace * 2;
+		padding: 1em;
 		border: 2px solid $uiFrame;
 		border-radius: 7px;
 		background-color: $colorAppBackground;
