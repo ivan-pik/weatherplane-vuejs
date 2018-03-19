@@ -15,6 +15,7 @@ import ResetPassword from './User/ResetPassword/index.vue'
 import SettingsView from './User/SettingsView/index.vue'
 import ExistingPlaceView from './Place/ExistingPlaceView/index.vue'
 import UserPlacesView from './Place/UserPlacesView/index.vue'
+import PlaceSettingsView from 'Place/PlaceSettingsView/index.vue'
 
 import uiNote from 'uiComponents/uiNote.vue'
 import uiModal from 'uiComponents/modal.vue'
@@ -68,6 +69,7 @@ const routes = [
 		{ path: '/place', name: 'place', component: ExistingPlaceView },
 		{ path: '/:username/', component: UserPlacesView },
 		{ path: '/:username/:place', component: ExistingPlaceView },
+		{ path: '/:username/:place/settings', component: PlaceSettingsView },
 ]
 
 const router = new VueRouter({
