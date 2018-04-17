@@ -74,6 +74,28 @@ var api = {
 		
 	},
 
+	// identify
+
+	identify () {
+		return new Promise(function(resolve, reject) {
+			HTTP.post('/identify')
+			.then(function (response) {
+				if (response.data.success) {
+					resolve(response.data.data.username);
+				} else {
+					reject(response);
+				}
+			})
+			.catch(function (error) {
+				if (error.response && error.response.data.errors) {
+					reject(error.response.data.errors);
+				} else {
+					reject(error);
+				}
+			});	
+		});
+	},
+
 
 	// Change order of places
 	reorderPlaces(payload) {

@@ -17,7 +17,6 @@
 <script>
 import Vue from 'vue'
 import {checkAuth, getLocalToken} from '../auth'
-import {HTTP} from '../http-common';
 import WPAPI from '../wpapi/index';
 import globalMessges from '../uiComponents/globalMessages.vue'
 
@@ -30,25 +29,20 @@ export default {
 
 		if(checkAuth()) {
 
-			HTTP.post('identify')
-				.then(response => {
-					if (response.data.success) {
-						
-						this.$store.commit('USER_LOG_IN', {
-							username: response.data.data.username
-						})
+			WPAPI.identify()
+				.then(username => {
+					this.$store.commit('USER_LOG_IN', {
+						username: username
+					})
 
-						WPAPI.getPublicSettings(response.data.data.username)
-						.then(settings => {
-							this.$store.commit('GLOBAL_SET_WINDUNIT', settings.windUnit );
-							this.$store.commit('GLOBAL_SET_TIMEFORMAT', settings.timeFormat );
-							this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', settings.temperatureUnit );
-							this.$store.commit('GLOBAL_SET_WEATHER_RANGE', settings.weatherRange );
-						});
+					WPAPI.getPublicSettings(username)
+					.then(settings => {
+						this.$store.commit('GLOBAL_SET_WINDUNIT', settings.windUnit );
+						this.$store.commit('GLOBAL_SET_TIMEFORMAT', settings.timeFormat );
+						this.$store.commit('GLOBAL_SET_TEMPERATURE_UNIT', settings.temperatureUnit );
+						this.$store.commit('GLOBAL_SET_WEATHER_RANGE', settings.weatherRange );
+					});
 
-					} else {
-						// Something unforseen happened
-					}
 				}
 				).catch(err => {
 					
