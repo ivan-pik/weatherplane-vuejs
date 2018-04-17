@@ -89,10 +89,15 @@
 		left: 0;
 		right: 0;
 		z-index: 1;
-		font-size: 0.8rem;
+		font-size: 1rem;
+		font-weight: 500;
 		text-align: center;
 		opacity: 0;
 		transition: all 0.2s ease-in-out;
+		background: rgba(#fff,0.8);
+		display: flex;
+		align-content: center;
+		align-items: center;
 
 		&.is-visible {
 			opacity: 1;
@@ -100,13 +105,8 @@
 	}
 
 	.dayLabel__date {
-		display: inline-block;
-		background: rgba(#000,0.8);
-		color: #fff;
-		border-radius: 30px;
+		color: #000;
 		line-height: 1;
-		padding: 1em 3em; 
-		letter-spacing: 0.05em;
 	}
 
 	
