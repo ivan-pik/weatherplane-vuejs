@@ -87,7 +87,7 @@
 					},
 					setBearing () {
 						this.$store.commit('PLACE_SEARCH_BEARING', this.bearing)
-						this.$router.push({ path: 'place' })
+						this.$router.push({ path: '/place' })
 					},
 					saveActiveLocation(coordinates) {
 						this.$store.commit('LOCATION_SAVE_ACTIVE_LOCATION', coordinates);

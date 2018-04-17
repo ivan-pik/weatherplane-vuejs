@@ -89,7 +89,7 @@
 					<ui-button
 						text="Sign Up!"
 						type="primary"
-						@click="$router.push('signup');"
+						@click="$router.push('/signup');"
 						:raised="false"
 					/>
 				</div>
