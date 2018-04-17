@@ -9,7 +9,7 @@
 		<div class="bearingSelector__display" v-html="bearingDisplay"></div>
 
 		<svg ref="dial" class="bearingSelectorDial" width="300px" height="300px" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-			<polygon id="Triangle" fill="#fff" points="140 0 160 0 150 16"></polygon>
+			<polygon y="10" id="Triangle" fill="#fff" points="144 10 156 10 150 18"></polygon>
 			<g v-bind:transform="rotationStyle">
 				<circle class="bearingSelectorDial__dialSteps" cx="150" cy="150" r="120"></circle>
 
@@ -29,23 +29,25 @@
 					y2="150"
 				/>
 				
-				<svg class="bearingSelectorDial__knob-wrapper" viewBox="0 0 40 40" version="1.1" ref="knob"
-					width="40" height="40"
-					x="130" y="250"
+				<svg class="bearingSelectorDial__knob-wrapper" viewBox="0 0 50 50" version="1.1"
+					ref="knob"
+					width="50"
+					height="50"
+					x="125" y="247"
 				>
 					<circle 
 						class="bearingSelectorDial__knob"
-						cx="20"
-						cy="20"
-						r="20"
+						cx="25"
+						cy="25"
+						r="25"
 						:class="{
 							'bearingSelectorDial__knob--active' : isDragging
 						}"
 					/>
 
-					<polygon class="bearingSelectorDial__knobArrow" points="10 20 18 10 18 30"
+					<polygon class="bearingSelectorDial__knobArrow" points="15 25 23 15 23 35"
 					></polygon>
-					<polygon class="bearingSelectorDial__knobArrow" points="30 20 22 10 22 30"
+					<polygon class="bearingSelectorDial__knobArrow" points="35 25 27 15 27 35"
 					></polygon>
 				</svg>
 
@@ -274,10 +276,12 @@
 .bearingSelector__display {
 	text-align: center;
 	color: #000;
-	padding: 0.6em 1.2em 0.5em;
+	padding: 0.6em 0.6em 0.5em;
 	font-size: 14px;
 	background: #fff;
 	border-radius: 20px;
+	position: relative;
+	top: 10px;
 }
 
 .bearingSelector__display-digit {
