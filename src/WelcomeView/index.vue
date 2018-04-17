@@ -16,7 +16,7 @@
 				<ui-button
 					text="Log In!"
 					type="primary"
-					@click="$router.push('login');"
+					@click="$router.push('/login');"
 				/>
 			</div>
 
@@ -76,7 +76,7 @@
 		},
 		methods: {
 			goToPlaceSearch () {
-				this.$router.push('search');
+				this.$router.push('/search');
 			},
 			loadPlacesData () {
 				WPAPI.getUserPlaces(this.username)
