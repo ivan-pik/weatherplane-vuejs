@@ -16,6 +16,6 @@
 	font-size: 0.7rem;
 	border-left: 2px solid #5da5e6;
 	padding: 0 0 0 0.5em;
-	margin-bottom: 1em;
+	margin: 1em 0;
 }
 </style>
