@@ -80,6 +80,10 @@
 	.uiButtonRadio {
 		margin: 0 0 1em 0;
 
+		&:last-child {
+			margin-bottom: 0;
+		}
+
 		.uiLabel {
 			margin-bottom: 1em;
 		}
@@ -92,15 +96,14 @@
 
 	.uiButtonRadio__item {
 		color: $uiInputInactiveFront;
-		
 		text-align: center;
-		min-width: 40px;
+		min-width: 50px;
 		border: 1px solid $uiFrame;
 		padding: 0 1em;
 		font-size: $fontSizeButton;
 		position: relative;
-		height: 40px;
-		line-height: 38px;
+		height: 50px;
+		line-height: 48px;
 		transition: all 200ms;
 		&:not(:last-child) {
 			margin-right: -1px;

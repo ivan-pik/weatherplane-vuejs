@@ -23,15 +23,17 @@ $uiButtonPrimaryFront: #fff;
 $uiInputInactive: $uiInputBorderColor;
 $uiInputInactiveFront: #666;
 $uiFrame: $colorSubtleBorder;
-$uiInputHeight: 40px;
+$uiInputHeight: 50px;
 $uiFocus: $brandMainColour;  
+$uiInputHover: rgba($brandAccentColour, 0.1);
+$uiInputSelected: rgba($brandAccentColour, 0.2);
 
 $uiPopupBackground: rgba(#fff, 0.8);
 $uiPopupIndex: 1000;
 
 // @todo: some nice naming convention
 
-$fontSizeButton: 0.7rem;
+$fontSizeButton: 0.8rem;
 
 
 $widthStatusBar: 4px;

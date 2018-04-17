@@ -68,9 +68,8 @@
 		font-size: 13px;
 		padding: 0 1em;
 		position: relative;
-		border-radius: 2px;
 		box-shadow: inset 0 -1px 0 rgba(#000, 0.1);
-		height: 40px;
+		height: 50px;
 
 		
 		&.success {
@@ -104,7 +103,7 @@
 	}
 
 	.uiGlobalMessage__text {
-		line-height: 40px;
+		line-height: 50px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
@@ -113,8 +112,8 @@
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 	}
 
 	.uiGlobalMessage__dismissIcon {}

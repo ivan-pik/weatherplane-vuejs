@@ -104,7 +104,7 @@
 		},
 		mounted () {
 			this.knobValue = this.currentValue;
-			this.sliderWidth = this.$refs.slider.offsetWidth - 40;
+			this.sliderWidth = this.$refs.slider.offsetWidth - 50;
 			this.posLeft = this.$refs.slider.offsetLeft;
 			this.posRight = this.posLeft + this.$refs.slider.offsetWidth;
 			setTimeout(() => {
@@ -265,7 +265,7 @@
 						this.offset = pointerX - this.left;
 						this.first = false;
 					}
-					let movement = Math.min(Math.max(pointerX - this.offset, 0),   this.posRight - this.posLeft - 40);
+					let movement = Math.min(Math.max(pointerX - this.offset, 0),   this.posRight - this.posLeft - 50);
 					this.left =+ movement;
 					this.knobProgress = Math.min(this.left / this.sliderWidth, 1);
 					this.knobValue = this.alignValueToStep(this.getValueFromProgress(this.knobProgress));
@@ -302,7 +302,7 @@
 
 	.uiSlider {
 		position: relative;
-		min-height: 40px;
+		min-height: 50px;
 		&.disabled {
 			opacity: 0.3;
 			pointer-events: none;
@@ -310,7 +310,7 @@
 	}
 	.uiSlider__track {
 		margin: 0 10px;
-		height: 40px;
+		height: 50px;
 		position: relative;
 		&::after {
 			content: '';
@@ -318,7 +318,7 @@
 			height: 2px;
 			width: 100%;
 			position: absolute;
-			top: 19px;
+			top: 24px;
 			background-color: $uiInputInactive;
 		}
 	}
@@ -333,15 +333,15 @@
 			height: 2px;
 			width: 100%;
 			position: absolute;
-			top: 19px;
+			top: 24px;
 			background-color: $uiInputActive;
 		}
 	}
 	.uiSlider__knob {
 		position: absolute;
 		top: 0;
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 		cursor: pointer;
 		transition: all 0s ease-in-out;
 		
@@ -351,16 +351,16 @@
 			left: 10px;
 			content: '';
 			display: block;
-			width: 20px;
-			height: 20px;
+			width: 30px;
+			height: 30px;
 			border-radius: 50%;
 			background-color: $uiInputActive;
 		}
 
 		&::before {
 			position: absolute;
-			top: 14px;
-			left: 14px;
+			top: 19px;
+			left: 19px;
 			content: '';
 			display: block;
 			width: 12px;
@@ -401,8 +401,8 @@
 		background-color: $uiInputActive;
 		position: absolute;
 		padding: 0.5em;
-		bottom: 100%;
-		width: 40px;
+		bottom: 120%;
+		width: 50px;
 		text-align: center;
 		border-radius: 3px;
 		color: $uiInputActiveFront;

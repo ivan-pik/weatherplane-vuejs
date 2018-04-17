@@ -13,6 +13,7 @@
 				:autofocus="autofocus"
 				:type="type"
 				v-on:input="updateValue($event.target.value)"
+				:autocomplete="autocomplete"
 			>
 			<div class="availability"
 				v-if="available!==null"
@@ -51,6 +52,10 @@
 			autofocus: {
 				type: Boolean,
 				default: false
+			},
+			autocomplete: {
+				type: String,
+				default: ""
 			},
 			type: {
 				type: String,
@@ -115,7 +120,7 @@
 	.availability {
 		position: absolute;
 		width: 40px;
-		height: 40px;
+		height: 50px;
 		right: 0;
 		bottom: 0;
 

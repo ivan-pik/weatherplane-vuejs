@@ -79,7 +79,7 @@
 
 	.uiTabs__tab--active {
 		color: $uiInputActive;
-		border-bottom: 2px solid $uiInputActive;
+		border-bottom: 3px solid $uiInputActive;
 	}
 
 </style>

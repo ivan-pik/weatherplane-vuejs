@@ -184,7 +184,6 @@
 // --------------------------------
 .windBearing {
 	font-size: 10px;
-	margin-left: $widthGridSpace *0.5;
 }
 
 .windBearing__value {

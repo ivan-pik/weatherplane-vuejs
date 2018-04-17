@@ -54,13 +54,13 @@
 @import '~globalVars';
 
 // --------------------------------
-$hourWindSpeed__size: 2.2em;
+$hourWindSpeed__size: 2em;
 $hourGustSpeed__size: 1.4em;
 
 .hourWindSpeed {
 	display: inline-flex;
 	align-items: center;
-	width: ($hourWindSpeed__size*2);
+	width: 3.7em;
 }
 
 .hourWindSpeed__display {
@@ -77,19 +77,19 @@ $hourGustSpeed__size: 1.4em;
 }
 
 .hourWindSpeed__display--speed {
-	font-size: 12px;
+	font-size: 0.90rem;
 	border-radius: 50%;
 	width: $hourWindSpeed__size;
 	height: $hourWindSpeed__size;
-	line-height: 2.25em;
+	line-height: 2.15em;
+	font-weight: 500;
 }
-
 
 .hourWindSpeed__display--gust {
 	font-size: 12px;
 	width: $hourGustSpeed__size;
 	// height: $hourGustSpeed__size;
-	margin-left: 0.4em;
+	margin-left: 0.2em;
 	line-height: 2;
 	background: none !important;
 	

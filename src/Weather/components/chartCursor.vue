@@ -108,7 +108,7 @@
 .chartCursor {
 	pointer-events: none;
 	position: fixed;
-	z-index: 10000;
+	z-index: 1;
 	svg {
 		 display: block;
 	}

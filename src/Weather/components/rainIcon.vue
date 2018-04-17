@@ -71,9 +71,8 @@
 @import '~globalVars';
 
 .rainIcon {
-	width: 30px;
-	height: 30px;
-	margin: 0 0 0 $widthGridSpace;
+	width: 24px;
+	height: 36px;
 	text-align: center;
 }
 

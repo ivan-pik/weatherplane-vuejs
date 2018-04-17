@@ -417,7 +417,7 @@
 }
 
 .weatherDetails__value {
-	font-size: 15px;
+	font-size: 1rem;
 	display: block;
 }
 

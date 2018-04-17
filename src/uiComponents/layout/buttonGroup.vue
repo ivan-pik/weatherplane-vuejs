@@ -3,12 +3,10 @@
 		class="uiButtonGroup"
 		:class="{
 			'uiButtonGroup--show' : show,
-			'uiButtonGroup--collapseHeight' : collapseHeight
+			'uiButtonGroup--hide' : !show,
 		}"
 	>
-		<div class="uiButtonGroup__collapser">
-			<slot />
-		</div>
+		<slot />
 	</div>
 </template>
 
@@ -20,10 +18,6 @@
 				type: Boolean,
 				default: true
 			},
-			collapseHeight: {
-				type: Boolean,
-				default: true
-			}
 		},
 		data () {
 			return {
@@ -36,27 +30,24 @@
 <style lang="scss">
 	@import '~globalVars';
 	.uiButtonGroup {
-		height: 40px;
-		.uiButtonGroup__collapser {
-			height: 0px;
-			overflow: hidden;
-			display: flex;
-			transition: all 100ms ease-in-out;
+		height: 50px;
+		display: flex;
+		transition: all 200ms ease-in-out;
+
+		.uiButton {
+			flex: 0 1 auto;
 		}
 	}
 
-	.uiButtonGroup--collapseHeight {
-		height: auto;		
-	}
-
-	.uiButtonGroup--gutter {
-		padding: $widthGridLargerSpace;
+	.uiButtonGroup--hide {
+		filter: grayscale(100%);
+		opacity: 0.3;
+		pointer-events: none;
 	}
 
 	.uiButtonGroup--show {
-		.uiButtonGroup__collapser {
-			height: 40px;
-		}
+		opacity: 1;
+		pointer-events: all;
 	}
 
 

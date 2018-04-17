@@ -162,10 +162,10 @@
 	
 	.limitSettingsOverview__button-text {
 		display: inline-block;
-		// border: 1px solid #eceeef;
-		padding: 0.4em 0.8em 0.5em;
+		padding: 0.8em 0.8em;
 		background-color: #849098;
 		color: #fff;
+		line-height: 1.2;
 	}
 
 	.limitSettingsOverview__params-wrapper {

@@ -1,4 +1,5 @@
 <template>
+<div class="uiSuggestions">
 	<ul class="uiSuggestions" v-if="visible">
 		<li
 			class="uiSuggestions__item"
@@ -13,6 +14,7 @@
 			</a>
 		</li>
 	</ul>
+</div>
 </template>
 
 <script>
@@ -33,9 +35,6 @@
 		},
 		beforeDestroy () {
 			document.removeEventListener('keyup', this.keyUpHandler);
-		},
-		computed: {
-			
 		},
 
 		watch: {
@@ -101,6 +100,11 @@
 
 	.uiSuggestions {
 		display: block;
+		position: relative;
+	}
+
+	.uiSuggestions_list {
+		display: block;
 		position: absolute;
 		z-index: 1;
 		background: #fff;
@@ -114,11 +118,19 @@
 
 	.uiSuggestions__link {
 		display: block;
-		line-height: 1.4;
-		padding: 1em $widthGridLargerSpace;
+		height: 50px;
+		line-height: 50px;
+		padding: 0 0.7rem;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 
-		&.active, &:hover {
-			// background-color: red;
+		&.active {
+			background-color: $uiInputSelected;
+		}
+
+		&:hover {
+			background-color: $uiInputHover;
 		}
 	}
 </style>

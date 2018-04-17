@@ -171,11 +171,8 @@
 		display: flex;
 		position: relative;
 		top: 0;
-		
-		
 		justify-content: space-between;
-		
-		font-size: 0.9rem;
+		font-size: 1rem;
 
 		&.can-transition {
 			transition: all 0.2s ease-in-out;
@@ -192,14 +189,13 @@
 		flex: 1 1 auto;
 	}
 
-	
-
 	.placesList__name {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		padding: 0 0 0 $widthGridLargerSpace;
 		width: 100%;
+		font-weight: 500;
 	}
 
 	.placesList__contextMenuToggler {

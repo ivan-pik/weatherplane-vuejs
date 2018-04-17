@@ -106,7 +106,7 @@
 		bottom: -0.6rem;
 		font-size: 0.5rem;
 		position: absolute;
-		z-index: 10000;
+		z-index: 100000;
 		left: 0;
 		height: 1.2rem;
 		line-height: 1.2rem;

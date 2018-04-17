@@ -69,6 +69,7 @@
 	display: flex;
 	justify-content: center;
 	pointer-events: none;
+	z-index: 10000;
 }
 
 .uiHelpBubble__content {
@@ -76,7 +77,7 @@
 	color: #fff;
 	padding: 1em 2em;
 	border-radius: 50px;
-	font-size: 0.6rem;
+	font-size: 0.8rem;
 	text-align: center;
 	line-height: 1.5;
 }

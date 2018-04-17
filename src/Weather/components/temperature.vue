@@ -59,10 +59,9 @@
 	@import '~globalVars';
 	// --------------------------------
 	.hourTemperature {
-		font-size: 12px;
-		margin-right: $widthStatusBar;
-		padding: 0 $widthGridSpace 0 0;
-		min-width: 2em;
+		font-size: 0.9rem;
+		padding: 0 .5rem 0 0;
+		width: 2.4em;
 		text-align: right;
 
 		&.yes {

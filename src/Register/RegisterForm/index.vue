@@ -248,7 +248,7 @@ export default {
 	@import '~globalVars';
 
 	.registerForm{
-		flex: 1 1 auto;
+		flex: 1 0 auto;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

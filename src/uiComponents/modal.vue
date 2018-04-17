@@ -13,7 +13,9 @@
 		>
 			
 			<div class="uiModal__window">
-				<div class="uiModal__header">
+				<div class="uiModal__header"
+					v-if="closeButton || headerTitle"
+				>
 					<div class="uiModal__title">
 						{{headerTitle}}
 					</div>
@@ -22,10 +24,10 @@
 						class="modal__toggler is-open"
 						@click="closeButtonHandler"
 					>
-						<span class="mainNavigation__burger mainNavigation__burger--1"></span>
-						<span class="mainNavigation__burger mainNavigation__burger--2"></span>
-						<span class="mainNavigation__burger mainNavigation__burger--2B"></span>
-						<span class="mainNavigation__burger mainNavigation__burger--3"></span>
+						<span class="modal__burger modal__burger--1"></span>
+						<span class="modal__burger modal__burger--2"></span>
+						<span class="modal__burger modal__burger--2B"></span>
+						<span class="modal__burger modal__burger--3"></span>
 					</button>
 					
 				</div>
@@ -59,7 +61,7 @@
 			},
 			popup: {
 				type: Boolean,
-				default: false
+				default: true
 			},
 			scrollContent: {
 				type: Boolean,
@@ -125,11 +127,12 @@
 @import '~globalVars';
 
 .uiModal {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-content: stretch;
-	align-items: center;
+	// display: flex;
+	// flex-direction: column;
+	// justify-content: center;
+	// align-content: stretch;
+	// align-items: center;
+	text-align: center;
 }
 
 //--------------------------------------------
@@ -140,82 +143,60 @@
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
 	background-color: rgba(#000, 0.8);
-	z-index: 1000;
-	padding: 1em;
+	z-index: 100000;
+	padding: 0.7rem;
+	
 
 	.uiModal__window {
+		display: inline-block;
 		background-color: #fff;
 		border-radius: 3px;
-		min-width: 300px;
 		max-width: 400px;
 		width: 100%;
 		position: relative;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-		min-height: 300px;
+		text-align: left;
 	}
 }
+
+.uiModal--scrollContent {
+	overflow: auto;
+}
+
+.uiModal--popup {
+	// padding: var(--layout-header-height) 40px;
+}
+
 
 .uiModal__window {
 	transition: all 200ms ease-in-out;
 }
 
 .uiModal__header {
+	display: block;
 	border-bottom: 1px solid silver;
-	height: 40px;
-	line-height: 40px;
+	height: 50px;
+	line-height: 50px;
+	flex: 1 0 auto;
 }
 
 .uiModal__content {
-	display: flex;
-	flex-direction: column;
+	// display: flex;
+	// flex-direction: column;
 }
 
 .uiModal {
 	.uiModal__content {
-		overflow: hidden;
-	}
-}
-
-.uiModal--scrollContent {
-	.uiModal__content {
-		overflow: auto;
-		touch-action: pan-y;
+		// overflow: hidden;
 	}
 }
 
 
 
 
-.uiModal--popup {
-	background-color: rgba(#000, 0.8);
-	& > .uiModal__window {
-		background-color: #fff;
-		position: relative;
-		padding: 40px 1em 1em 1em;
-		width: 100%;
-		max-width: 80vw;
-		border-radius: 3px;
-		margin: 1em 0;
-	}
-	& > .modal__toggler {
-		position: absolute;
-	}
-}
 
-.uiModal:not(.uiModal--popup) {
-	& > .uiModal__window {
-		// flex: 1 1 auto;
-		// width: 100%;
-		// height: 100%;
-		// display: flex;
-		// flex-direction: column;
-		// border-top: 1px solid $colorSubtleBorder;
-	}
-}
+
 
 
 
@@ -251,8 +232,8 @@
 	right: 0;
 	top: 0;
 	display: block;
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
 	cursor: pointer;
 	
 }
@@ -263,7 +244,7 @@
 	left: 0;
 }
 
-.mainNavigation__burger {
+.modal__burger {
 	display: block;
 	position: absolute;
 	width: 16px;
@@ -273,50 +254,49 @@
 	transition: all 100ms ease-in-out;
 }
 
-.mainNavigation__burger--1 {
+.modal__burger--1 {
 	top: 14px;
 }
 
 
-.mainNavigation__burger--2{
+.modal__burger--2{
 	top: 19px;
 }
 
-.mainNavigation__burger--2B{
+.modal__burger--2B{
 	top: 19px;
 }
 
-.mainNavigation__burger--3 {
+.modal__burger--3 {
 	bottom: 14px;
 }
 
 
 
 .modal__toggler.is-open {
-	.mainNavigation__burger--1 {
-		top: 19px;
+	.modal__burger--1 {
+		top: 24px;
 		opacity: 0;
 	}
 
-
-	.mainNavigation__burger--2{
-		top: 19px;
+	.modal__burger--2{
+		top: 24px;
 		transform: rotate(45deg);
 		width: 18px;
-		left: 11px;
+		left: 16px;
 		transition: all 100ms 80ms ease-in-out;
 	}
 
-	.mainNavigation__burger--2B{
-		top: 19px;
+	.modal__burger--2B{
+		top: 24px;
 		transform: rotate(-45deg);
 		width: 18px;
-		left: 11px;
+		left: 16px;
 		transition: all 100ms 80ms ease-in-out;
 	}
 
-	.mainNavigation__burger--3 {
-		bottom: 19px;
+	.modal__burger--3 {
+		bottom: 24px;
 		opacity: 0;
 	}
 }

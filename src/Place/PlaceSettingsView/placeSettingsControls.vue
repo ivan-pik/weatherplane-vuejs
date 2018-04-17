@@ -21,7 +21,7 @@
 
 
 		<ui-group
-			:border="false"
+			title="Privacy"
 		>
 			<setting-privacy
 				:value="place.placeSettings.public"
@@ -32,7 +32,7 @@
 		</ui-group>
 
 		<ui-group
-			:border="false"
+			title="Location"
 		>
 			<setting-location
 				:location="[place.placeLat, place.placeLng]"
@@ -43,7 +43,7 @@
 		</ui-group>
 
 		<ui-group
-			:border="false"
+			title="Delete from saved location"
 		>
 			<setting-delete
 				v-on:deletePlace="deletePlace"

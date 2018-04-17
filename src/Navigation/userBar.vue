@@ -4,14 +4,14 @@
 			<ui-button
 				v-if="!loggedIn"
 				text="Login"
-				@click="$router.push('login');"
+				@click="$router.push('/login');"
 				:raised="false"
 			/>
 
 			<ui-button
 				v-if="!loggedIn"
 				text="Signup"
-				@click="$router.push('signup');"
+				@click="$router.push('/signup');"
 				:raised="false"
 			/>
 
@@ -25,7 +25,7 @@
 			<ui-button
 				v-if="loggedIn"
 				text="User Settings"
-				@click="$router.push('settings');"
+				@click="$router.push('/settings');"
 				:raised="false"
 			/>
 			<ui-button
@@ -52,11 +52,17 @@
 			:show="openUnitsSettings"
 			:closeButton="true"
 			:popup="true"
+			headerTitle="Unit Settings"
 			@close-button-clicked="openUnitsSettings=false"
 		>
-			<setting-units
+			<ui-group
 				slot="content"
-			 />
+				:border="false"
+			>
+				<setting-units
+					
+				/>
+			</ui-group>
 		</ui-modal>
 
 		<ui-modal
@@ -64,10 +70,14 @@
 			:closeButton="true"
 			:popup="true"
 			@close-button-clicked="openWeatherSettings=false"
+			headerTitle="Weather Settings"
 		>
-			<setting-weather
+			<ui-group
 				slot="content"
-			 />
+				:border="false"
+			>
+				<setting-weather />
+			</ui-group>
 		</ui-modal>
 
 

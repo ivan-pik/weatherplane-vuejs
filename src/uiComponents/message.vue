@@ -53,7 +53,7 @@
 	}
 
 	.uiMessage__text {
-		line-height: 40px;
+		line-height: 50px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}

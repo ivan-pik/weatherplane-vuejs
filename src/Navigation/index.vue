@@ -135,14 +135,14 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: $layer-navigation;
+	z-index: 10;
 }
 
 // ----------------------------
 .mainNavigation__toggler {
 	display: block;
-	width: 40px;
-	height: 40px;
+	width: var(--layout-header-height);
+	height: var(--layout-header-height);
 	position: relative;
 	cursor: pointer;
 	
@@ -157,7 +157,7 @@
 .mainNavigation__burger {
 	display: block;
 	position: absolute;
-	width: 16px;
+	width: 18px;
 	height: 2px;
 	background: $color-burger;
 	left: 12px;
@@ -165,20 +165,20 @@
 }
 
 .mainNavigation__burger--1 {
-	top: 14px;
+	top: 19px;
 }
 
 
 .mainNavigation__burger--2{
-	top: 19px;
+	top: 24px;
 }
 
 .mainNavigation__burger--2B{
-	top: 19px;
+	top: 24px;
 }
 
 .mainNavigation__burger--3 {
-	bottom: 14px;
+	bottom: 19px;
 }
 
 .mainNavigation__toggler.is-closed {
@@ -237,7 +237,7 @@
 	left: 0;
 	bottom: 0;
 	background: rgb(255, 255, 255);
-	height: 100vh;
+	height: 100%;
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
@@ -265,7 +265,7 @@
 	position: fixed;
 	display: block;
 	background: $background-popup-overlay;
-	height: 100vh;
+	height: 100%;
 	width: 100vw;
 	left: 0;
 	top: 0;

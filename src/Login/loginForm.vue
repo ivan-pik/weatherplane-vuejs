@@ -1,6 +1,6 @@
 <template>
 	<ui-modal
-		:overlay="overlay"
+		
 		:show="!loginSuccessfulState"
 		v-on:closed="modalClosedHandler"
 	>	

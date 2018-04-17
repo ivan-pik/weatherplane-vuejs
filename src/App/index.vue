@@ -5,7 +5,7 @@
 			v-on:dismissMessage="dismissMessage"
 		/>
 
-		<navigation-toggle />
+		
 
 		<transition name="routerTransition">
 			<router-view></router-view>
@@ -65,7 +65,7 @@ export default {
 	},
 	components: {
 		'ui-global-messages': globalMessges,
-		'navigation-toggle': Navigation
+		
 	},
 	computed: {
 		globalMessages () {
@@ -95,13 +95,21 @@ export default {
 	@import '~globalVars';
 
 	body, html {
-		height: 100vh;
+		height: 100%;
 		overflow: hidden;
+	}
+
+	.app {
+		min-height: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 
 	body {
 		color: $textBaseColour;
 		font-family: 'Inter UI', sans-serif;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.routerTransition-enter-active, .routerTransition-leave-active {
@@ -124,7 +132,7 @@ export default {
 	}
 
 	:root {
-		--layout-header-height: 40px;
+		--layout-header-height: 50px;
 		
 		--layout-chart-top: 280px;
 		--layout-chart-time-width: 2.8rem;

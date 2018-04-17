@@ -79,7 +79,7 @@
 <style lang="scss">
 @import '~globalVars';
 .hour__time {
-	font-size: 0.8rem;
+	font-size: 1rem;
 	padding: 0 0.3rem 0 0;
 	width: var(--layout-chart-time-width);
 	z-index: 1;

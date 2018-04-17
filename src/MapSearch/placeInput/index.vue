@@ -9,23 +9,25 @@
 				v-model="place"
 				:help="validationErrors.first('username')"
 				@input="autocompleteRequest(place)"
+				style="margin-bottom: 0"
 			/>
 		</form>
 
 		<suggestions-list
-				:suggestions="suggestionsList"
-				v-on:suggestionHighlighted="suggestionHighlighted"
-			/>
-			<ui-group
-				:border="false"
+			:suggestions="suggestionsList"
+			v-on:suggestionHighlighted="suggestionHighlighted"
+		/>
+
+		<ui-group
+			:border="false"
+			v-if="noResults"
+		>
+			<ui-message
+				type="error"
 			>
-				<ui-message
-					v-if="noResults"
-					type="error"
-				>
-					No results found
-				</ui-message>
-			</ui-group>
+				No results found
+			</ui-message>
+		</ui-group>
 	</div>
 </template>
 
@@ -109,7 +111,7 @@
 }
 
 .placeInput__form {
-	margin: 0 $widthGridLargerSpace;
+	margin: 0 0.7rem;
 }
 
 

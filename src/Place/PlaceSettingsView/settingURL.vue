@@ -1,7 +1,7 @@
 <template>
 	<div class="placeSetting placeSetting--url">
 		<ui-text-input
-			label="Password"
+			label="Place URL"
 			name="placeSlug"
 			placeholder="URL here"
 			v-model="newValue"

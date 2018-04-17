@@ -10,9 +10,7 @@
 			:unit="'day'"
 			:unitPlural="'days'"
 		/>
-		<ui-note
-			v-if="(newWeatherRange > 3)"
-		>
+		<ui-note>
 			@todo: copy Please note, that the forecast reliability is worse 
 		</ui-note>
 	</div>

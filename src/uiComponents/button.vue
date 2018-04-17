@@ -78,12 +78,13 @@
 	@import '~globalVars';
 
 	.uiButton {
-		height: 40px;
+		height: 50px;
 		font-size: $fontSizeButton;
 		text-transform: uppercase;
 		text-align: center;
-		line-height: 40px;
+		line-height: 50px;
 		white-space: nowrap;
+		flex: 0 0 auto;
 	}
 
 	.uiButton--link {

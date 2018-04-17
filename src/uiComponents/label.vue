@@ -17,7 +17,7 @@
 
 <style lang="scss">
 	.uiLabel {
-		font-size: 0.7rem;
+		font-size: 0.8rem;
 		display: block;
 	}
 </style>

@@ -311,7 +311,8 @@
 	flex: 1 1 auto;
 	overflow: auto;
 	touch-action: pan-y;
-	padding: 1em 0;
+	padding: 2rem 0 1rem;
+	max-height: 80vh;
 }
 .limitSettings__group {
 	margin: 0 0.5em;
