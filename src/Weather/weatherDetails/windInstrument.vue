@@ -307,6 +307,13 @@
 	margin-left: -90px;
 	width: 180px;
 	height: 180px;
+
+	svg {
+		width: 120px;
+		height: 120px;
+		display: block;
+		margin: 0 auto;
+	}
 }
 
 .windInstrument__dial {

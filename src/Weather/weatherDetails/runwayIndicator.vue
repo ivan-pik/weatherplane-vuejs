@@ -84,33 +84,34 @@
 
 	.runwaySideIndicator {
 		position: absolute;
-		top: 91px;
-		left: 0;
-		width: 100%;
+		top: 62px;
+		left: 50%;
+		transform: translate(-50%,0);
+		width: 200px;
 		height: 27px;
 	}
 
 	.runwaySideIndicator__runway {
 		transform: translate(0,13px);
 		stroke: #cfd9e0;
-		stroke-width: 2;
-		// stroke-dasharray: 4,16;
+		stroke-width: 1;
+		stroke-dasharray: 4,16;
 		stroke-linecap: round;
 	}
 
 	.runwaySideIndicator__planePosition {
 		position: absolute;
-		top: -7px;
-		width: 40px;
-		height: 40px;
+		top: -1px;
+		width: 30px;
+		height: 30px;
 	}
 
 	.runwaySideIndicator__planePosition--left {
-		left: $widthGridSpace*4;
+		left: 0;
 	}
 
 	.runwaySideIndicator__planePosition--right {
-		right: $widthGridSpace*4;
+		right: 0;
 		
 	}
 

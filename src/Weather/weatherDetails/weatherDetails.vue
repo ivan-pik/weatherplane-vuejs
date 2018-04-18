@@ -322,8 +322,6 @@
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: 195px;
-	margin-top: 5px;
 	background: #fff;
 }
 
@@ -344,7 +342,7 @@
 		display: inline-block;
 		vertical-align: middle;
 		position: relative;
-		top: -2px;
+		top: -1px;
 		margin-right: 0.2em;
 		
 	}
@@ -386,14 +384,13 @@
 	margin: 0 0 18px 0;
 	position: relative;
 	&:nth-child(3) {
-		margin-top: auto;
-		margin-bottom: 32px;
+		margin-bottom: 6px;
 	}
 	.weatherDetails__col--1 & {
-		padding-left: $widthGridSpace * 1.6;
+		padding-left: $widthGridSpace * 2;
 	}
 	.weatherDetails__col--2 & {
-		padding-right: $widthGridSpace * 1.6;
+		padding-right: $widthGridSpace * 2;
 	}
 	.status {
 		position: absolute;

@@ -312,7 +312,7 @@
 	overflow: auto;
 	touch-action: pan-y;
 	padding: 2rem 0 1rem;
-	max-height: 80vh;
+	max-height: 70vh;
 }
 .limitSettings__group {
 	margin: 0 0.5em;
