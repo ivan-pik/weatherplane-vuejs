@@ -213,11 +213,12 @@
 				this.edgeScrolling = false;
 			},
 			sizeHandler () {
+				let chartScrollerPos =  this.$refs.chartScroller.getBoundingClientRect();
+
 				this.chartHeight = this.$refs.chartScroller.offsetHeight;
-				this.positioning.chartTop = this.$refs.chartScroller.offsetTop;
+				this.positioning.chartTop = chartScrollerPos.top;
 			
 				this.positioning.chartLeft = this.$refs.chartScroller.offsetLeft;
-				this.positioning.chartRight = this.$refs.chartScroller.offsetRight;
 				this.positioning.chartBottom = this.$refs.chartSpacer.offsetTop;
 
 				let chartSpaceFillerHeight = this.chartHeight - this.rowHeight;
@@ -311,7 +312,6 @@
 					chartTop: 0,
 					chartBottom: 0,
 					chartLeft: 0,
-					chartRight: 0
 				},
 				lastY: 0,
 				lastChartCursorY: 0,
@@ -330,11 +330,10 @@
 .weather-hourly-wrapper {
 	display: block;
 	width: 100%;
-	position: fixed;
-	top: var(--layout-chart-top);
-	bottom: 0;
 	display: flex;
 	flex-direction: column;
+	position: relative;
+	flex: 1 1 auto;
 
 	&:before {
 		top: 0;
@@ -352,8 +351,8 @@
 }
 
 .weather-hourly {
-	position: fixed;
-	top: var(--layout-chart-top);
+	position: absolute;
+	top: 0;
 	width: 100%;
 	bottom: 0;
 	overflow: scroll;

@@ -4,58 +4,63 @@
 			:loaded="!!weatherData"
 			text="Loading Weather"
 		>
-			<div class="placeContextMenu">
-				<ui-button
-					v-if="placeViewType=='saved'" 
-					text="Settings"
-					type="primary"
-					:raised="false"
-					@click="placeSettingsModal=true"
-				/>
-				<ui-button
-					v-if="placeViewType=='temporary'"
-					text="Save location"
-					type="primary"
-					:raised="false"
-					@click="saveLocationModal=true"
-				/>
-			</div>
+			<div class="placeDetailWrapper">
 
-			<ui-modal
-				v-if="placeViewType=='saved'"
-				:show="placeSettingsModal"
-				:closeButton="true"
-				@close-button-clicked="placeSettingsModal=false"
-				headerTitle="Place Settings"
-			>
-				<div
-					v-if="!currentUserResource"
-					class=""
-					slot="content"
-				>
-					@todo: You have to log-in as <strong>{{$route.params.username}}</strong> to tweak those!
-				</div>
-				<place-settings-controls
-					v-else
-					slot="content"
-				/>
-			</ui-modal>
-
-			<ui-modal
-				v-if="placeViewType=='temporary'"
-				:show="saveLocationModal"
-				:closeButton="true"
-				:popup="true"
-				@close-button-clicked="saveLocationModal=false"
-			>
-				<save-place
-					slot="content"
-					@place-saved="placeSavedHandler"
-				/>
-			</ui-modal>
 			
-			<weather-details-data v-if="weatherData" :weather="weatherData.hourly" />
-			<hourly-view :weather="weatherData" />
+				<div class="placeContextMenu">
+					<ui-button
+						v-if="placeViewType=='saved'" 
+						text="Settings"
+						type="primary"
+						:raised="false"
+						@click="placeSettingsModal=true"
+					/>
+					<ui-button
+						v-if="placeViewType=='temporary'"
+						text="Save location"
+						type="primary"
+						:raised="false"
+						@click="saveLocationModal=true"
+					/>
+				</div>
+
+				<ui-modal
+					v-if="placeViewType=='saved'"
+					:show="placeSettingsModal"
+					:closeButton="true"
+					@close-button-clicked="placeSettingsModal=false"
+					headerTitle="Place Settings"
+				>
+					<div
+						v-if="!currentUserResource"
+						class=""
+						slot="content"
+					>
+						@todo: You have to log-in as <strong>{{$route.params.username}}</strong> to tweak those!
+					</div>
+					<place-settings-controls
+						v-else
+						slot="content"
+					/>
+				</ui-modal>
+
+				<ui-modal
+					v-if="placeViewType=='temporary'"
+					:show="saveLocationModal"
+					:closeButton="true"
+					:popup="true"
+					@close-button-clicked="saveLocationModal=false"
+				>
+					<save-place
+						slot="content"
+						@place-saved="placeSavedHandler"
+					/>
+				</ui-modal>
+				
+				<weather-details-data v-if="weatherData" :weather="weatherData.hourly" />
+				<hourly-view :weather="weatherData" />
+
+			</div>
 		</ui-loader>
 
 	</ui-transition-fade>
@@ -225,6 +230,16 @@
 		right: 0;
 		z-index: 1;
 		padding: 0 0.5em;
+	}
+
+	.placeDetailWrapper {
+		display: flex;
+		flex-direction: column;
+		position: fixed;
+		top: var(--layout-header-height);
+		right: 0;
+		bottom: 0;
+		left: 0;
 	}
 
 </style>
